@@ -49,8 +49,8 @@ public final class Constants {
   public static class ArmSubsystem {
     public static final int kWristMotorID = 7;
     public static final int kPullyMotorID = 8;
-    public static final int kReversedScrewMotorID = 8;
-    public static final int kArmMotorID = 9;
+    public static final int kReversedScrewMotorID = 9;
+    public static final int kArmMotorID = 10;
 
 
   }
