@@ -1,18 +1,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.frc.CANSparkMax;
 
 public class ArmSubsystem extends SubsystemBase {
-
-    private CANSparkMax wristMotor; 
-    private CANSparkMax armMotor;
 
 
 
 
     public ArmSubsystem() {
-      wristMotor = new CANSparkMax()
+
     }
 
     @Override
