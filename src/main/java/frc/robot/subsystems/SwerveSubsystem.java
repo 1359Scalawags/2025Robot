@@ -66,7 +66,9 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * AprilTag field layout.
    */
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField();
+
+          //TODO: find out how to fix this
+       // private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField();
   /**
    * Enable vision odometry updates while driving.
    */
@@ -343,14 +345,16 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return SysId Drive Command
    */
-  public Command sysIdDriveMotorCommand()
-  {
-    return SwerveDriveTest.generateSysIdCommand(
-        SwerveDriveTest.setDriveSysIdRoutine(
-            new Config(),
-            this, swerveDrive, 12, true),
-        3.0, 5.0, 3.0);
-  }
+
+      //TODO: find out how to fix this
+  // public Command sysIdDriveMotorCommand()
+  // {
+  //   return SwerveDriveTest.generateSysIdCommand(
+  //       SwerveDriveTest.setDriveSysIdRoutine(
+  //           new Config(),
+  //           this, swerveDrive, 12, true),
+  //       3.0, 5.0, 3.0);
+  // }
 
   /**
    * Command to characterize the robot angle motors using SysId
