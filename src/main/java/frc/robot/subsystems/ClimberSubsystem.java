@@ -26,7 +26,33 @@ public class ClimberSubsystem extends SubsystemBase{
       babyLockingEncoder = babyLockingMotor.getAbsoluteEncoder();
 
       ConfigureBabyLockingMotor();
+      configurePositionMotor();
 
+    }
+
+    private void configurePositionMotor(){
+      // create a new sparkmax config
+      SparkMaxConfig positionMotorConfig = new SparkMaxConfig();
+
+      positionMotorConfig
+        .idleMode(IdleMode.kBrake)
+        .inverted(false)
+        .openLoopRampRate(1.0)
+        .closedLoopRampRate(1.0)
+        .smartCurrentLimit(70, 30, 120);
+
+      positionMotorConfig.absoluteEncoder
+      .zeroOffset(Constants.ClimberSubsystem.kPositionEncoderOffset)
+      .positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor);
+     
+     
+      positionMotorConfig.closedLoop
+      .p(1.0f)
+      .i(0.0f)
+      .d(0.0);
+
+      // apply configuration
+      positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     private void ConfigureBabyLockingMotor() {
@@ -52,8 +78,6 @@ public class ClimberSubsystem extends SubsystemBase{
       // apply configuration
       babyLockingMotor.configure(babyLockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-
-
 
     @Override
     public void periodic() {
