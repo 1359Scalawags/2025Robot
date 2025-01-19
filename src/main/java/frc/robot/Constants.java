@@ -58,7 +58,6 @@ public final class Constants {
 
   public static class Vision {
 
-    public static final AprilTagFields AprilTagFieldLayout = null;
 
   }
 
