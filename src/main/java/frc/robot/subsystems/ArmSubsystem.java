@@ -11,7 +11,7 @@ public class ArmSubsystem extends SubsystemBase {
     private SendableCANSparkMax wristMotor; 
     private SendableCANSparkMax armMotor;
     private SendableCANSparkMax pulleyMotor;
-    private SendableCANSparkMax reversedScrewMotor;
+    private SendableCANSparkMax reversedScrewMotor; //TODO: What does this motor do as opposed to the specific hardware used to do it?
 
 
 
