@@ -46,6 +46,7 @@ public final class Constants {
     public static final int kPositionMotorID = 6;
     public static final float kPositionConversionFactor = 1.0f;
     public static final double kPositionEncoderOffset = 0;
+    public static final double kBabyLockingMotorOffset = 0;
 
 
   }  

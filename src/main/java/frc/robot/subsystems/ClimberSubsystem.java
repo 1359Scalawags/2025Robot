@@ -67,8 +67,8 @@ public class ClimberSubsystem extends SubsystemBase{
         .smartCurrentLimit(70, 30, 120);
 
       babyLockingMotorConfig.absoluteEncoder
-        .zeroOffset(Constants.ClimberSubsystem.kPositionEncoderOffset)
-        .positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor);
+        .zeroOffset(Constants.ClimberSubsystem.kBabyLockingMotorOffset)
+        .positionConversionFactor(Constants.ClimberSubsystem.kBabyLockingMotorConversionFactor);
 
       babyLockingMotorConfig.closedLoop
         .p(1.0f)
