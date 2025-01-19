@@ -23,9 +23,13 @@ public class ClimberSubsystem extends SubsystemBase{
     public ClimberSubsystem() {
       babyLockingMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kBabyLockingMotorID, MotorType.kBrushless);
       positionMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless);
-
       babyLockingEncoder = babyLockingMotor.getAbsoluteEncoder();
 
+      ConfigureBabyLockingMotor();
+
+    }
+
+    private void ConfigureBabyLockingMotor() {
       // create a new sparkmax config
       SparkMaxConfig babyLockingMotorConfig = new SparkMaxConfig();
 
@@ -47,8 +51,10 @@ public class ClimberSubsystem extends SubsystemBase{
 
       // apply configuration
       babyLockingMotor.configure(babyLockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
     }
+
+
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
