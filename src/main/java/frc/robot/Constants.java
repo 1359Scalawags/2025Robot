@@ -57,6 +57,9 @@ public final class Constants {
   }
 
   public static class Vision {
+      //TODO: Are these LL names correct?, 
+    public static final String klimelightOne = "limelight2+";
+    public static final String klimelightTwo = "limelight3G";
 
 
   }
