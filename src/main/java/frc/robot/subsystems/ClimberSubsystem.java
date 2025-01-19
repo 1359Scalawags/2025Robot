@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.util.sendable.Sendable;
 import frc.robot.extensions.SendableCANSparkMax;
@@ -22,9 +25,28 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless);
 
       babyLockingEncoder = babyLockingMotor.getAbsoluteEncoder();
-      AbsoluteEncoderConfig babyLockingConfig = new AbsoluteEncoderConfig();
-      babyLockingConfig.zeroOffset(Constants.ClimberSubsystem.kPositionEncoderOffset).positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor);
-      babyLockingConfig.apply(babyLockingConfig);
+
+      // create a new sparkmax config
+      SparkMaxConfig babyLockingMotorConfig = new SparkMaxConfig();
+
+      babyLockingMotorConfig
+        .idleMode(IdleMode.kBrake)
+        .inverted(false)
+        .openLoopRampRate(1.0)
+        .closedLoopRampRate(1.0)
+        .smartCurrentLimit(70, 30, 120);
+
+      babyLockingMotorConfig.absoluteEncoder
+        .zeroOffset(Constants.ClimberSubsystem.kPositionEncoderOffset)
+        .positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor);
+
+      babyLockingMotorConfig.closedLoop
+        .p(1.0f)
+        .i(0.0f)
+        .d(0.0);
+
+      // apply configuration
+      babyLockingMotor.configure(babyLockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     }
     @Override
