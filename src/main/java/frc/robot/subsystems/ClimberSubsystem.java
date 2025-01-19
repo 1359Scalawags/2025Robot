@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase{
-  private SendableCANSparkMax babyLockingMotor;
+  private SendableCANSparkMax babyLockingMotor;  // TODO: why are we locking babies? Is that legal?
   private SendableCANSparkMax positionMotor;
 
     public ClimberSubsystem() {
