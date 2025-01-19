@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFields;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -49,14 +50,15 @@ public final class Constants {
 
   public static class ArmSubsystem {
     public static final int kWristMotorID = 7;
-    public static final int kPullyMotorID = 8;
+    public static final int kPulleyMotorID = 8;
     public static final int kReversedScrewMotorID = 9;
     public static final int kArmMotorID = 10;
-
 
   }
 
   public static class Vision {
+
+    public static final AprilTagFields AprilTagFieldLayout = null;
 
   }
 

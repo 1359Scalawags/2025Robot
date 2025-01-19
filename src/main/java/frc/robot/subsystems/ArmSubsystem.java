@@ -19,7 +19,7 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmSubsystem() {
       wristMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kWristMotorID,MotorType.kBrushless);
       armMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kArmMotorID,MotorType.kBrushless);
-      pulleyMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kPullyMotorID,MotorType.kBrushless);
+      pulleyMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kPulleyMotorID,MotorType.kBrushless);
       reversedScrewMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kReversedScrewMotorID,MotorType.kBrushless);
     }
 
