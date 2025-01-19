@@ -15,6 +15,8 @@ package frc.robot;
  */
 public final class Constants {
 
+  public final static boolean kDebug = true;
+
   public static class SwereveSubsystem {
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
