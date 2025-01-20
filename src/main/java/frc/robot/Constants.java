@@ -48,7 +48,7 @@ public final class Constants {
     public static final double kPositionEncoderOffset = 0;
     public static final double kBabyLockingMotorOffset = 0;
     public static final double kBabyLockingMotorConversionFactor = 0;
-
+    
 
   }  
 
@@ -57,6 +57,13 @@ public final class Constants {
     public static final int kPulleyMotorID = 8;
     public static final int kReversedScrewMotorID = 9;
     public static final int kArmMotorID = 10;
+    public static final double kWristMotorOffset = 0;
+    public static final double kWristConversionFactor = 0;
+    public static final double kPulleyMotorOffset = 0;
+    public static final double kPulleyConversionFactor = 0;
+    public static final double kReversedScrewMotorOffset = 0;
+    public static final double kReversedScrewConversionFactor = 0;
+
 
   }
 
