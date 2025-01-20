@@ -13,15 +13,21 @@ public class ArmSubsystem extends SubsystemBase {
     private SendableCANSparkMax pulleyMotor;
     private SendableCANSparkMax reversedScrewMotor; //TODO: What does this motor do as opposed to the specific hardware used to do it?
 
-
-
-
     public ArmSubsystem() {
       wristMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kWristMotorID,MotorType.kBrushless);
       armMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kArmMotorID,MotorType.kBrushless);
       pulleyMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kPulleyMotorID,MotorType.kBrushless);
       reversedScrewMotor = new SendableCANSparkMax(Constants.ArmSubsystem.kReversedScrewMotorID,MotorType.kBrushless);
+
+      configureWristMotor();
+
     }
+
+    private void configureWristMotor() {
+
+    }
+
+
 
     @Override
     public void periodic() {
