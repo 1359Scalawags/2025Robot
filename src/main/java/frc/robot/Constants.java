@@ -76,17 +76,17 @@ public final class Constants {
   }
 
 
-  public static class OperatorConstants {
+  public static class Operator {
 
-    public static class DriverJoysticks {
-
+    public static class DriverJoystick {
+      public static final int kPort = 0;
     }
 
-    public static class AssistSubsystem {
-
+    public static class AssistJoystick {
+      public static final int kPort = 1;
     }
 
-    public static final int kDriverControllerPort = 0;
+    
   }
 
 }
