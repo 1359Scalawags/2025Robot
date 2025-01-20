@@ -36,6 +36,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.extensions.LimelightHelpers;
+
 //import frc.robot.subsystems.swervedrive.Vision.Cameras;
 import java.io.File;
 import java.io.IOException;
@@ -136,6 +138,12 @@ public class SwerveSubsystem extends SubsystemBase
 //  {
 //    vision = new Vision(swerveDrive::getPose, swerveDrive.field);
 //  }
+
+  public void updateVisionOdometry(){
+    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    //if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+    //TODO: We need to figure out how to get the rotaional speed of the robot
+  }
 
   @Override
   public void periodic()
