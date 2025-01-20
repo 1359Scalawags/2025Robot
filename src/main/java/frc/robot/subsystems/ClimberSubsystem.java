@@ -9,6 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.Servo;
 import frc.robot.extensions.SendableCANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,16 +19,29 @@ public class ClimberSubsystem extends SubsystemBase{
   private SendableCANSparkMax positionMotor;
 
   private AbsoluteEncoder babyLockingEncoder;
+  private AbsoluteEncoder positionEncoder;
+  private Servo latchingServo;
 
 
     public ClimberSubsystem() {
       babyLockingMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kBabyLockingMotorID, MotorType.kBrushless);
       positionMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless);
+      latchingServo = new Servo(1);
       babyLockingEncoder = babyLockingMotor.getAbsoluteEncoder();
+      positionEncoder = positionMotor.getAbsoluteEncoder();
+   
 
-      ConfigureBabyLockingMotor();
+      configureBabyLockingMotor();
       configurePositionMotor();
 
+    }
+
+    public double getServoAngle(){
+      return latchingServo.getAngle();
+    }
+
+    public void setServoAngle(double newAngle){
+      latchingServo.setAngle(newAngle);
     }
 
     private void configurePositionMotor(){
@@ -55,7 +69,7 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    private void ConfigureBabyLockingMotor() {
+    private void configureBabyLockingMotor() {
       // create a new sparkmax config
       SparkMaxConfig babyLockingMotorConfig = new SparkMaxConfig();
 
