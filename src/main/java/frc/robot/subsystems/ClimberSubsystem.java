@@ -15,23 +15,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase{
-  private SendableCANSparkMax babyLockingMotor;  // TODO: why are we locking babies? Is that legal?
+  private SendableCANSparkMax lockingMotor;  
   private SendableCANSparkMax positionMotor;
 
-  private AbsoluteEncoder babyLockingEncoder;
+  private AbsoluteEncoder lockingEncoder;
   private AbsoluteEncoder positionEncoder;
   private Servo latchingServo;
 
 
     public ClimberSubsystem() {
-      babyLockingMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kBabyLockingMotorID, MotorType.kBrushless);
+      lockingMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kLockingMotorID, MotorType.kBrushless);
       positionMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless);
       latchingServo = new Servo(1);
-      babyLockingEncoder = babyLockingMotor.getAbsoluteEncoder();
+      lockingEncoder = lockingMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
    
 
-      configureBabyLockingMotor();
+      configureLockingMotor();
       configurePositionMotor();
 
     }
@@ -69,7 +69,7 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    private void configureBabyLockingMotor() {
+    private void configureLockingMotor() {
       // create a new sparkmax config
       SparkMaxConfig babyLockingMotorConfig = new SparkMaxConfig();
 
@@ -90,7 +90,7 @@ public class ClimberSubsystem extends SubsystemBase{
         .d(0.0);
 
       // apply configuration
-      babyLockingMotor.configure(babyLockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      lockingMotor.configure(babyLockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
