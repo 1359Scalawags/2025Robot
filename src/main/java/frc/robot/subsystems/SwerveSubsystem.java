@@ -19,7 +19,9 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,6 +33,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -58,8 +61,9 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
-public class SwerveSubsystem extends SubsystemBase
-{
+public class SwerveSubsystem extends SubsystemBase {
+
+  LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
 
   /**
    * Swerve drive object.
@@ -139,12 +143,6 @@ public class SwerveSubsystem extends SubsystemBase
 //    vision = new Vision(swerveDrive::getPose, swerveDrive.field);
 //  }
 
-  public void updateVisionOdometry(){
-    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-    //if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-    //TODO: We need to figure out how to get the rotaional speed of the robot
-  }
-
   @Override
   public void periodic()
   {
@@ -152,9 +150,32 @@ public class SwerveSubsystem extends SubsystemBase
     if (visionDriveTest)
     {
       swerveDrive.updateOdometry();
+        //TODO: how do we want to implement the odementry?
+      // updateVisionOdometryMegatagOne();
+      // updateVisionOdometryMegatagTwo();
 //      vision.updatePoseEstimation(swerveDrive);
     }
   }
+
+
+  public void updateVisionOdometryMegatagOne() {
+      if (limelightMeasurement.tagCount >= 2) {  // Only trust measurement if we see multiple tags
+           //TODO: do we want to keep this? Do we want to use the VecBuilder.fill(5, 5,99999)); with our own values to make it more accurate.
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999)); 
+        swerveDrive.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
+      }
+    }
+
+  public void updateVisionOdometryMegatagTwo() {
+        // First, tell Limelight your robot's current orientation
+    double robotYaw = swerveDrive.getOdometryHeading().getDegrees(); 
+    LimelightHelpers.SetRobotOrientation("", robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+        // Add it to your pose estimator
+    swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
+    swerveDrive.addVisionMeasurement(limelightMeasurement.pose,limelightMeasurement.timestampSeconds);
+    }
+
 
   @Override
   public void simulationPeriodic()
@@ -352,15 +373,15 @@ public class SwerveSubsystem extends SubsystemBase
    * @return SysId Drive Command
    */
 
-      //TODO: find out how to fix this
-  public Command sysIdDriveMotorCommand()
-  {
-    return SwerveDriveTest.generateSysIdCommand(
-        SwerveDriveTest.setDriveSysIdRoutine(
-            new Config(),
-            this, swerveDrive, 12, true),
-        3.0, 5.0, 3.0);
-  }
+  //     //TODO: find out how to fix this
+  // public Command sysIdDriveMotorCommand()
+  // {
+  //   return SwerveDriveTest.generateSysIdCommand(
+  //       SwerveDriveTest.setDriveSysIdRoutine(
+  //           new Config(),
+  //           this, swerveDrive, 12, true),
+  //       3.0, 5.0, 3.0);
+  // }
 
   /**
    * Command to characterize the robot angle motors using SysId
