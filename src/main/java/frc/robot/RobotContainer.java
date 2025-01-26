@@ -5,11 +5,15 @@
 package frc.robot;
 
 import frc.robot.Constants.Operator;
+import frc.robot.Constants.SwereveSubsystem;
 import frc.robot.commands.Autos;
 
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
+import java.io.File;
+
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -25,10 +29,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
-  private final CommandJoystick driverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
-  private final CommandJoystick assistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
+  private final SwereveSubsystem swereveSubsystemsubsystem = new SwereveSubsystem(
+    new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/swerve/" + Constants.robotName));
+  // private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  // private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
+  // private final CommandJoystick driverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
+  // private final CommandJoystick assistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed

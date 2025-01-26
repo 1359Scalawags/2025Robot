@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.io.File;
+
 import edu.wpi.first.apriltag.AprilTagFields;
 
 /**
@@ -17,6 +19,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 public final class Constants {
 
   public final static boolean kDebug = true;
+  public static final String robotName = "Siren";
 
   public static class SwereveSubsystem {
     /*
@@ -36,7 +39,11 @@ public final class Constants {
      * -------------------------------------
      */
     
-     public static final double MAX_SPEED = 0;
+     public SwereveSubsystem(File file) {
+      //TODO Auto-generated constructor stub
+    }
+
+    public static final double MAX_SPEED = 0;
 
 
   }
