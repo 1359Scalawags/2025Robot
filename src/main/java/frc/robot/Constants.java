@@ -55,6 +55,8 @@ public final class Constants {
     public static final double kPositionEncoderOffset = 0;
     public static final double kLockingMotorOffset = 0;
     public static final double kLockingMotorConversionFactor = 0;
+    public static final double maxServoLimit = 0;
+    public static final double minServoLimit = 0;
     
 
   }  

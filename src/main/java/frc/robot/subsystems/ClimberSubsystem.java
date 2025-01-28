@@ -40,7 +40,9 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
     public void setServoAngle(double newAngle){
-      latchingServo.setAngle(newAngle);
+      if ((newAngle <= Constants.ClimberSubsystem.maxServoLimit) && (newAngle >= Constants.ClimberSubsystem.minServoLimit)){
+        latchingServo.setAngle(newAngle);
+      }
     }
 
     private void configurePositionMotor(){
