@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -28,7 +29,6 @@ public class ArmSubsystem extends SubsystemBase {
       configureArmMotor();
       configurePulleyMotor();
       configureReversedScrewMotor();
-
     }
 
     private void configureWristMotor() {
@@ -54,6 +54,7 @@ public class ArmSubsystem extends SubsystemBase {
       // apply configuration
       wristMotor.configure(wristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
+
 
     private void configureArmMotor() {
       SparkMaxConfig armMotorConfig = new SparkMaxConfig();
@@ -103,6 +104,7 @@ public class ArmSubsystem extends SubsystemBase {
       wristMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+
     private void configureReversedScrewMotor() {
       SparkMaxConfig reversedScrewMotorConfig = new SparkMaxConfig();
   
@@ -126,6 +128,13 @@ public class ArmSubsystem extends SubsystemBase {
         // apply configuration
         wristMotor.configure(reversedScrewMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       }
+
+    public void setPulleyMotorPosition(double pulleyMotorPosition) {
+      if (pulleyMotorPosition < Constants.ClimberSubsystem.maxLockLimit && pulleyMotorPosition > Constants.ClimberSubsystem.minLockLimit) {
+        pulleyMotor.getClosedLoopController().setReference(pulleyMotorPosition, ControlType.kPosition);
+      }
+    } 
+
 
     @Override
     public void periodic() {

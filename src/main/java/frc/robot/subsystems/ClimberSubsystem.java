@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -10,6 +11,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.extensions.SendableCANSparkMax;
 import frc.robot.extensions.SimableSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,20 +23,29 @@ public class ClimberSubsystem extends SubsystemBase{
 
   private AbsoluteEncoder lockingEncoder;
   private AbsoluteEncoder positionEncoder;
+
   private Servo latchingServo;
 
+  private double lockingTargetPosition;
+  private double positionTargetPosition;
 
     public ClimberSubsystem() {
-      lockingMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingMotorID, MotorType.kBrushless);
+      lockingMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingMotorID, MotorType.kBrushless, "LockingMotor");
       positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless, "postionMotor");
-      latchingServo = new Servo(1);
+      latchingServo = new Servo(Constants.ClimberSubsystem.kLatchingServoID);
       lockingEncoder = lockingMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
    
-
       configureLockingMotor();
       configurePositionMotor();
+    }
 
+    public double getLockingMotorPosition(){
+      return lockingEncoder.getPosition();
+    }
+
+    public double getPositionMotorPostion(){
+      return positionEncoder.getPosition();
     }
 
     public double getServoAngle(){
@@ -59,8 +70,7 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotorConfig.absoluteEncoder
       .zeroOffset(Constants.ClimberSubsystem.kPositionEncoderOffset)
       .positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor);
-     
-     
+       
       positionMotorConfig.closedLoop
       .p(1.0f)
       .i(0.0f)
@@ -94,8 +104,21 @@ public class ClimberSubsystem extends SubsystemBase{
       lockingMotor.configure(babyLockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+    public void deployLockingMotorPosition(double lockingMotorPosition) {
+      if (lockingMotorPosition < Constants.ClimberSubsystem.maxLockLimit && lockingMotorPosition > Constants.ClimberSubsystem.minLockLimit) {
+        lockingMotor.getClosedLoopController().setReference(lockingMotorPosition, ControlType.kPosition);
+      }
+    } 
+
+    public void deployPositioMotor(double lockingMotorPosition) {
+      if (lockingMotorPosition < Constants.ClimberSubsystem.maxLockLimit && lockingMotorPosition > Constants.ClimberSubsystem.minLockLimit) {
+        lockingMotor.getClosedLoopController().setReference(lockingMotorPosition, ControlType.kPosition);
+      }
+    } 
+
     @Override
     public void periodic() {
-
-      }
+      SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
+      SmartDashboard.putNumber("Climber Motor Position", getPositionMotorPostion());
+  }
 }

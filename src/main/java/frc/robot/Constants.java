@@ -55,8 +55,9 @@ public final class Constants {
     public static final double kPositionEncoderOffset = 0;
     public static final double kBabyLockingMotorOffset = 0;
     public static final double kBabyLockingMotorConversionFactor = 0;
-    
-
+    public static final int kLatchingServoID = 0;
+    public static final double minLockLimit = 0;
+    public static double maxLockLimit = 0;
   }  
 
   public static class ArmSubsystem {
@@ -78,8 +79,6 @@ public final class Constants {
       //TODO: Are these LL names correct?, 
     public static final String klimelightOne = "limelight2+";
     public static final String klimelightTwo = "limelight3G";
-
-
   }
 
 
@@ -92,8 +91,6 @@ public final class Constants {
     public static class AssistJoystick {
       public static final int kPort = 1;
     }
-
-    
   }
 
 
