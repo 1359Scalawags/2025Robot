@@ -11,12 +11,13 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.extensions.SendableCANSparkMax;
+import frc.robot.extensions.SimableSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase{
-  private SendableCANSparkMax lockingMotor;  
-  private SendableCANSparkMax positionMotor;
+  private SimableSparkMax lockingMotor;  
+  private SimableSparkMax positionMotor;
 
   private AbsoluteEncoder lockingEncoder;
   private AbsoluteEncoder positionEncoder;
@@ -24,8 +25,8 @@ public class ClimberSubsystem extends SubsystemBase{
 
 
     public ClimberSubsystem() {
-      lockingMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kLockingMotorID, MotorType.kBrushless);
-      positionMotor = new SendableCANSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless);
+      lockingMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingMotorID, MotorType.kBrushless);
+      positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless, "postionMotor");
       latchingServo = new Servo(1);
       lockingEncoder = lockingMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
