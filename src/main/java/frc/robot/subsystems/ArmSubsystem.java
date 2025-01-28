@@ -16,13 +16,13 @@ import frc.robot.extensions.SimableSparkMax;
 public class ArmSubsystem extends SubsystemBase {
 
     private SimableSparkMax wristMotor; 
-    private SimableSparkMax armMotor;
+    private SimableSparkMax elbowMotor;
     private SimableSparkMax pulleyMotor;
     private SimableSparkMax reversedScrewMotor; //TODO: What does this motor do as opposed to the specific hardware used to do it?
 
     public ArmSubsystem() {
       wristMotor = new SimableSparkMax(Constants.ArmSubsystem.kWristMotorID,MotorType.kBrushless);
-      armMotor = new SimableSparkMax(Constants.ArmSubsystem.kArmMotorID,MotorType.kBrushless);
+      elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.kArmMotorID,MotorType.kBrushless);
       pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.kPulleyMotorID,MotorType.kBrushless);
       reversedScrewMotor = new SimableSparkMax(Constants.ArmSubsystem.kReversedScrewMotorID,MotorType.kBrushless);
 
@@ -130,12 +130,24 @@ public class ArmSubsystem extends SubsystemBase {
         wristMotor.configure(reversedScrewMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       }
 
+
     public void setPulleyMotorPosition(double pulleyMotorPosition) {
-      if (pulleyMotorPosition < Constants.ClimberSubsystem.maxLockLimit && pulleyMotorPosition > Constants.ClimberSubsystem.minLockLimit) {
+      if (pulleyMotorPosition < Constants.ArmSubsystem.maxPulleyLimit && pulleyMotorPosition > Constants.ArmSubsystem.minPulleyLimit) {
         pulleyMotor.getClosedLoopController().setReference(pulleyMotorPosition, ControlType.kPosition);
       }
     } 
 
+    public void setElbowMotorPosition(double elbowMotorPosition) {
+      if (elbowMotorPosition < Constants.ArmSubsystem.maxElbowLimit && elbowMotorPosition > Constants.ArmSubsystem.minElbowLimit) {
+        elbowMotor.getClosedLoopController().setReference(elbowMotorPosition, ControlType.kPosition);
+      }
+    } 
+
+    public void setWristMotorPosition(double wristMotorPosition) {
+      if (wristMotorPosition < Constants.ArmSubsystem.maxWristLimit && wristMotorPosition > Constants.ArmSubsystem.minWristLimit) {
+        wristMotor.getClosedLoopController().setReference(wristMotorPosition, ControlType.kPosition);
+      }
+    } 
 
     @Override
     public void periodic() {
