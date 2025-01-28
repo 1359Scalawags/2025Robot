@@ -52,12 +52,6 @@ public class ClimberSubsystem extends SubsystemBase{
       return latchingServo.getAngle();
     }
 
-    public void setServoAngle(double newAngle){
-      if ((newAngle <= Constants.ClimberSubsystem.maxServoLimit) && (newAngle >= Constants.ClimberSubsystem.minServoLimit)){
-        latchingServo.setAngle(newAngle);
-      }
-    }
-
     private void configurePositionMotor(){
       // create a new sparkmax config
       SparkMaxConfig positionMotorConfig = new SparkMaxConfig();
@@ -117,6 +111,12 @@ public class ClimberSubsystem extends SubsystemBase{
         lockingMotor.getClosedLoopController().setReference(lockingMotorPosition, ControlType.kPosition);
       }
     } 
+
+    public void setServoAngle(double newAngle){
+      if ((newAngle <= Constants.ClimberSubsystem.maxServoLimit) && (newAngle >= Constants.ClimberSubsystem.minServoLimit)){
+        latchingServo.setAngle(newAngle);
+      }
+    }
 
     @Override
     public void periodic() {
