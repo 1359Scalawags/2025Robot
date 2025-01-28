@@ -30,11 +30,9 @@ public class ClimberSubsystem extends SubsystemBase{
       latchingServo = new Servo(1);
       lockingEncoder = lockingMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
-   
 
       configureLockingMotor();
       configurePositionMotor();
-
     }
 
     public double getServoAngle(){
@@ -72,26 +70,26 @@ public class ClimberSubsystem extends SubsystemBase{
 
     private void configureLockingMotor() {
       // create a new sparkmax config
-      SparkMaxConfig babyLockingMotorConfig = new SparkMaxConfig();
+      SparkMaxConfig lockingMotorConfig = new SparkMaxConfig();
 
-      babyLockingMotorConfig
+      lockingMotorConfig
         .idleMode(IdleMode.kBrake)
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
         .smartCurrentLimit(70, 30, 120);
 
-      babyLockingMotorConfig.absoluteEncoder
-        .zeroOffset(Constants.ClimberSubsystem.kBabyLockingMotorOffset)
-        .positionConversionFactor(Constants.ClimberSubsystem.kBabyLockingMotorConversionFactor);
+      lockingMotorConfig.absoluteEncoder
+        .zeroOffset(Constants.ClimberSubsystem.kLockingMotorOffset)
+        .positionConversionFactor(Constants.ClimberSubsystem.kLockingMotorConversionFactor);
 
-      babyLockingMotorConfig.closedLoop
+      lockingMotorConfig.closedLoop
         .p(1.0f)
         .i(0.0f)
         .d(0.0);
 
       // apply configuration
-      lockingMotor.configure(babyLockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      lockingMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
