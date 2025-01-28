@@ -53,11 +53,15 @@ public final class Constants {
     public static final int kPositionMotorID = 6;
     public static final float kPositionConversionFactor = 1.0f;
     public static final double kPositionEncoderOffset = 0;
-    public static final double kBabyLockingMotorOffset = 0;
-    public static final double kBabyLockingMotorConversionFactor = 0;
     public static final int kLatchingServoID = 0;
     public static final double minLockLimit = 0;
     public static double maxLockLimit = 0;
+    public static final double kLockingMotorOffset = 0;
+    public static final double kLockingMotorConversionFactor = 0;
+    public static final double maxServoLimit = 0;
+    public static final double minServoLimit = 0;
+    
+
   }  
 
   public static class ArmSubsystem {
