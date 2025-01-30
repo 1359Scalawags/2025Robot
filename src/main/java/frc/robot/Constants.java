@@ -39,6 +39,8 @@ public final class Constants {
      * -------------------------------------
      */
     
+
+     //TODO: what is this for?
      public SwereveSubsystem(File file) {
       //TODO Auto-generated constructor stub
     }
@@ -75,12 +77,17 @@ public final class Constants {
     public static final double kPulleyConversionFactor = 0;
     public static final double kReversedScrewMotorOffset = 0;
     public static final double kReversedScrewConversionFactor = 0;
+    public static final double maxPulleyLimit = 0;
+    public static final double minPulleyLimit = 0;
+    public static final double minElbowLimit = 0;
+    public static final double maxElbowLimit = 0;
+    public static final double maxWristLimit = 0;
+    public static final double minWristLimit = 0;
 
 
   }
 
-  public static class Vision {
-      //TODO: Are these LL names correct?, 
+  public static class Vision { 
     public static final String klimelightOne = "limelight2+";
     public static final String klimelightTwo = "limelight3G";
   }
