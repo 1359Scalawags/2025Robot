@@ -21,7 +21,13 @@ public final class Constants {
   public final static boolean kDebug = true;
   public static final String robotName = "Siren";
 
-  public static class SwereveSubsystem {
+  public static class SwerveSubsystem {
+
+    public static final double MAX_SPEED = 0;
+    public static final double LOOP_TIME = 0;
+    public static final double ROBOT_MASS = 0;
+    public static final Object CHASSIS = null;
+
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
      *-------------------------------------
@@ -41,12 +47,11 @@ public final class Constants {
     
 
      //TODO: what is this for?
-     public SwereveSubsystem(File file) {
+     public SwerveSubsystem(File file) {
       //TODO Auto-generated constructor stub
     }
 
-    public static final double MAX_SPEED = 0;
-
+    
 
   }
 

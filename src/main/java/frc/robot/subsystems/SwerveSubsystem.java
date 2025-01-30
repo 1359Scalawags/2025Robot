@@ -93,7 +93,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.SwereveSubsystem.MAX_SPEED,
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.SwerveSubsystem.MAX_SPEED,
                                                                   new Pose2d(new Translation2d(Meter.of(1),
                                                                                                Meter.of(4)),
                                                                              Rotation2d.fromDegrees(0)));
@@ -130,7 +130,7 @@ public class SwerveSubsystem extends SubsystemBase {
   {
     swerveDrive = new SwerveDrive(driveCfg,
                                   controllerCfg,
-                                  Constants.SwereveSubsystem.MAX_SPEED,
+                                  Constants.SwerveSubsystem.MAX_SPEED,
                                   new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
                                              Rotation2d.fromDegrees(0)));
   }
@@ -665,7 +665,7 @@ public class SwerveSubsystem extends SubsystemBase {
                                                         headingX,
                                                         headingY,
                                                         getHeading().getRadians(),
-                                                        Constants.SwereveSubsystem.MAX_SPEED);
+                                                        Constants.SwerveSubsystem.MAX_SPEED);
   }
 
   /**
@@ -685,7 +685,7 @@ public class SwerveSubsystem extends SubsystemBase {
                                                         scaledInputs.getY(),
                                                         angle.getRadians(),
                                                         getHeading().getRadians(),
-                                                        Constants.SwereveSubsystem.MAX_SPEED);
+                                                        Constants.SwerveSubsystem.MAX_SPEED);
   }
 
   /**

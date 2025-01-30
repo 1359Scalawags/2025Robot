@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.Operator;
-import frc.robot.Constants.SwereveSubsystem;
+import frc.robot.Constants.SwerveSubsystem;
 import frc.robot.commands.Autos;
 
 import frc.robot.subsystems.ArmSubsystem;
@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final SwereveSubsystem m_SwereveSubsystem = new SwereveSubsystem(
+  private final SwerveSubsystem m_SwereveSubsystem = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/swerve/" + Constants.robotName));
    private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
