@@ -10,11 +10,16 @@ import frc.robot.commands.Autos;
 
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -29,23 +34,69 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final SwereveSubsystem swereveSubsystemsubsystem = new SwereveSubsystem(
+  private final SwereveSubsystem m_SwereveSubsystem = new SwereveSubsystem(
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/swerve/" + Constants.robotName));
-  // private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  // private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
-  // private final CommandJoystick driverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
-  // private final CommandJoystick assistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
+   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+   private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
+   private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
+    //TODO: Do we need to use commandJoystick or Joystick?
+  //  private final Joystick driverJoystick = new Joystick(Constants.Operator.DriverJoystick.kPort);
+  //  private final Joystick assistantJoystick = new Joystick(Constants.Operator.AssistJoystick.kPort);
 
+  SendableChooser<Command> autoChooser;
+  SendableChooser<Command> pipelineChooser;  
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(Operator.DriverJoystick.kPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    autoChooser = AutoBuilder.buildAutoChooser();
+    pipelineChooser = new SendableChooser<Command>();
+
+    SmartDashboard.putData("Pipeline Chooser", pipelineChooser);
+    SmartDashboard.putData("Auto Chooser ", autoChooser);
+
     // Configure the trigger bindings
     configureBindings();
   }
+
+      // Configure remote movements
+  public double assistantGetY() {
+    return -m_AssistantJoystick.getY();
+  }
+  public double assistantGetX() {
+    return -m_AssistantJoystick.getX();
+  }
+  public double assistantGetZ() {
+    return -m_AssistantJoystick.getZ();
+  }
+  public double driverGetRight() {
+    return -m_DriverJoystick.getX();
+  }
+  public double driverGetForward() {
+    return -m_DriverJoystick.getY();
+  }
+  public double driverGetZ() {
+    return -m_DriverJoystick.getZ();
+  }
+  public double driverGetThrottle() {
+    return m_DriverJoystick.getThrottle();
+  }
+
+
+
+      //Which one of these did i use?
+//   public Command getAutonomousCommandForChooser() {
+//     return m_SwereveSubsystem.getAutonomousCommand(autoChooser.getSelected().getName());
+//   }
+
+// // Do i need .getName()?
+
+//     public Command getAutonomousCommand(String exampleAuto){
+//     //return m_SwerveSubsystem.getAutonomousCommand(autoChooser.getSelected().getName());
+//     return m_SwereveSubsystem.getAutonomousCommand(exampleAuto);
+//   }
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
