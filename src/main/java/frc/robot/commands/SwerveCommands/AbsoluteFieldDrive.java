@@ -67,9 +67,12 @@ public class AbsoluteFieldDrive extends Command
                                                          new Rotation2d(heading.getAsDouble() * Math.PI));
 
 
-      //TODO: fix this         
+         
     // Limit velocity to prevent tippy
-    // Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
+    
+    Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
+    
+    //TODO: Fix This
     // translation = SwerveMath.limitVelocity(
     //   translation,
     //   swerve.getFieldVelocity(),
@@ -79,11 +82,11 @@ public class AbsoluteFieldDrive extends Command
     //   List.of(Constants.SwerveSubsystem.CHASSIS),
     //   swerve.getSwerveDriveConfiguration());
 
-    // SmartDashboard.putNumber("LimitedTranslation", translation.getX());
-    // SmartDashboard.putString("Translation", translation.toString());
+     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
+    SmartDashboard.putString("Translation", translation.toString());
 
-    // // Make the robot move
-    // swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
+    // Make the robot move
+    swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
 
   }
 
