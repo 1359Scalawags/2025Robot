@@ -32,7 +32,10 @@ public class SetHeightHumanStation extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_subsystem.setArmHumanStation();
+    m_subsystem.setHeightHumanStation();
+  }
 
   // Called once the command ends or is interrupted.
   @Override

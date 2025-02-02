@@ -191,14 +191,14 @@ public class ArmSubsystem extends SubsystemBase {
       setWristMotorPosition(wristPos);
     }
     //Sets arm postion to Level Three
-    public void setArmGroundL3(){
+    public void setArmL3(){
       double elbowPos = Constants.ArmSubsystem.kElbowPosL3;
       double wristPos = Constants.ArmSubsystem.kWristPosL3;
       setElbowMotorPosition(elbowPos);
       setWristMotorPosition(wristPos);
     }
     //Sets arm position to Level Four
-    public void setArmGroundL4(){
+    public void setArmL4(){
       double elbowPos = Constants.ArmSubsystem.kElbowPosL4;
       double wristPos = Constants.ArmSubsystem.kWristPosL4;
       setElbowMotorPosition(elbowPos);
