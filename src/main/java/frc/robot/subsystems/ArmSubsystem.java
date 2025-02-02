@@ -147,7 +147,73 @@ public class ArmSubsystem extends SubsystemBase {
       if (wristMotorPosition < Constants.ArmSubsystem.maxWristLimit && wristMotorPosition > Constants.ArmSubsystem.minWristLimit) {
         wristMotor.getClosedLoopController().setReference(wristMotorPosition, ControlType.kPosition);
       }
-    } 
+    }
+    
+    //Sets arm height to the ground
+    public void setHeightGround(){
+      double heightPos = Constants.ArmSubsystem.kHeightGround;
+      setPulleyMotorPosition(heightPos);
+    }
+    //Sets arm height to Level Two
+    public void setHeightL2(){
+      double heightPos = Constants.ArmSubsystem.kL2Height;
+      setPulleyMotorPosition(heightPos);
+    }
+    //Sets arm height to Level Three
+    public void setHeightL3(){
+      double heightPos = Constants.ArmSubsystem.kL3Height;
+      setPulleyMotorPosition(heightPos);
+    }
+    //Sets arm height to Level Four
+    public void setHeightL4(){
+      double heightPos = Constants.ArmSubsystem.kL4Height;
+      setPulleyMotorPosition(heightPos);
+    }
+    //Sets arm height to the Human Station
+    public void setHeightHumanStation(){
+      double heightPos = Constants.ArmSubsystem.kHeightHumanStation;
+      setPulleyMotorPosition(heightPos);
+
+    }
+
+    //Sets arm position to the Ground
+    public void setArmGround(){
+      double elbowPos = Constants.ArmSubsystem.kElbowPosGround;
+      double wristPos = Constants.ArmSubsystem.kWristPosGround;
+      setElbowMotorPosition(elbowPos);
+      setWristMotorPosition(wristPos);
+    }
+    //Sets arm position to Level Two
+    public void setArmL2(){
+      double elbowPos = Constants.ArmSubsystem.kElbowPosL2;
+      double wristPos = Constants.ArmSubsystem.kWristPosL2;
+      setElbowMotorPosition(elbowPos);
+      setWristMotorPosition(wristPos);
+    }
+    //Sets arm postion to Level Three
+    public void setArmGroundL3(){
+      double elbowPos = Constants.ArmSubsystem.kElbowPosL3;
+      double wristPos = Constants.ArmSubsystem.kWristPosL3;
+      setElbowMotorPosition(elbowPos);
+      setWristMotorPosition(wristPos);
+    }
+    //Sets arm position to Level Four
+    public void setArmGroundL4(){
+      double elbowPos = Constants.ArmSubsystem.kElbowPosL4;
+      double wristPos = Constants.ArmSubsystem.kWristPosL4;
+      setElbowMotorPosition(elbowPos);
+      setWristMotorPosition(wristPos);
+    }
+    //Sets arm position to the Human Station
+    public void setArmHumanStation(){
+      double elbowPos = Constants.ArmSubsystem.kElbowPosHumanStation;
+      double wristPos = Constants.ArmSubsystem.kWristPosHumanStation;
+      setElbowMotorPosition(elbowPos);
+      setWristMotorPosition(wristPos);
+    }
+
+    
+
 
     @Override
     public void periodic() {
