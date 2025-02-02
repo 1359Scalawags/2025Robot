@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.Constants.Operator;
 import frc.robot.Constants.SwerveSubsystem;
 import frc.robot.commands.Autos;
-
+import frc.robot.commands.ClimberCommands.DeployClimber;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
@@ -23,7 +23,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClimberCommands.DeployClimber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,10 +41,10 @@ public class RobotContainer {
    private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
-   private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
+   // private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
     //TODO: Do we need to use commandJoystick or Joystick?
   //  private final Joystick driverJoystick = new Joystick(Constants.Operator.DriverJoystick.kPort);
-  //  private final Joystick assistantJoystick = new Joystick(Constants.Operator.AssistJoystick.kPort);
+    private final Joystick assistantJoystick = new Joystick(Constants.Operator.AssistJoystick.kPort);
 
   SendableChooser<Command> autoChooser;
   SendableChooser<Command> pipelineChooser;  
@@ -62,13 +64,13 @@ public class RobotContainer {
 
       // Configure remote movements
   public double assistantGetY() {
-    return -m_AssistantJoystick.getY();
+    return -assistantJoystick.getY();
   }
   public double assistantGetX() {
-    return -m_AssistantJoystick.getX();
+    return -assistantJoystick.getX();
   }
   public double assistantGetZ() {
-    return -m_AssistantJoystick.getZ();
+    return -assistantJoystick.getZ();
   }
   public double driverGetRight() {
     return -m_DriverJoystick.getX();
@@ -82,6 +84,7 @@ public class RobotContainer {
   public double driverGetThrottle() {
     return m_DriverJoystick.getThrottle();
   }
+
 
 
 
@@ -108,13 +111,18 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //new Trigger(m_exampleSubsystem::exampleCondition)
     //    .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
   //  m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+  // new JoystickButton(assistantJoystick, Constants.Operator.AssistJoystick.deployClimberButton)
+  //     .onTrue(new DeployClimber(m_ClimberSubsystem));
+  // }
+
   }
 
   /**
