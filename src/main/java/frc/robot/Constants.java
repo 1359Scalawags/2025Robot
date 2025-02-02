@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.io.File;
+import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.apriltag.AprilTagFields;
 
@@ -27,6 +28,7 @@ public final class Constants {
     public static final double LOOP_TIME = 0;
     public static final double ROBOT_MASS = 0;
     public static final Object CHASSIS = null;
+    public static final double TURN_CONSTANT = 0;
 
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
@@ -61,13 +63,21 @@ public final class Constants {
     public static final float kPositionConversionFactor = 1.0f;
     public static final double kPositionEncoderOffset = 0;
     public static final int kLatchingServoID = 0;
-    public static final double minLockLimit = 0;
-    public static double maxLockLimit = 0;
     public static final double kLockingMotorOffset = 0;
     public static final double kLockingMotorConversionFactor = 0;
+
     public static final double maxServoLimit = 0;
     public static final double minServoLimit = 0;
-    
+
+    public static final double maxClimberAngle = 0;
+    public static final double minClimberAngle = 0;
+
+    public static final double minLockLimit = 0;
+    public static final double maxLockLimit = 0;
+    public static final double unlockedPosition = 0;
+    public static final double lockedPosition = 0;
+    public static final double extendedClimberAngle = 0;
+    public static final double retractedClimberAngle = 0;
 
   }  
 
@@ -106,6 +116,7 @@ public final class Constants {
 
     public static class AssistJoystick {
       public static final int kPort = 1;
+      public static final BooleanSupplier climberExtendButton = null;
     }
   }
 

@@ -131,6 +131,7 @@ public class AbsoluteRobotDrive extends Command
     // SmartDashboard.putString("Translation", translation.toString());
 
     // Make the robot move
+    
     if (headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) > 0)
     {
       resetHeading = true;

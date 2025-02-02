@@ -9,6 +9,7 @@ import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +29,8 @@ public class ClimberSubsystem extends SubsystemBase{
 
   private double lockingTargetPosition;
   private double positionTargetPosition;
+
+  private double curretPosition = positionEncoder.getPosition();
 
     public ClimberSubsystem() {
       lockingMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingMotorID, MotorType.kBrushless, "LockingMotor");
@@ -100,17 +103,37 @@ public class ClimberSubsystem extends SubsystemBase{
       lockingMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void deployLockingMotorPosition(double lockingMotorPosition) {
-      if (lockingMotorPosition < Constants.ClimberSubsystem.maxLockLimit && lockingMotorPosition > Constants.ClimberSubsystem.minLockLimit) {
-        lockingMotor.getClosedLoopController().setReference(lockingMotorPosition, ControlType.kPosition);
+    public void lockClimber(){
+      lockingMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.lockedPosition, ControlType.kPosition);
+    }
+
+    public void unlockClimber(){
+      lockingMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.unlockedPosition, ControlType.kPosition);
+    }
+
+    public void setClimberAngle(double angle) {
+      if (angle < Constants.ClimberSubsystem.maxClimberAngle && angle > Constants.ClimberSubsystem.minClimberAngle) {
+        positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
       }
     } 
 
-    public void deployPositioMotor(double lockingMotorPosition) {
-      if (lockingMotorPosition < Constants.ClimberSubsystem.maxLockLimit && lockingMotorPosition > Constants.ClimberSubsystem.minLockLimit) {
-        lockingMotor.getClosedLoopController().setReference(lockingMotorPosition, ControlType.kPosition);
-      }
-    } 
+    public void extendClimber(){
+      double targetpostion = Constants.ClimberSubsystem.extendedClimberAngle;
+      setClimberAngle(targetpostion);
+    }
+
+    public void retractClimber(){
+      double targetpostion = Constants.ClimberSubsystem.retractedClimberAngle;
+      setClimberAngle(targetpostion);
+    }
+
+        // operater controll of the climber 
+    public void changeClimberPosition(double delta){
+      double newPosition = curretPosition + delta; 
+      newPosition = MathUtil.clamp(newPosition, Constants.ClimberSubsystem.minClimberAngle, Constants.ClimberSubsystem.maxClimberAngle);
+      positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
+    }
+    
 
     public void setServoAngle(double newAngle){
       if ((newAngle <= Constants.ClimberSubsystem.maxServoLimit) && (newAngle >= Constants.ClimberSubsystem.minServoLimit)){
