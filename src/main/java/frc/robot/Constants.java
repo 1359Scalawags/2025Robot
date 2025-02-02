@@ -63,11 +63,12 @@ public final class Constants {
   }
 
   public static class ClimberSubsystem {
-    public static final int kLockingMotorID = 5;
-    public static final int kPositionMotorID = 6;
+    //Can ID's for climber are from 9 to 15
+    public static final int kLockingMotorID = 9;
+    public static final int kPositionMotorID = 10;
     public static final float kPositionConversionFactor = 1.0f;
     public static final double kPositionEncoderOffset = 0;
-    public static final int kLatchingServoID = 0;
+    public static final int kLatchingServoID = 11;
     public static final double kLockingMotorOffset = 0;
     public static final double kLockingMotorConversionFactor = 0;
 
@@ -89,34 +90,40 @@ public final class Constants {
   }  
 
   public static class ArmSubsystem {
-    public static final int kWristMotorID = 7;
-    public static final int kPulleyMotorID = 8;
-    public static final int kReversedScrewMotorID = 9;
-    public static final int kArmMotorID = 10;
+    //Can ID's for Arm are from 16 to 21
+    public static final int kWristMotorID = 16;
+    public static final int kPulleyMotorID = 17;
+    public static final int kReversedScrewMotorID = 18;
+    public static final int kArmMotorID = 19;
     public static final double kWristMotorOffset = 0;
     public static final double kWristConversionFactor = 0;
     public static final double kPulleyMotorOffset = 0;
     public static final double kPulleyConversionFactor = 0;
     public static final double kReversedScrewMotorOffset = 0;
     public static final double kReversedScrewConversionFactor = 0;
+
     public static final double maxPulleyLimit = 0;
     public static final double minPulleyLimit = 0;
     public static final double minElbowLimit = 0;
     public static final double maxElbowLimit = 0;
     public static final double maxWristLimit = 0;
     public static final double minWristLimit = 0;
+
     public static final double kL2Height = 0;
     public static final double kL3Height = 0;
     public static final double kL4Height = 0;
+
     public static final double kHeightGround = 0;
     public static final double kElbowPosGround = 0;
     public static final double kWristPosGround = 0;
+
     public static final double kElbowPosL2 = 0;
     public static final double kWristPosL2 = 0;
     public static final double kElbowPosL3 = 0;
     public static final double kWristPosL3 = 0;
     public static final double kElbowPosL4 = 0;
     public static final double kWristPosL4 = 0;
+
     public static final double kHeightHumanStation = 0;
     public static final double kElbowPosHumanStation = 0;
     public static final double kWristPosHumanStation = 0;
