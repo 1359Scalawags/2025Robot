@@ -41,10 +41,10 @@ public class RobotContainer {
    private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
-   // private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
+   private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
     //TODO: Do we need to use commandJoystick or Joystick?
   //  private final Joystick driverJoystick = new Joystick(Constants.Operator.DriverJoystick.kPort);
-    private final Joystick assistantJoystick = new Joystick(Constants.Operator.AssistJoystick.kPort);
+  // private final Joystick assistantJoystick = new Joystick(Constants.Operator.AssistJoystick.kPort);
 
   SendableChooser<Command> autoChooser;
   SendableChooser<Command> pipelineChooser;  
@@ -64,13 +64,13 @@ public class RobotContainer {
 
       // Configure remote movements
   public double assistantGetY() {
-    return -assistantJoystick.getY();
+    return -m_AssistantJoystick.getY();
   }
   public double assistantGetX() {
-    return -assistantJoystick.getX();
+    return -m_AssistantJoystick.getX();
   }
   public double assistantGetZ() {
-    return -assistantJoystick.getZ();
+    return -m_AssistantJoystick.getZ();
   }
   public double driverGetRight() {
     return -m_DriverJoystick.getX();
@@ -123,6 +123,7 @@ public class RobotContainer {
   //     .onTrue(new DeployClimber(m_ClimberSubsystem));
   // }
 
+  // m_AssistantJoystick.trigger().onTrue(new DeployClimber(m_ClimberSubsystem));
   }
 
   /**
