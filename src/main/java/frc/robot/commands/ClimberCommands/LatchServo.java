@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 @Deprecated
 /** An example command that uses an example subsystem. */
-public class DeployServo extends Command {
+public class LatchServo extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
 
@@ -20,7 +20,7 @@ public class DeployServo extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DeployServo(ClimberSubsystem subsystem) {
+  public LatchServo(ClimberSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -32,7 +32,9 @@ public class DeployServo extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_subsystem.latchCLimber();
+  }
 
   // Called once the command ends or is interrupted.
   @Override

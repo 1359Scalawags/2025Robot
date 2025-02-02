@@ -141,6 +141,15 @@ public class ClimberSubsystem extends SubsystemBase{
       }
     }
 
+    public void latchCLimber(){
+      setServoAngle(Constants.ClimberSubsystem.servoLatchedAngle);
+    }
+
+    public void unLatchCLimber(){
+      setServoAngle(Constants.ClimberSubsystem.servoUnLatchedAngle);
+    }
+
+
     @Override
     public void periodic() {
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());

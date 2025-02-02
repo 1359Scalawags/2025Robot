@@ -78,6 +78,8 @@ public final class Constants {
     public static final double lockedPosition = 0;
     public static final double extendedClimberAngle = 0;
     public static final double retractedClimberAngle = 0;
+    public static final double servoLatchedAngle = 0;
+    public static final double servoUnLatchedAngle = 0;
 
   }  
 
@@ -131,7 +133,7 @@ public final class Constants {
 
     public static class AssistJoystick {
       public static final int kPort = 1;
-      public static final BooleanSupplier climberExtendButton = null;
+    public static final int deployClimberButton = 7;
     }
   }
 

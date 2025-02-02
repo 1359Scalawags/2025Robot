@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 //TODO: make this command work
-import frc.robot.Constants.Operator.AssistJoystick;
 
 @Deprecated
 /** An example command that uses an example subsystem. */
