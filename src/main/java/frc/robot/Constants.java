@@ -34,17 +34,22 @@ public final class Constants {
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
      *-------------------------------------
      *  SparkMAX:
-     * FRONT LEFT-  1
+     * BACK LEFT-   1
      * FRONT RIGHT- 2
-     * BACK LEFT-   3
+     * FRONT LEFT-  3
      * BACK RIGHT-  4
      * -------------------------------------
      * Falcon500:
-     * FRONT LEFT-  1
+     * BACK LEFT-   1
      * FRONT RIGHT- 2
-     * BACK LEFT-   3
+     * FRONT LEFT-  3
      * BACK RIGHT-  4
      * -------------------------------------
+     *  Enconder:
+     * BACK LEFT-   5
+     * FRONT RIGHT- 6
+     * FRONT LEFT-  7
+     * BACK RIGHT-  8
      */
     
 
