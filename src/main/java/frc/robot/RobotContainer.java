@@ -36,7 +36,7 @@ import frc.robot.commands.ClimberCommands.DeployClimber;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final SwerveSubsystem m_SwereveSubsystem = new SwerveSubsystem(
+  private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/swerve/" + Constants.robotName));
    private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
