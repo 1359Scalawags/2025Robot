@@ -9,20 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.RobotContainer;
 
-//TODO: make this command work
-
-@Deprecated
-/** An example command that uses an example subsystem. */
 public class MoveClimber extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
   private final RobotContainer m_container;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
+
   public MoveClimber(ClimberSubsystem subsystem, RobotContainer container) {
     m_subsystem = subsystem;
     m_container = container;

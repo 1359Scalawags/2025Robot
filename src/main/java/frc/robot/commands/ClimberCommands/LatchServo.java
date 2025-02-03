@@ -7,10 +7,6 @@ package frc.robot.commands.ClimberCommands;
 import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-//TODO: make this command work
-
-@Deprecated
-/** An example command that uses an example subsystem. */
 public class LatchServo extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
