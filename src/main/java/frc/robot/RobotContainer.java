@@ -5,9 +5,10 @@
 package frc.robot;
 
 import frc.robot.Constants.Operator;
-import frc.robot.Constants.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClimberCommands.DeployClimber;
+import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
@@ -60,7 +61,22 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
+    setDefaultCommands(); 
+
+    
   }
+
+  private void setDefaultCommands() {
+    m_SwerveSubsystem.setDefaultCommand(
+      new AbsoluteFieldDrive(m_SwerveSubsystem,
+      this::driverGetForward,
+      this::driverGetRight,
+      this::driverGetZ,
+      this::driverGetThrottle,
+      m_SwerveSubsystem::getFeildCentric, 
+      false
+      ));
+      }
 
       // Configure remote movements
   public double assistantGetY() {
