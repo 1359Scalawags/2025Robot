@@ -24,11 +24,13 @@ public final class Constants {
 
   public static class SwerveSubsystem {
 
-    public static final double MAX_SPEED = 0;
+    public static final double MAX_SPEED = 12;
     public static final double LOOP_TIME = 0;
     public static final double ROBOT_MASS = 0;
     public static final Object CHASSIS = null;
     public static final double TURN_CONSTANT = 0;
+    public static final double kTeleopDeadzone = 0;
+    public static final double kAngleSpeedMultiplier = 0;
 
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
