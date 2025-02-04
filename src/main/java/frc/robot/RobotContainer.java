@@ -8,6 +8,12 @@ import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClimberCommands.DeployClimber;
+import frc.robot.commands.ClimberCommands.LatchServo;
+import frc.robot.commands.ClimberCommands.LockClimber;
+import frc.robot.commands.ClimberCommands.MoveClimber;
+import frc.robot.commands.ClimberCommands.RetractClimber;
+import frc.robot.commands.ClimberCommands.UnLatchServo;
+import frc.robot.commands.ClimberCommands.UnLockClimber;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -139,7 +145,19 @@ public class RobotContainer {
   //     .onTrue(new DeployClimber(m_ClimberSubsystem));
   // }
 
-  // m_AssistantJoystick.trigger().onTrue(new DeployClimber(m_ClimberSubsystem));
+  //Binding Climber Commands
+  m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));
+  m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
+
+  m_AssistantJoystick.button(0).onTrue(new LockClimber(m_ClimberSubsystem));
+  m_AssistantJoystick.button(0).onTrue(new UnLockClimber(m_ClimberSubsystem));
+
+  m_AssistantJoystick.button(0).onTrue(new LatchServo(m_ClimberSubsystem));
+  m_AssistantJoystick.button(0).onTrue(new UnLatchServo(m_ClimberSubsystem));
+
+  //m_AssistantJoystick.button(0).onTrue(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
+  m_ClimberSubsystem.setDefaultCommand(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
+
   }
 
   /**

@@ -5,19 +5,22 @@
 package frc.robot.commands.ClimberCommands;
 
 import frc.robot.subsystems.ClimberSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
 
 public class MoveClimber extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
-  private final RobotContainer m_container;
+  private final DoubleSupplier assistXSupplier;
 
 
-  public MoveClimber(ClimberSubsystem subsystem, RobotContainer container) {
+  public MoveClimber(ClimberSubsystem subsystem, DoubleSupplier assistX) {
     m_subsystem = subsystem;
-    m_container = container;
+    assistXSupplier = assistX;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,8 +34,10 @@ public class MoveClimber extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-     m_subsystem.changeClimberPosition(m_container.assistantGetX());
+    if(m_subsystem.isArmlocked() == false ) {
+     m_subsystem.changeClimberPosition(assistXSupplier.getAsDouble());
     }
+  }
 
   // Called once the command ends or is interrupted.
   @Override

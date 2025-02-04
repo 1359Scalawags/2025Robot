@@ -30,6 +30,8 @@ public class ClimberSubsystem extends SubsystemBase{
   private double lockingTargetPosition;
   private double positionTargetPosition;
 
+  private boolean moveArmCommandLock = true;
+
   private double curretPosition = positionEncoder.getPosition();
 
     public ClimberSubsystem() {
@@ -120,6 +122,8 @@ public class ClimberSubsystem extends SubsystemBase{
     public void extendClimber(){
       double targetpostion = Constants.ClimberSubsystem.extendedClimberAngle;
       setClimberAngle(targetpostion);
+
+      moveArmCommandLock = false;
     }
 
     public void retractClimber(){
@@ -149,6 +153,10 @@ public class ClimberSubsystem extends SubsystemBase{
       setServoAngle(Constants.ClimberSubsystem.servoUnLatchedAngle);
     }
 
+
+    public boolean isArmlocked() {
+      return moveArmCommandLock;
+    }
 
     @Override
     public void periodic() {
