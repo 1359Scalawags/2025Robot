@@ -82,6 +82,10 @@ public class SwerveSubsystem extends SubsystemBase {
    */
 //  private       Vision              vision;
 
+
+  private boolean isFeildCentric = true;
+  private boolean isTeleopReversed = false;
+
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
@@ -763,4 +767,21 @@ public class SwerveSubsystem extends SubsystemBase {
   {
     return swerveDrive;
   }
+
+  public void SetfeildCentric (boolean state) {
+    isFeildCentric = state;
+  }
+    //TODO: make this able to switch
+  public boolean getFeildCentric () {
+    return true;
+  }  
+
+  public void reverse(boolean reverse) {
+    this.isTeleopReversed = reverse;
+  }
+
+  public boolean isReversed() {
+    return this.isTeleopReversed;
+  }
+
 }

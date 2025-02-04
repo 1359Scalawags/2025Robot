@@ -4,104 +4,98 @@
 
 package frc.robot.commands.SwerveCommands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
-
-import java.util.List;
-import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
-import swervelib.math.SwerveMath;
 
-/**
- * An example command that uses an example subsystem.
- */
-public class AbsoluteFieldDrive extends Command
-{
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
-  private final SwerveSubsystem swerve;
-  private final DoubleSupplier  vX, vY, heading;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 
-  /**
-   * Used to drive a swerve robot in full field-centric mode.  vX and vY supply translation inputs, where x is
-   * torwards/away from alliance wall and y is left/right. headingHorzontal and headingVertical are the Cartesian
-   * coordinates from which the robot's angle will be derived— they will be converted to a polar angle, which the robot
-   * will rotate to.
-   *
-   * @param swerve  The swerve drivebase subsystem.
-   * @param vX      DoubleSupplier that supplies the x-translation joystick input.  Should be in the range -1 to 1 with
-   *                deadband already accounted for.  Positive X is away from the alliance wall.
-   * @param vY      DoubleSupplier that supplies the y-translation joystick input.  Should be in the range -1 to 1 with
-   *                deadband already accounted for.  Positive Y is towards the left wall when looking through the driver
-   *                station glass.
-   * @param heading DoubleSupplier that supplies the robot's heading angle.
-   */
-  public AbsoluteFieldDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-                            DoubleSupplier heading)
-  {
-    this.swerve = swerve;
-    this.vX = vX;
-    this.vY = vY;
-    this.heading = heading;
+/** An example command that uses an example subsystem. */
+public class AbsoluteFieldDrive extends Command {
+    private SwerveSubsystem swerve;
+    private DoubleSupplier vX;
+    private DoubleSupplier vY;
+    private DoubleSupplier omega;
+    private DoubleSupplier throttle;
+    private BooleanSupplier feildRelitive;
+    private boolean isOpenLoop;
+    private SwerveController controller;
 
-    addRequirements(swerve);
-  }
-
-  @Override
-  public void initialize()
-  {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute()
-  {
-
-    // Get the desired chassis speeds based on a 2 joystick module.
-
-    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(),
-                                                         new Rotation2d(heading.getAsDouble() * Math.PI));
+    /**
+     * 
+     * @param swerve
+     * @param vX double between -1, and 1
+     * @param vY double between -1, and 1
+     * @param omega
+     * @param throttle
+     * @param feildRelitive
+     * @param isOpenLoop
+     */
+    public AbsoluteFieldDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier omega, DoubleSupplier throttle, BooleanSupplier feildRelitive, boolean isOpenLoop) {
+        this.swerve = swerve;
+        this.vX = vX;
+        this.vY = vY;
+        this.omega = omega;
+        this.throttle = throttle;
+        this.feildRelitive = feildRelitive;
+        this.isOpenLoop = isOpenLoop;
+        this.controller = swerve.getSwerveController();
+        addRequirements(swerve);
+    }
 
 
-         
-    // Limit velocity to prevent tippy
-    
-    Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
-    
-    //TODO: Fix This
-    // translation = SwerveMath.limitVelocity(
-    //   translation,
-    //   swerve.getFieldVelocity(),
-    //   swerve.getPose(),
-    //   Constants.SwerveSubsystem.LOOP_TIME,
-    //   Constants.SwerveSubsystem.ROBOT_MASS,
-    //   List.of(Constants.SwerveSubsystem.CHASSIS),
-    //   swerve.getSwerveDriveConfiguration());
 
-     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
-    SmartDashboard.putString("Translation", translation.toString());
+    @Override
+    public void execute() {
+        double modvX = vX.getAsDouble();
+        double modvY = vY.getAsDouble();
+        if(Math.abs(vX.getAsDouble()) < Constants.SwerveSubsystem.kTeleopDeadzone && Math.abs(vY.getAsDouble()) < Constants.SwerveSubsystem.kTeleopDeadzone) {
+            modvX = 0;
+            modvY = 0;
+        }
+        //Translation2d translation, double rotation, boolean fieldRelative
+        double xVelocity = (modvX * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
+        double yVelocity = (modvY * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
+        double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * Constants.SwerveSubsystem.kAngleSpeedMultiplier * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
+        
+        if(swerve.isReversed()) {
+            // if(feildRelitive.getAsBoolean()) {
+                //if field relative, just need to flip forward backward
+                swerve.drive(
+                    new Translation2d(-xVelocity, -yVelocity),
+                    angVelocity,
+                    feildRelitive.getAsBoolean());
+            // } else {
+            //     //if robot relative, need a 180 rotation...flip both axes
+            //     swerve.drive(
+            //         new Translation2d(-xVelocity, -yVelocity),
+            //         angVelocity,
+            //         feildRelitive.getAsBoolean());                
+            // }
+        } else {
+            swerve.drive(
+                new Translation2d(xVelocity, yVelocity),
+                angVelocity,
+                feildRelitive.getAsBoolean());
+        }
 
-    // Make the robot move
-    swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
 
-  }
+        SmartDashboard.putNumber("Throttle", throttle.getAsDouble() * 100);
+        SmartDashboard.putNumber("swerve X", modvX);
+        SmartDashboard.putNumber("swerve Y", modvY);
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted)
-  {
-  }
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished()
-  {
-    return false;
-  }
-
+    @Override
+    public boolean isFinished() {
+        //TODO Auto-generated method stub
+        return true;
+    }
 
 }
