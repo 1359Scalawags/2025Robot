@@ -15,6 +15,9 @@ import frc.robot.commands.ClimberCommands.RetractClimber;
 import frc.robot.commands.ClimberCommands.UnLatchServo;
 import frc.robot.commands.ClimberCommands.UnLockClimber;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
+import frc.robot.commands.SwerveCommands.FieldCentricCommand;
+import frc.robot.commands.SwerveCommands.RobotCentricCommand;
+import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
@@ -157,6 +160,10 @@ public class RobotContainer {
 
   //m_AssistantJoystick.button(0).onTrue(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
   m_ClimberSubsystem.setDefaultCommand(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
+
+  m_DriverJoystick.button(0).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
+  m_DriverJoystick.button(1).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
+  m_DriverJoystick.button(2).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
 
   }
 

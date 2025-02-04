@@ -771,9 +771,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public void SetfeildCentric (boolean state) {
     isFeildCentric = state;
   }
-    //TODO: make this able to switch
+    //By default he robot is in feild centric.
   public boolean getFeildCentric () {
-    return true;
+    return isFeildCentric;
   }  
 
   public void reverse(boolean reverse) {
