@@ -29,29 +29,29 @@ public final class Constants {
     public static final double ROBOT_MASS = 0;
     public static final Object CHASSIS = null;
     public static final double TURN_CONSTANT = 0;
-    public static final double kTeleopDeadzone = 0;
-    public static final double kAngleSpeedMultiplier = 0;
+    public static final double kTeleopDeadzone = 0.1;
+    public static final double kAngleSpeedMultiplier = 1;
 
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
      *-------------------------------------
      *  SparkMAX:
-     * BACK LEFT-   1
-     * FRONT RIGHT- 2
-     * FRONT LEFT-  3
-     * BACK RIGHT-  4
+     * BACK LEFT ID-   1
+     * FRONT RIGHT ID- 2
+     * FRONT LEFT ID-  3
+     * BACK RIGHT ID-  4
      * -------------------------------------
      * Falcon500:
-     * BACK LEFT-   1
-     * FRONT RIGHT- 2
-     * FRONT LEFT-  3
-     * BACK RIGHT-  4
+     * BACK LEFT ID-   1
+     * FRONT RIGHT ID- 2
+     * FRONT LEFT ID-  3
+     * BACK RIGHT ID-  4
      * -------------------------------------
      *  Enconder:
-     * BACK LEFT-   5
-     * FRONT RIGHT- 6
-     * FRONT LEFT-  7
-     * BACK RIGHT-  8
+     * BACK LEFT ID-   5
+     * FRONT RIGHT ID- 6
+     * FRONT LEFT ID-  7
+     * BACK RIGHT ID-  8
      */
     
 
@@ -74,6 +74,8 @@ public final class Constants {
     public static final double kLockingMotorOffset = 0;
     public static final double kLockingMotorConversionFactor = 0;
 
+
+      //Limits
     public static final double maxServoLimit = 0;
     public static final double minServoLimit = 0;
 
@@ -104,13 +106,7 @@ public final class Constants {
     public static final double kReversedScrewMotorOffset = 0;
     public static final double kReversedScrewConversionFactor = 0;
 
-    public static final double maxPulleyLimit = 0;
-    public static final double minPulleyLimit = 0;
-    public static final double minElbowLimit = 0;
-    public static final double maxElbowLimit = 0;
-    public static final double maxWristLimit = 0;
-    public static final double minWristLimit = 0;
-
+      //set-to-point
     public static final double kL2Height = 0;
     public static final double kL3Height = 0;
     public static final double kL4Height = 0;
@@ -130,7 +126,13 @@ public final class Constants {
     public static final double kElbowPosHumanStation = 0;
     public static final double kWristPosHumanStation = 0;
 
-
+      //Limits
+    public static final double maxPulleyLimit = 0;
+    public static final double minPulleyLimit = 0;
+    public static final double minElbowLimit = 0;
+    public static final double maxElbowLimit = 0;
+    public static final double maxWristLimit = 0;
+    public static final double minWristLimit = 0;
   }
 
   public static class Vision { 
@@ -147,7 +149,7 @@ public final class Constants {
 
     public static class AssistJoystick {
       public static final int kPort = 1;
-    public static final int deployClimberButton = 7;
+      public static final int deployClimberButton = 7;
     }
   }
 
