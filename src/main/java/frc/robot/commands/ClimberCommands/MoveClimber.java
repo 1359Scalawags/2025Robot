@@ -33,10 +33,10 @@ public class MoveClimber extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
+  public void execute() {  
     if(m_subsystem.isArmlocked() == false ) {
      m_subsystem.changeClimberPosition(assistXSupplier.getAsDouble());
-    }
+  }
   }
 
   // Called once the command ends or is interrupted.
