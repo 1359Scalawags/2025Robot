@@ -47,9 +47,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
-    new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/swerve/" + Constants.robotName));
-   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+    new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Flipper"));
+  //  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  //  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
    private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
     //TODO: Do we need to use commandJoystick or Joystick?
@@ -149,17 +149,17 @@ public class RobotContainer {
   // }
 
   //Binding Climber Commands
-  m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));
-  m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
+  // m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));
+  // m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
 
-  m_AssistantJoystick.button(0).onTrue(new LockClimber(m_ClimberSubsystem));
-  m_AssistantJoystick.button(0).onTrue(new UnLockClimber(m_ClimberSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new LockClimber(m_ClimberSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new UnLockClimber(m_ClimberSubsystem));
 
-  m_AssistantJoystick.button(0).onTrue(new LatchServo(m_ClimberSubsystem));
-  m_AssistantJoystick.button(0).onTrue(new UnLatchServo(m_ClimberSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new LatchServo(m_ClimberSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
-  //m_AssistantJoystick.button(0).onTrue(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
-  m_ClimberSubsystem.setDefaultCommand(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
+  // //m_AssistantJoystick.button(0).onTrue(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
+  // m_ClimberSubsystem.setDefaultCommand(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
 
   m_DriverJoystick.button(0).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
   m_DriverJoystick.button(1).onTrue(new FieldCentricCommand(m_SwerveSubsystem));

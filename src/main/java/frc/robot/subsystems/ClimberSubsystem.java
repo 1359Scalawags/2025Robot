@@ -32,7 +32,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
   private boolean moveArmCommandLock = true;
 
-  private double curretPosition = positionEncoder.getPosition();
+  private double curretPosition;
 
     public ClimberSubsystem() {
       lockingMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingMotorID, MotorType.kBrushless, "LockingMotor");
