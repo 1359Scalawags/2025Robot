@@ -20,7 +20,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 public final class Constants {
 
   public final static boolean kDebug = true;
-  public static final String robotName = "Siren";
+  public static final String robotName = "Flipper";
 
   public static class SwerveSubsystem {
 

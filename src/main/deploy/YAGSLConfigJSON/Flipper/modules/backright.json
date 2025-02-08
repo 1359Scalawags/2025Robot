@@ -7,7 +7,7 @@
   "drive": {
     "type": "falcon",
     "id": 2,
-    "canbus": null
+    "canbus": "CANivore"
   },
   "angle": {
     "type": "sparkmax_neo",

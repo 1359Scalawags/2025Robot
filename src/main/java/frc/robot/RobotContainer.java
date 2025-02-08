@@ -161,9 +161,9 @@ public class RobotContainer {
   // //m_AssistantJoystick.button(0).onTrue(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
   // m_ClimberSubsystem.setDefaultCommand(new MoveClimber(m_ClimberSubsystem, this::assistantGetX));
 
-  m_DriverJoystick.button(0).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
-  m_DriverJoystick.button(1).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
-  m_DriverJoystick.button(2).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
+  m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
+  m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
+  m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
 
   }
 
