@@ -19,14 +19,14 @@ import edu.wpi.first.apriltag.AprilTagFields;
  */
 public final class Constants {
 
-  public final static boolean kDebug = true;
+  public static boolean kDebug = true;
   public static final String robotName = "Flipper";
 
   public static class SwerveSubsystem {
 
     public static final double MAX_SPEED = 12;
     public static final double LOOP_TIME = 0;
-    public static final double ROBOT_MASS = 0;
+    public static final double ROBOT_MASS = 100 ;
     public static final Object CHASSIS = null;
     public static final double TURN_CONSTANT = 0;
     public static final double kTeleopDeadzone = 0.1;
