@@ -104,7 +104,7 @@ public class RobotContainer {
     return -m_DriverJoystick.getY();
   }
   public double driverGetZ() {
-    return -m_DriverJoystick.getZ();
+    return m_DriverJoystick.getZ();
   }
   public double driverGetThrottle() {
     return m_DriverJoystick.getThrottle();
