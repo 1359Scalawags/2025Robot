@@ -55,6 +55,6 @@ public class RotateCCWCommand extends Command {
     @Override
     public boolean isFinished() {
         // TODO Auto-generated method stub
-        return false;
+        return false;   //TODO: Be sure to have an end condition?
     }
 }
