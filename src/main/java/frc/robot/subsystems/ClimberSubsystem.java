@@ -5,15 +5,12 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.extensions.SendableCANSparkMax;
 import frc.robot.extensions.SimableSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,7 +27,7 @@ public class ClimberSubsystem extends SubsystemBase{
   private double lockingTargetPosition;
   private double positionTargetPosition;
 
-  private boolean moveArmCommandLock = true;
+  private boolean moveClimberCommandLock = false;
 
   private double curretPosition;
 
@@ -122,8 +119,6 @@ public class ClimberSubsystem extends SubsystemBase{
     public void extendClimber(){
       double targetpostion = Constants.ClimberSubsystem.extendedClimberAngle;
       setClimberAngle(targetpostion);
-
-      moveArmCommandLock = false;
     }
 
     public void retractClimber(){
@@ -153,9 +148,16 @@ public class ClimberSubsystem extends SubsystemBase{
       setServoAngle(Constants.ClimberSubsystem.servoUnLatchedAngle);
     }
 
+    public void moveCLimberCommandLock(){
+      moveClimberCommandLock = false;
+    }
+    
+    public void moveCLimberCommandUnLock(){
+      moveClimberCommandLock = true;
+    }
 
-    public boolean isArmlocked() {
-      return moveArmCommandLock;
+    public boolean isClimberCommandLocked() {
+      return moveClimberCommandLock;
     }
 
     @Override

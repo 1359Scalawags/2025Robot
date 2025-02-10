@@ -34,7 +34,7 @@ public class MoveClimber extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {  
-    if(m_subsystem.isArmlocked() == false ) {
+    if(m_subsystem.isClimberCommandLocked() == false ) {
      m_subsystem.changeClimberPosition(assistXSupplier.getAsDouble());
   }
   }
@@ -46,6 +46,6 @@ public class MoveClimber extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //TODO: Be sure to have an end condition
+    return true;
   }
 }

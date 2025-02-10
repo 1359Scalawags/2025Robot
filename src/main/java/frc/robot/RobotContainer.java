@@ -52,7 +52,6 @@ public class RobotContainer {
   //  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
    private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
-    //TODO: Do we need to use commandJoystick or Joystick?
   //  private final Joystick driverJoystick = new Joystick(Constants.Operator.DriverJoystick.kPort);
   // private final Joystick assistantJoystick = new Joystick(Constants.Operator.AssistJoystick.kPort);
 
