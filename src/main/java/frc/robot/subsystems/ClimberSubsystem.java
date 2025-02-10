@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase{
-  private SimableSparkMax lockingMotor;  
+  private SimableSparkMax lockingBarMotor;  
   private SimableSparkMax positionMotor;
 
-  private AbsoluteEncoder lockingEncoder;
+  private AbsoluteEncoder lockingBarEncoder;
   private AbsoluteEncoder positionEncoder;
 
   private Servo latchingServo;
@@ -35,18 +35,18 @@ public class ClimberSubsystem extends SubsystemBase{
   private double curretPosition;
 
     public ClimberSubsystem() {
-      lockingMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingMotorID, MotorType.kBrushless, "LockingMotor");
+      lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingBarMotorID, MotorType.kBrushless, "LockingBarMotor");
       positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless, "postionMotor");
       latchingServo = new Servo(Constants.ClimberSubsystem.kLatchingServoID);
-      lockingEncoder = lockingMotor.getAbsoluteEncoder();
+      lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
    
-      configureLockingMotor();
+      configureLockingBarMotor();
       configurePositionMotor();
     }
 
     public double getLockingMotorPosition(){
-      return lockingEncoder.getPosition();
+      return lockingBarEncoder.getPosition();
     }
 
     public double getPositionMotorPostion(){
@@ -81,7 +81,7 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    private void configureLockingMotor() {
+    private void configureLockingBarMotor() {
       // create a new sparkmax config
       SparkMaxConfig lockingMotorConfig = new SparkMaxConfig();
 
@@ -102,15 +102,15 @@ public class ClimberSubsystem extends SubsystemBase{
         .d(0.0);
 
       // apply configuration
-      lockingMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void lockClimber(){
-      lockingMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.lockedPosition, ControlType.kPosition);
+    public void lockClimberBar(){
+      lockingBarMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.barLockedPosition, ControlType.kPosition);
     }
 
     public void unlockClimber(){
-      lockingMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.unlockedPosition, ControlType.kPosition);
+      lockingBarMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.unlockedBarPosition, ControlType.kPosition);
     }
 
     public void setClimberAngle(double angle) {

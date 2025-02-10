@@ -66,7 +66,7 @@ public final class Constants {
 
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
-    public static final int kLockingMotorID = 9;
+    public static final int kLockingBarMotorID = 9;
     public static final int kPositionMotorID = 10;
     public static final float kPositionConversionFactor = 1.0f;
     public static final double kPositionEncoderOffset = 0;
@@ -79,13 +79,15 @@ public final class Constants {
     public static final double maxServoLimit = 0;
     public static final double minServoLimit = 0;
 
-    public static final double maxClimberAngle = 0;
-    public static final double minClimberAngle = 0;
+    //TODO; make sure these are right
+    public static final double maxClimberAngle = 0.615;
+    public static final double minClimberAngle = 0.125;
 
-    public static final double minLockLimit = 0;
-    public static final double maxLockLimit = 0;
-    public static final double unlockedPosition = 0;
-    public static final double lockedPosition = 0;
+    public static final double minLockLimit = 0.167;
+    public static final double maxLockLimit = 0.425;
+
+    public static final double unlockedBarPosition = 0;
+    public static final double barLockedPosition = 0;
     public static final double extendedClimberAngle = 0;
     public static final double retractedClimberAngle = 0;
     public static final double servoLatchedAngle = 0;

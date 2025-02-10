@@ -8,12 +8,12 @@ import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class UnLockClimber extends Command {
+public class UnLockClimberBar extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
 
 
-  public UnLockClimber(ClimberSubsystem subsystem) {
+  public UnLockClimberBar(ClimberSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);

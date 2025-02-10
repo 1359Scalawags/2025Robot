@@ -4,15 +4,17 @@
 
 package frc.robot.commands.ClimberCommands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class LockClimber extends Command {
+public class LockClimberBar extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
 
-  public LockClimber(ClimberSubsystem subsystem) {
+  public LockClimberBar(ClimberSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -26,7 +28,7 @@ public class LockClimber extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.lockClimber();
+    m_subsystem.lockClimberBar();
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +38,10 @@ public class LockClimber extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //TODO: Be sure to have an end condition
+    if(MathUtil.isNear(Constants.ClimberSubsystem.barLockedPosition, m_subsystem.getLockingMotorPosition(), 5)){
+    return true; 
+    } else {
+      return false;
+    }
   }
 }
