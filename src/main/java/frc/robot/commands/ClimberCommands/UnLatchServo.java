@@ -4,7 +4,9 @@
 
 package frc.robot.commands.ClimberCommands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
@@ -35,6 +37,10 @@ public class UnLatchServo extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //TODO: Be sure to have an end condition
+    if(MathUtil.isNear(Constants.ClimberSubsystem.servoUnLatchedAngle, m_subsystem.getServoAngle(), 5)){
+    return true; 
+    } else {
+      return false;
+    }
   }
 }

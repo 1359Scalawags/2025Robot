@@ -88,7 +88,7 @@ public final class Constants {
 
     public static final double unlockedBarPosition = 0;
     public static final double barLockedPosition = 0;
-    public static final double extendedClimberAngle = 0;
+    public static final double deployedClimberAngle = 0;
     public static final double retractedClimberAngle = 0;
     public static final double servoLatchedAngle = 0;
     public static final double servoUnLatchedAngle = 0;

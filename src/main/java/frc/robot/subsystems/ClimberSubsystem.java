@@ -117,7 +117,7 @@ public class ClimberSubsystem extends SubsystemBase{
     } 
 
     public void extendClimber(){
-      double targetpostion = Constants.ClimberSubsystem.extendedClimberAngle;
+      double targetpostion = Constants.ClimberSubsystem.deployedClimberAngle;
       setClimberAngle(targetpostion);
     }
 
