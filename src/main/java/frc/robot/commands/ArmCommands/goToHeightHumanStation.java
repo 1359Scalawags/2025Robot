@@ -4,7 +4,9 @@
 
 package frc.robot.commands.ArmCommands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
 //TODO: make this command work
@@ -39,11 +41,19 @@ public class goToHeightHumanStation extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //TODO: Be sure to have an end condition
+      if (MathUtil.isNear(Constants.ArmSubsystem.kHeightHumanStation, m_subsystem.getCalculatedHeight(), 0) && 
+    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosHumanStation, m_subsystem.getElbowMotorPosition(), 0) &&
+    MathUtil.isNear(Constants.ArmSubsystem.kWristPosHumanStation, m_subsystem.getElbowMotorPosition(),0)) {
+      return true;
+    } else {
+      return false;
   }
+ }
 }

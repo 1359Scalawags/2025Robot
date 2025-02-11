@@ -47,12 +47,12 @@ public class goToHeightLevelTwo extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (MathUtil.isNear(Constants.ArmSubsystem.kL2Height, 0, 0) && 
-    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosL2, 0, 0) &&
-    MathUtil.isNear(Constants.ArmSubsystem.kWristPosL2,0,0)); {
+    if (MathUtil.isNear(Constants.ArmSubsystem.kL2Height, m_subsystem.getCalculatedHeight(), 0) && 
+    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosL2, m_subsystem.getElbowMotorPosition(), 0) &&
+    MathUtil.isNear(Constants.ArmSubsystem.kWristPosL2, m_subsystem.getWristMotorPosition(),0)) {
       return true;
+    } else {
+      return false;
     }
-
-
   }
 }
