@@ -19,6 +19,8 @@ public class ArmSubsystem extends SubsystemBase {
     private SimableSparkMax elbowMotor;
     private SimableSparkMax pulleyMotor;
     private SimableSparkMax reversedScrewMotor; //TODO: What does this motor do as opposed to the specific hardware used to do it?
+    private static double ARM_HEIGHT; 
+
 
     public ArmSubsystem() {
       wristMotor = new SimableSparkMax(Constants.ArmSubsystem.kWristMotorID,MotorType.kBrushless);
@@ -212,11 +214,28 @@ public class ArmSubsystem extends SubsystemBase {
       goToWristMotorPosition(wristPos);
     }
 
+    public static double getArmHeight(){
+      return ARM_HEIGHT;
+    }
+
+    public double getElbowMotorPosition(){
+      return elbowMotor.getEncoder().getPosition();
+    }
     
+    public double getWristMotorPosition(){
+      return wristMotor.getEncoder().getPosition();
+    }
+    
+    //TODO : Get formula
+       public double getCalculatedHeight(){
+        return pulleyMotor.getEncoder().getPosition(); 
+       }
 
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+
+        ARM_HEIGHT = getCalculatedHeight();
     }
 }

@@ -5,7 +5,11 @@
 
 package frc.robot.commands.ArmCommands;
 
+import org.ejml.dense.fixed.MatrixFeatures_DDF2;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
 //TODO: make this command work
@@ -43,8 +47,17 @@ public class goToHeightLevelFour extends Command {
   public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
+
+  //TODO : Tune tolerances
   @Override
   public boolean isFinished() {
-    return false; //TODO: Be sure to have an end condition
+ if (MathUtil.isNear(Constants.ArmSubsystem.kL4Height, m_subsystem.getCalculatedHeight(), 0) && 
+    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosL4, m_subsystem.getElbowMotorPosition(), 0) &&
+    MathUtil.isNear(Constants.ArmSubsystem.kWristPosL4,m_subsystem.getWristMotorPosition(),0)) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 }
