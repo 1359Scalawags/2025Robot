@@ -18,7 +18,7 @@ public class ArmSubsystem extends SubsystemBase {
     private SimableSparkMax wristMotor; 
     private SimableSparkMax elbowMotor;
     private SimableSparkMax pulleyMotor;
-    private SimableSparkMax clawMotor; 
+    private SimableSparkMax clawMotor; // TODO : make this do all the things is needs to do (make gavan do it)
     private static double ARM_HEIGHT; 
 
 
