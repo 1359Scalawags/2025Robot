@@ -42,6 +42,6 @@ public class ZeroGyroCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;   //TODO: Be sure to have an end condition?
+    return true;   
   }
 }

@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
-//TODO: make this command work
 
 @Deprecated
 /** An example command that uses an example subsystem. */
