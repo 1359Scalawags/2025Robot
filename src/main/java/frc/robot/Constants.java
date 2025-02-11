@@ -55,10 +55,7 @@ public final class Constants {
      */
     
 
-     //TODO: what is this for?
-     public SwerveSubsystem(File file) {
-      //TODO Auto-generated constructor stub
-    }
+     
 
     
 
@@ -80,16 +77,16 @@ public final class Constants {
     public static final double minServoLimit = 0;
 
     //TODO; make sure these are right
-    public static final double maxClimberAngle = 0.615;
-    public static final double minClimberAngle = 0.125;
+    public static final double maxClimberAngle = 0.037;
+    public static final double minClimberAngle = 0.457;
 
     public static final double minLockLimit = 0.167;
     public static final double maxLockLimit = 0.425;
 
     public static final double unlockedBarPosition = 0;
     public static final double barLockedPosition = 0;
-    public static final double deployedClimberAngle = 0;
-    public static final double retractedClimberAngle = 0;
+    public static final double deployedClimberAngle = 0.185;
+    public static final double retractedClimberAngle = 0.442;
     public static final double servoLatchedAngle = 0;
     public static final double servoUnLatchedAngle = 0;
 
