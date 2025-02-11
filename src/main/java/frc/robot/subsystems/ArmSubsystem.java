@@ -151,7 +151,7 @@ public class ArmSubsystem extends SubsystemBase {
     
     //Sets arm height to the ground
     public void goToHeightGround(){
-      double heightPos = Constants.ArmSubsystem.kHeightGround;
+      double heightPos = Constants.ArmSubsystem.kGroundHeight;
       goToPulleyMotorPosition(heightPos);
     }
     //Sets arm height to Level Two

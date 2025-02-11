@@ -5,7 +5,9 @@
 
 package frc.robot.commands.ArmCommands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
 //TODO: make this command work
@@ -45,6 +47,12 @@ public class goToHeightLevelTwo extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //TODO: FIX THIS kavi nerd
+    if (MathUtil.isNear(Constants.ArmSubsystem.kL2Height, 0, 0) && 
+    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosL2, 0, 0) &&
+    MathUtil.isNear(Constants.ArmSubsystem.kWristPosL2,0,0)); {
+      return true;
+    }
+
+
   }
 }

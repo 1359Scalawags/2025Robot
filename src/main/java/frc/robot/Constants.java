@@ -112,21 +112,21 @@ public final class Constants {
     public static final double kL2Height = 0;
     public static final double kL3Height = 0;
     public static final double kL4Height = 0;
-
-    public static final double kHeightGround = 0;
-    public static final double kElbowPosGround = 0;
-    public static final double kWristPosGround = 0;
-
-    public static final double kElbowPosL2 = 0;
-    public static final double kWristPosL2 = 0;
-    public static final double kElbowPosL3 = 0;
-    public static final double kWristPosL3 = 0;
-    public static final double kElbowPosL4 = 0;
-    public static final double kWristPosL4 = 0;
-
+    public static final double kGroundHeight = 0;
     public static final double kHeightHumanStation = 0;
+
+    public static final double kElbowPosGround = 0;
+    public static final double kElbowPosL2 = 0;
+    public static final double kElbowPosL3 = 0;
+    public static final double kElbowPosL4 = 0;
     public static final double kElbowPosHumanStation = 0;
+
+    public static final double kWristPosGround = 0;
+    public static final double kWristPosL2 = 0;
+    public static final double kWristPosL3 = 0;
+    public static final double kWristPosL4 = 0;
     public static final double kWristPosHumanStation = 0;
+
 
       //Limits
     public static final double maxPulleyLimit = 0;
