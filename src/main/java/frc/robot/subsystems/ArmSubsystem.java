@@ -131,85 +131,85 @@ public class ArmSubsystem extends SubsystemBase {
       }
 
 
-    public void setPulleyMotorPosition(double pulleyMotorPosition) {
+    public void goToPulleyMotorPosition(double pulleyMotorPosition) {
       if (pulleyMotorPosition < Constants.ArmSubsystem.maxPulleyLimit && pulleyMotorPosition > Constants.ArmSubsystem.minPulleyLimit) {
         pulleyMotor.getClosedLoopController().setReference(pulleyMotorPosition, ControlType.kPosition);
       }
     } 
 
-    public void setElbowMotorPosition(double elbowMotorPosition) {
+    public void goToElbowMotorPosition(double elbowMotorPosition) {
       if (elbowMotorPosition < Constants.ArmSubsystem.maxElbowLimit && elbowMotorPosition > Constants.ArmSubsystem.minElbowLimit) {
         elbowMotor.getClosedLoopController().setReference(elbowMotorPosition, ControlType.kPosition);
       }
     } 
 
-    public void setWristMotorPosition(double wristMotorPosition) {
+    public void goToWristMotorPosition(double wristMotorPosition) {
       if (wristMotorPosition < Constants.ArmSubsystem.maxWristLimit && wristMotorPosition > Constants.ArmSubsystem.minWristLimit) {
         wristMotor.getClosedLoopController().setReference(wristMotorPosition, ControlType.kPosition);
       }
     }
     
     //Sets arm height to the ground
-    public void setHeightGround(){
+    public void goToHeightGround(){
       double heightPos = Constants.ArmSubsystem.kHeightGround;
-      setPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(heightPos);
     }
     //Sets arm height to Level Two
-    public void setHeightL2(){
+    public void goToHeightL2(){
       double heightPos = Constants.ArmSubsystem.kL2Height;
-      setPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(heightPos);
     }
     //Sets arm height to Level Three
-    public void setHeightL3(){
+    public void goToHeightL3(){
       double heightPos = Constants.ArmSubsystem.kL3Height;
-      setPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(heightPos);
     }
     //Sets arm height to Level Four
-    public void setHeightL4(){
+    public void goToHeightL4(){
       double heightPos = Constants.ArmSubsystem.kL4Height;
-      setPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(heightPos);
     }
     //Sets arm height to the Human Station
-    public void setHeightHumanStation(){
+    public void goToHeightHumanStation(){
       double heightPos = Constants.ArmSubsystem.kHeightHumanStation;
-      setPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(heightPos);
 
     }
 
     //Sets arm position to the Ground
-    public void setArmGround(){
+    public void goToArmGround(){
       double elbowPos = Constants.ArmSubsystem.kElbowPosGround;
       double wristPos = Constants.ArmSubsystem.kWristPosGround;
-      setElbowMotorPosition(elbowPos);
-      setWristMotorPosition(wristPos);
+      goToElbowMotorPosition(elbowPos);
+      goToWristMotorPosition(wristPos);
     }
     //Sets arm position to Level Two
-    public void setArmL2(){
+    public void goToArmL2(){
       double elbowPos = Constants.ArmSubsystem.kElbowPosL2;
       double wristPos = Constants.ArmSubsystem.kWristPosL2;
-      setElbowMotorPosition(elbowPos);
-      setWristMotorPosition(wristPos);
+      goToElbowMotorPosition(elbowPos);
+      goToWristMotorPosition(wristPos);
     }
     //Sets arm postion to Level Three
-    public void setArmL3(){
+    public void goToArmL3(){
       double elbowPos = Constants.ArmSubsystem.kElbowPosL3;
       double wristPos = Constants.ArmSubsystem.kWristPosL3;
-      setElbowMotorPosition(elbowPos);
-      setWristMotorPosition(wristPos);
+      goToElbowMotorPosition(elbowPos);
+      goToWristMotorPosition(wristPos);
     }
     //Sets arm position to Level Four
-    public void setArmL4(){
+    public void goToArmL4(){
       double elbowPos = Constants.ArmSubsystem.kElbowPosL4;
       double wristPos = Constants.ArmSubsystem.kWristPosL4;
-      setElbowMotorPosition(elbowPos);
-      setWristMotorPosition(wristPos);
+      goToElbowMotorPosition(elbowPos);
+      goToWristMotorPosition(wristPos);
     }
     //Sets arm position to the Human Station
-    public void setArmHumanStation(){
+    public void goToArmHumanStation(){
       double elbowPos = Constants.ArmSubsystem.kElbowPosHumanStation;
       double wristPos = Constants.ArmSubsystem.kWristPosHumanStation;
-      setElbowMotorPosition(elbowPos);
-      setWristMotorPosition(wristPos);
+      goToElbowMotorPosition(elbowPos);
+      goToWristMotorPosition(wristPos);
     }
 
     

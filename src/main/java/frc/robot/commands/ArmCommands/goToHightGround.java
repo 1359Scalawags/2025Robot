@@ -12,7 +12,7 @@ import frc.robot.subsystems.ArmSubsystem;
 
 @Deprecated
 /** An example command that uses an example subsystem. */
-public class SetHeightLevelTwo extends Command {
+public class goToHightGround extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
 
@@ -21,7 +21,7 @@ public class SetHeightLevelTwo extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SetHeightLevelTwo(ArmSubsystem subsystem) {
+  public goToHightGround(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -34,8 +34,8 @@ public class SetHeightLevelTwo extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setHeightL2();
-    m_subsystem.setArmL2();
+    m_subsystem.goToHeightGround();
+    m_subsystem.goToArmGround();
   }
 
   // Called once the command ends or is interrupted.

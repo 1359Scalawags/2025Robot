@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -11,7 +12,7 @@ import frc.robot.subsystems.ArmSubsystem;
 
 @Deprecated
 /** An example command that uses an example subsystem. */
-public class SetHeightHumanStation extends Command {
+public class goToHeightLevelTwo extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
 
@@ -20,7 +21,7 @@ public class SetHeightHumanStation extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SetHeightHumanStation(ArmSubsystem subsystem) {
+  public goToHeightLevelTwo(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -33,8 +34,8 @@ public class SetHeightHumanStation extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setArmHumanStation();
-    m_subsystem.setHeightHumanStation();
+    m_subsystem.goToHeightL2();
+    m_subsystem.goToArmL2();
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +45,6 @@ public class SetHeightHumanStation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //TODO: Be sure to have an end condition
+    return false; //TODO: FIX THIS kavi nerd
   }
 }

@@ -164,5 +164,7 @@ public class ClimberSubsystem extends SubsystemBase{
     public void periodic() {
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       SmartDashboard.putNumber("Climber Motor Position", getPositionMotorPostion());
+      SmartDashboard.putNumber("Servo position", getServoAngle());
+
   }
 }
