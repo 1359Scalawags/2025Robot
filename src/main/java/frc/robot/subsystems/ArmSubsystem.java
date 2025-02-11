@@ -18,7 +18,7 @@ public class ArmSubsystem extends SubsystemBase {
     private SimableSparkMax wristMotor; 
     private SimableSparkMax elbowMotor;
     private SimableSparkMax pulleyMotor;
-    private SimableSparkMax reversedScrewMotor; //TODO: What does this motor do as opposed to the specific hardware used to do it?
+    private SimableSparkMax clawMotor; 
     private static double ARM_HEIGHT; 
 
 
@@ -26,12 +26,12 @@ public class ArmSubsystem extends SubsystemBase {
       wristMotor = new SimableSparkMax(Constants.ArmSubsystem.kWristMotorID,MotorType.kBrushless);
       elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.kArmMotorID,MotorType.kBrushless);
       pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.kPulleyMotorID,MotorType.kBrushless);
-      reversedScrewMotor = new SimableSparkMax(Constants.ArmSubsystem.kReversedScrewMotorID,MotorType.kBrushless);
+      clawMotor = new SimableSparkMax(Constants.ArmSubsystem.kReversedScrewMotorID,MotorType.kBrushless);
 
       configureWristMotor();
       configureArmMotor();
       configurePulleyMotor();
-      configureReversedScrewMotor();
+      configureClawMotor();
     }
 
     private void configureWristMotor() {
@@ -108,7 +108,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
 
-    private void configureReversedScrewMotor() {
+    private void configureClawMotor() {
       SparkMaxConfig reversedScrewMotorConfig = new SparkMaxConfig();
   
         reversedScrewMotorConfig
