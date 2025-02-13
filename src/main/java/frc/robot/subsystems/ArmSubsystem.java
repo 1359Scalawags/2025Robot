@@ -132,6 +132,15 @@ public class ArmSubsystem extends SubsystemBase {
         wristMotor.configure(reversedScrewMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       }
 
+    public void closeClaw(){
+      System.err.println("closeClaw not implemented");
+      //clawMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.closedClawPosition, ControlType.kPosition);
+    }
+
+    public void openClaw(){
+      System.err.println("openClaw not implemented");
+      //clawMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.openedClawPosition, ControlType.kPosition);
+    }
 
     public void goToPulleyMotorPosition(double pulleyMotorPosition) {
       if (pulleyMotorPosition < Constants.ArmSubsystem.maxPulleyLimit && pulleyMotorPosition > Constants.ArmSubsystem.minPulleyLimit) {

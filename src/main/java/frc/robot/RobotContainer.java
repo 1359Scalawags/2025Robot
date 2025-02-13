@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ArmCommands.closeClawCommand;
+import frc.robot.commands.ArmCommands.openClawCommand;
 import frc.robot.commands.ClimberCommands.DeployClimber;
 import frc.robot.commands.ClimberCommands.LatchServo;
 import frc.robot.commands.ClimberCommands.LockClimberBar;
@@ -146,6 +148,9 @@ public class RobotContainer {
   // new JoystickButton(assistantJoystick, Constants.Operator.AssistJoystick.deployClimberButton)
   //     .onTrue(new DeployClimber(m_ClimberSubsystem));
   // }
+
+  //Bindin Arm Commands
+  m_AssistantJoystick.button(0).onTrue(new closeClawCommand(null));
 
   //Binding Climber Commands
   // m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));
