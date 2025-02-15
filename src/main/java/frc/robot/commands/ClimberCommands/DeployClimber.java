@@ -43,7 +43,7 @@ public class DeployClimber extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(MathUtil.isNear(Constants.ClimberSubsystem.deployedClimberAngle, m_subsystem.getPositionMotorPostion(), 5)){
+    if(MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kDeployedAngle, m_subsystem.getPositionMotorPostion(), 5)){
     return true; 
     } else {
       return false;

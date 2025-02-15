@@ -59,10 +59,9 @@ public final class Constants {
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
     public static final int kLockingBarMotorID = 9;
-    public static final int kPositionMotorID = 10;
+
     public static final int kLatchingServoID = 11;
-    public static final double kPositionConversionFactor = 360;
-    public static final double kPositionEncoderOffset = 180;
+
     public static final double kLockingMotorOffset = 0;
     public static final double kLockingBarMotorConversionFactor = 360;
 
@@ -72,18 +71,26 @@ public final class Constants {
     public static final double minServoLimit = 0;
 
     //TODO; make sure these are right
-    public static final double maxClimberAngle = 0.037*360;
-    public static final double minClimberAngle = 0.457*360;
+
 
     public static final double minBarLockLimit = 0.167*360;
     public static final double maxBarLockLimit = 0.425*360;
 
     public static final double unlockedBarPosition = 0;
     public static final double barLockedPosition = 0;
-    public static final double deployedClimberAngle = 0.185*360;
-    public static final double retractedClimberAngle = 0.442*360;
+
     public static final double servoLatchedAngle = 0;
     public static final double servoUnLatchedAngle = 0;
+
+    public class PositionMotor {
+      public static final int kMotorID = 10;
+      public static final double kMaxAngle = 0.037*360;
+      public static final double kMinAngle = 0.457*360;
+      public static final double kConversionFactor = 360;
+      public static final double kEncoderOffset = 180;    
+      public static final double kDeployedAngle = 0.185*360;
+      public static final double kHomeAngle = 0.442*360;
+    }
   }  
 
   // TODO: Create sub classes for each function of the Arm system

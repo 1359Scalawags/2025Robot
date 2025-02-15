@@ -34,7 +34,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public ClimberSubsystem() {
       lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingBarMotorID, MotorType.kBrushless, "LockingBarMotor");
-      positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.kPositionMotorID, MotorType.kBrushless, "postionMotor");
+      positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
       latchingServo = new Servo(Constants.ClimberSubsystem.kLatchingServoID);
       lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
@@ -67,8 +67,8 @@ public class ClimberSubsystem extends SubsystemBase{
         .smartCurrentLimit(70, 30, 120);
 
       positionMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ClimberSubsystem.kPositionEncoderOffset)
-      .positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor);
+      .zeroOffset(Constants.ClimberSubsystem.PositionMotor.kEncoderOffset)
+      .positionConversionFactor(Constants.ClimberSubsystem.PositionMotor.kConversionFactor);
        
       positionMotorConfig.closedLoop
       .p(0.1f)
@@ -114,25 +114,25 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
     public void setClimberAngle(double angle) {
-      if (angle < Constants.ClimberSubsystem.maxClimberAngle && angle > Constants.ClimberSubsystem.minClimberAngle) {
+      if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
         positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
       }
     } 
 
     public void extendClimber(){
-      double targetpostion = Constants.ClimberSubsystem.deployedClimberAngle;
+      double targetpostion = Constants.ClimberSubsystem.PositionMotor.kDeployedAngle;
       setClimberAngle(targetpostion);
     }
 
     public void retractClimber(){
-      double targetpostion = Constants.ClimberSubsystem.retractedClimberAngle;
+      double targetpostion = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
       setClimberAngle(targetpostion);
     }
 
         // operater controll of the climber 
     public void changeClimberPosition(double delta){
       double newPosition = curretPosition + delta; 
-      newPosition = MathUtil.clamp(newPosition, Constants.ClimberSubsystem.minClimberAngle, Constants.ClimberSubsystem.maxClimberAngle);
+      newPosition = MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
       positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
     }
     
@@ -168,6 +168,7 @@ public class ClimberSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       SmartDashboard.putNumber("Climber Motor Position", getPositionMotorPostion());
       SmartDashboard.putNumber("Servo position", getServoAngle());
+      System.out.println("Position Motor Applied Output: " + positionMotor.getAppliedOutput());
 
   }
 }
