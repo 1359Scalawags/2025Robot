@@ -24,9 +24,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem() {
       wristMotor = new SimableSparkMax(Constants.ArmSubsystem.kWristMotorID,MotorType.kBrushless);
-      elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.kArmMotorID,MotorType.kBrushless);
+      elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.kElbowMotorID,MotorType.kBrushless);
       pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.kPulleyMotorID,MotorType.kBrushless);
-      clawMotor = new SimableSparkMax(Constants.ArmSubsystem.kReversedScrewMotorID,MotorType.kBrushless);
+      clawMotor = new SimableSparkMax(Constants.ArmSubsystem.kClawMotorID,MotorType.kBrushless);
 
       configureWristMotor();
       configureArmMotor();

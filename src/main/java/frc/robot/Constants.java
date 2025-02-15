@@ -96,8 +96,8 @@ public final class Constants {
     //Can ID's for Arm are from 16 to 21
     public static final int kWristMotorID = 16;
     public static final int kPulleyMotorID = 17;
-    public static final int kReversedScrewMotorID = 18;
-    public static final int kArmMotorID = 19;
+    public static final int kClawMotorID = 18;
+    public static final int kElbowMotorID = 19;
     public static final double kWristMotorOffset = 0;
     public static final double kWristConversionFactor = 360;
     public static final double kPulleyMotorOffset = 0;
