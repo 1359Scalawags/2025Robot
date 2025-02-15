@@ -65,11 +65,11 @@ public final class Constants {
     //Can ID's for climber are from 9 to 15
     public static final int kLockingBarMotorID = 9;
     public static final int kPositionMotorID = 10;
+    public static final int kLatchingServoID = 11;
     public static final float kPositionConversionFactor = 1.0f;
     public static final double kPositionEncoderOffset = 0;
-    public static final int kLatchingServoID = 11;
     public static final double kLockingMotorOffset = 0;
-    public static final double kLockingMotorConversionFactor = 0;
+    public static final double kLockingMotorConversionFactor = 1;
 
 
       //Limits
@@ -99,11 +99,11 @@ public final class Constants {
     public static final int kReversedScrewMotorID = 18;
     public static final int kArmMotorID = 19;
     public static final double kWristMotorOffset = 0;
-    public static final double kWristConversionFactor = 0;
+    public static final double kWristConversionFactor = 1;
     public static final double kPulleyMotorOffset = 0;
-    public static final double kPulleyConversionFactor = 0;
+    public static final double kPulleyConversionFactor = 1;
     public static final double kReversedScrewMotorOffset = 0;
-    public static final double kReversedScrewConversionFactor = 0;
+    public static final double kReversedScrewConversionFactor = 1;
 
       //set-to-point
     public static final double kL2Height = 0;
