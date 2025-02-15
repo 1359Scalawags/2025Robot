@@ -82,12 +82,12 @@ public final class Constants {
 
     public class PositionMotor {
       public static final int kMotorID = 10;
-      public static final double kMaxAngle = 0.037*360;
-      public static final double kMinAngle = 0.457*360;
+      public static final double kMaxAngle = 282.0; //0.037*360;
+      public static final double kMinAngle = 132.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
-      public static final double kDeployedAngle = 0.185*360;
-      public static final double kHomeAngle = 0.442*360;
+      public static final double kDeployedAngle = 245.0; // 0.185*360;
+      public static final double kHomeAngle = 135.0; //0.442*360;
     }
   }  
 
@@ -96,8 +96,8 @@ public final class Constants {
     //Can ID's for Arm are from 16 to 21
     public static final int kWristMotorID = 16;
     public static final int kPulleyMotorID = 17;
-    public static final int kReversedScrewMotorID = 18;
-    public static final int kArmMotorID = 19;
+    public static final int kClawMotorID = 18;
+    public static final int kElbowMotorID = 19;
     public static final double kWristMotorOffset = 0;
     public static final double kWristConversionFactor = 360;
     public static final double kPulleyMotorOffset = 0;
