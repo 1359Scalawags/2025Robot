@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.derive;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -11,6 +13,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.extensions.SimableSparkMax;
@@ -33,6 +36,8 @@ public class ClimberSubsystem extends SubsystemBase{
 
   private double curretPosition;
 
+  private Timer debugTimer;
+
     public ClimberSubsystem() {
       lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingBarMotorID, MotorType.kBrushless, "LockingBarMotor");
       positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
@@ -47,6 +52,9 @@ public class ClimberSubsystem extends SubsystemBase{
       Shuffleboard.getTab("climber").add("Latching Servo", latchingServo);
       Shuffleboard.getTab("climber").add("Locking Bar", lockingBarMotor);
       Shuffleboard.getTab("climber").add("Position Motor Position",positionMotor.getEncoder().getPosition());
+
+      debugTimer = new Timer();
+      debugTimer.start();
     }
 
     public double getLockingMotorPosition(){
@@ -175,8 +183,12 @@ public class ClimberSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       SmartDashboard.putNumber("Climber Motor Position", getPositionMotorPostion());
       SmartDashboard.putNumber("Servo position", getServoAngle());
-      System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
-      System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
+      if(debugTimer.get() > 0.5) {
+        System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
+        System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
+        debugTimer.reset();
+      }
+
 
   }
 }
