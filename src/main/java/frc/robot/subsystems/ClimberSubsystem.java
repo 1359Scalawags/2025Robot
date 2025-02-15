@@ -175,6 +175,8 @@ public class ClimberSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       SmartDashboard.putNumber("Climber Motor Position", getPositionMotorPostion());
       SmartDashboard.putNumber("Servo position", getServoAngle());
+      System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
+      System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
 
   }
 }
