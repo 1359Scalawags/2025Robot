@@ -69,7 +69,7 @@ public final class Constants {
     public static final float kPositionConversionFactor = 1.0f;
     public static final double kPositionEncoderOffset = 0;
     public static final double kLockingMotorOffset = 0;
-    public static final double kLockingMotorConversionFactor = 1;
+    public static final double kLockingBarMotorConversionFactor = 1;
 
 
       //Limits
@@ -80,8 +80,8 @@ public final class Constants {
     public static final double maxClimberAngle = 0.037;
     public static final double minClimberAngle = 0.457;
 
-    public static final double minLockLimit = 0.167;
-    public static final double maxLockLimit = 0.425;
+    public static final double minBarLockLimit = 0.167;
+    public static final double maxBarLockLimit = 0.425;
 
     public static final double unlockedBarPosition = 0;
     public static final double barLockedPosition = 0;

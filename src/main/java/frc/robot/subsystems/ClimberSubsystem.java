@@ -91,7 +91,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
       lockingMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ClimberSubsystem.kLockingMotorOffset)
-        .positionConversionFactor(Constants.ClimberSubsystem.kLockingMotorConversionFactor);
+        .positionConversionFactor(Constants.ClimberSubsystem.kLockingBarMotorConversionFactor);
 
       lockingMotorConfig.closedLoop
         .p(1.0f)
