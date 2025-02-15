@@ -59,9 +59,7 @@ public final class Constants {
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
     public static final int kLockingBarMotorID = 9;
-
     public static final int kLatchingServoID = 0;
-
     public static final double kLockingMotorOffset = 0;
     public static final double kLockingBarMotorConversionFactor = 360;
 
@@ -87,7 +85,7 @@ public final class Constants {
       public static final double kMaxAngle = 0.037*360;
       public static final double kMinAngle = 0.457*360;
       public static final double kConversionFactor = 360;
-      public static final double kEncoderOffset = 180;    
+      public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 0.185*360;
       public static final double kHomeAngle = 0.442*360;
     }
