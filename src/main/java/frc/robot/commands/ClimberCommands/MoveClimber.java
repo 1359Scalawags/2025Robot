@@ -15,12 +15,12 @@ import frc.robot.RobotContainer;
 public class MoveClimber extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
-  private final DoubleSupplier assistXSupplier;
+  private final DoubleSupplier assistYSupplier;
 
 
-  public MoveClimber(ClimberSubsystem subsystem, DoubleSupplier assistX) {
+  public MoveClimber(ClimberSubsystem subsystem, DoubleSupplier assistY) {
     m_subsystem = subsystem;
-    assistXSupplier = assistX;
+    assistYSupplier = assistY;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -35,7 +35,7 @@ public class MoveClimber extends Command {
   @Override
   public void execute() {  
     if(m_subsystem.isClimberCommandLocked() == false ) {
-     m_subsystem.changeClimberPosition(assistXSupplier.getAsDouble());
+     m_subsystem.changeClimberPosition(assistYSupplier.getAsDouble());
   }
   }
 

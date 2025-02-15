@@ -32,6 +32,7 @@ public class ClimberSubsystem extends SubsystemBase{
   private double lockingTargetPosition;
   private double positionTargetPosition;
 
+    //TODO: make this make sense to the drivers when it is in the dashboard
   private boolean moveClimberCommandLock = true;
 
   private Timer debugTimer;
@@ -190,6 +191,7 @@ public class ClimberSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
       SmartDashboard.putNumber("Servo position", getServoAngle());
+      SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
       if(debugTimer.get() > 1.5) {
         System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
         System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
