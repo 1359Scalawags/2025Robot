@@ -66,7 +66,7 @@ public class ClimberSubsystem extends SubsystemBase{
       SparkMaxConfig positionMotorConfig = new SparkMaxConfig();
 
       positionMotorConfig
-        .idleMode(IdleMode.kBrake)
+        .idleMode(IdleMode.kCoast)
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)

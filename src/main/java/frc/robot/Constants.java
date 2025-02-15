@@ -60,7 +60,7 @@ public final class Constants {
     //Can ID's for climber are from 9 to 15
     public static final int kLockingBarMotorID = 9;
 
-    public static final int kLatchingServoID = 11;
+    public static final int kLatchingServoID = 0;
 
     public static final double kLockingMotorOffset = 0;
     public static final double kLockingBarMotorConversionFactor = 360;
