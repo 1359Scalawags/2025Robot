@@ -34,8 +34,6 @@ public class ClimberSubsystem extends SubsystemBase{
 
   private boolean moveClimberCommandLock = true;
 
-  private double curretPosition;
-
   private Timer debugTimer;
 
     public ClimberSubsystem() {
@@ -61,7 +59,7 @@ public class ClimberSubsystem extends SubsystemBase{
       return lockingBarEncoder.getPosition();
     }
 
-    public double getPositionMotorPostion(){
+    public double getClimberPostion(){
       return positionEncoder.getPosition();
     }
 
@@ -146,7 +144,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
         // operater controll of the climber 
     public void changeClimberPosition(double delta){
-      double newPosition = curretPosition + delta; 
+      double newPosition = getClimberPostion() + delta; 
       newPosition = MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
       positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
     }
@@ -178,10 +176,19 @@ public class ClimberSubsystem extends SubsystemBase{
       return moveClimberCommandLock;
     }
 
+    public boolean isClimberLocked() {
+      return moveClimberCommandLock;
+    }
+
+    public boolean unlockClimberSubsystem() {
+      moveClimberCommandLock = false;
+      return moveClimberCommandLock;
+    }
+
     @Override
     public void periodic() {
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
-      SmartDashboard.putNumber("Climber Motor Position", getPositionMotorPostion());
+      SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
       SmartDashboard.putNumber("Servo position", getServoAngle());
       if(debugTimer.get() > 0.5) {
         System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());

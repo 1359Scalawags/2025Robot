@@ -38,7 +38,7 @@ public class RetractClimber extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kHomeAngle, m_subsystem.getPositionMotorPostion(), 5)){
+    if(MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kHomeAngle, m_subsystem.getClimberPostion(), 5)){
     return true; 
     } else {
       return false;
