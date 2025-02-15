@@ -58,7 +58,7 @@ public class ArmSubsystem extends SubsystemBase {
       wristMotor.configure(wristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-
+      //TODO: make sure to add ".feedbackSensor(FeedbackSensor.kAbsoluteEncoder)" to any motor with a absolute encoder
     private void configureArmMotor() {
       SparkMaxConfig armMotorConfig = new SparkMaxConfig();
   
