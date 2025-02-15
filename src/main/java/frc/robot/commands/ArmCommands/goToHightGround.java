@@ -11,8 +11,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
 
-
-@Deprecated
 /** An example command that uses an example subsystem. */
 public class goToHightGround extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
@@ -47,9 +45,9 @@ public class goToHightGround extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-        if (MathUtil.isNear(Constants.ArmSubsystem.kGroundHeight, m_subsystem.getCalculatedHeight(), 0) && 
-    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosGround, m_subsystem.getElbowMotorPosition(), 0) &&
-    MathUtil.isNear(Constants.ArmSubsystem.kWristPosGround, m_subsystem.getWristMotorPosition(),0)) {
+        if (MathUtil.isNear(Constants.ArmSubsystem.kGroundHeight, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
+    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosGround, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
+    MathUtil.isNear(Constants.ArmSubsystem.kWristPosGround, m_subsystem.getWristMotorPosition(), Constants.ArmSubsystem.armGoToTolerance)) {
       return true;
     } else {
       return false;

@@ -53,12 +53,6 @@ public final class Constants {
      * FRONT LEFT ID-  7
      * BACK RIGHT ID-  8
      */
-    
-
-     
-
-    
-
   }
 
   // TODO: Create sub classes for each function of the Climber system
@@ -66,11 +60,11 @@ public final class Constants {
     //Can ID's for climber are from 9 to 15
     public static final int kLockingBarMotorID = 9;
     public static final int kPositionMotorID = 10;
-    public static final float kPositionConversionFactor = 1.0f;
-    public static final double kPositionEncoderOffset = 0;
     public static final int kLatchingServoID = 11;
+    public static final double kPositionConversionFactor = 360;
+    public static final double kPositionEncoderOffset = 180;
     public static final double kLockingMotorOffset = 0;
-    public static final double kLockingMotorConversionFactor = 0;
+    public static final double kLockingBarMotorConversionFactor = 360;
 
 
       //Limits
@@ -78,19 +72,18 @@ public final class Constants {
     public static final double minServoLimit = 0;
 
     //TODO; make sure these are right
-    public static final double maxClimberAngle = 0.037;
-    public static final double minClimberAngle = 0.457;
+    public static final double maxClimberAngle = 0.037*360;
+    public static final double minClimberAngle = 0.457*360;
 
-    public static final double minLockLimit = 0.167;
-    public static final double maxLockLimit = 0.425;
+    public static final double minBarLockLimit = 0.167*360;
+    public static final double maxBarLockLimit = 0.425*360;
 
     public static final double unlockedBarPosition = 0;
     public static final double barLockedPosition = 0;
-    public static final double deployedClimberAngle = 0.185;
-    public static final double retractedClimberAngle = 0.442;
+    public static final double deployedClimberAngle = 0.185*360;
+    public static final double retractedClimberAngle = 0.442*360;
     public static final double servoLatchedAngle = 0;
     public static final double servoUnLatchedAngle = 0;
-
   }  
 
   // TODO: Create sub classes for each function of the Arm system
@@ -101,11 +94,11 @@ public final class Constants {
     public static final int kReversedScrewMotorID = 18;
     public static final int kArmMotorID = 19;
     public static final double kWristMotorOffset = 0;
-    public static final double kWristConversionFactor = 0;
+    public static final double kWristConversionFactor = 360;
     public static final double kPulleyMotorOffset = 0;
-    public static final double kPulleyConversionFactor = 0;
+    public static final double kPulleyConversionFactor = 360;
     public static final double kReversedScrewMotorOffset = 0;
-    public static final double kReversedScrewConversionFactor = 0;
+    public static final double kReversedScrewConversionFactor = 360;
 
       //set-to-point
     public static final double kL2Height = 0;
@@ -136,6 +129,8 @@ public final class Constants {
     public static final double minWristLimit = 0;
     public static final double closedClawPosition = 0;
     public static final double openedClawPosition = 0;
+
+    public static final double armGoToTolerance = 0;
   }
 
   public static class Vision { 

@@ -8,6 +8,11 @@ import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ArmCommands.closeClawCommand;
+import frc.robot.commands.ArmCommands.goToHeightHumanStation;
+import frc.robot.commands.ArmCommands.goToHeightLevelFour;
+import frc.robot.commands.ArmCommands.goToHeightLevelThree;
+import frc.robot.commands.ArmCommands.goToHeightLevelTwo;
+import frc.robot.commands.ArmCommands.goToHightGround;
 import frc.robot.commands.ArmCommands.openClawCommand;
 import frc.robot.commands.ClimberCommands.DeployClimber;
 import frc.robot.commands.ClimberCommands.LatchServo;
@@ -22,7 +27,6 @@ import frc.robot.commands.SwerveCommands.RobotCentricCommand;
 import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
-
 
 import java.io.File;
 
@@ -46,16 +50,14 @@ import frc.robot.commands.ClimberCommands.DeployClimber;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // The robot's subsystems and commands are defined here
 
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Flipper"));
-  //  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+   //private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
    private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
-  //  private final Joystick driverJoystick = new Joystick(Constants.Operator.DriverJoystick.kPort);
-  // private final Joystick assistantJoystick = new Joystick(Constants.Operator.AssistJoystick.kPort);
 
   SendableChooser<Command> autoChooser;
   SendableChooser<Command> pipelineChooser;  
@@ -71,9 +73,7 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
-    setDefaultCommands(); 
-
-    
+    setDefaultCommands();     
   }
 
   private void setDefaultCommands() {
@@ -86,6 +86,11 @@ public class RobotContainer {
       m_SwerveSubsystem::getFeildCentric, 
       false
       ));
+
+      //TODO: is it x or y movment for forwards and backwords?
+    m_ClimberSubsystem.setDefaultCommand(
+      new MoveClimber(m_ClimberSubsystem, 
+      this::assistantGetY));
       }
 
       // Configure remote movements
@@ -149,10 +154,29 @@ public class RobotContainer {
   //     .onTrue(new DeployClimber(m_ClimberSubsystem));
   // }
 
-  //Bindin Arm Commands
-  //m_AssistantJoystick.button(0).onTrue(new closeClawCommand(null));
+    //Bindin Arm Commands
+  // m_AssistantJoystick.button(0).onTrue(new closeClawCommand(m_ArmSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new openClawCommand(m_ArmSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new goToHeightHumanStation(m_ArmSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new goToHeightLevelFour(m_ArmSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new goToHeightLevelThree(m_ArmSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new goToHeightLevelTwo(m_ArmSubsystem));
+  // m_AssistantJoystick.button(0).onTrue(new goToHightGround(m_ArmSubsystem));
 
   //Binding Climber Commands
+      //TODO: should these be toggles, and can we make this simpler (sequential command)?
+      //TODO: how are we going to lay out the climber and arm commands?
+          //proposed solution
+            //if (useClimber == false) {
+            // - 
+            // - insert all ARM commands
+            // - insert the deufault command for climber movement
+            //} else {
+            // - all of the CLIMBER commands
+            // - climber default movment command
+            //}
+            // then just make a button that flips that variable. talk to drive team about it.
+
   //  m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));
   //  m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
 

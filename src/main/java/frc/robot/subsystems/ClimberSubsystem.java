@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
@@ -70,9 +71,10 @@ public class ClimberSubsystem extends SubsystemBase{
       .positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor);
        
       positionMotorConfig.closedLoop
-      .p(1.0f)
+      .p(0.1f)
       .i(0.0f)
-      .d(0.0);
+      .d(0.0)
+      .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
       positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -91,12 +93,13 @@ public class ClimberSubsystem extends SubsystemBase{
 
       lockingMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ClimberSubsystem.kLockingMotorOffset)
-        .positionConversionFactor(Constants.ClimberSubsystem.kLockingMotorConversionFactor);
+        .positionConversionFactor(Constants.ClimberSubsystem.kLockingBarMotorConversionFactor);
 
       lockingMotorConfig.closedLoop
-        .p(1.0f)
+        .p(0.1f)
         .i(0.0f)
-        .d(0.0);
+        .d(0.0)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
       lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
