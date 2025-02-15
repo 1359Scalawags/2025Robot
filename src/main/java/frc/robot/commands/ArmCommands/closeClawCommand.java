@@ -42,6 +42,7 @@ public class closeClawCommand extends Command {
 
   // Returns true when the command should end.
   @Override
+    //TODO: do we want tolerances?
   public boolean isFinished() {
     return true;
   }

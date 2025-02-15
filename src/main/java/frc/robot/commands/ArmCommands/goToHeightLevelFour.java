@@ -5,16 +5,13 @@
 
 package frc.robot.commands.ArmCommands;
 
-import org.ejml.dense.fixed.MatrixFeatures_DDF2;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
-//TODO: make this command work
 
-@Deprecated
 /** An example command that uses an example subsystem. */
 public class goToHeightLevelFour extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
@@ -51,9 +48,9 @@ public class goToHeightLevelFour extends Command {
   //TODO : Tune tolerances
   @Override
   public boolean isFinished() {
- if (MathUtil.isNear(Constants.ArmSubsystem.kL4Height, m_subsystem.getCalculatedHeight(), 0) && 
-    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosL4, m_subsystem.getElbowMotorPosition(), 0) &&
-    MathUtil.isNear(Constants.ArmSubsystem.kWristPosL4,m_subsystem.getWristMotorPosition(),0)) {
+ if (MathUtil.isNear(Constants.ArmSubsystem.kL4Height, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
+    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosL4, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
+    MathUtil.isNear(Constants.ArmSubsystem.kWristPosL4,m_subsystem.getWristMotorPosition(),Constants.ArmSubsystem.armGoToTolerance)) {
       return true;
     } else {
       return false;
