@@ -61,7 +61,7 @@ public final class Constants {
     public static final int kPositionMotorID = 10;
     public static final int kLatchingServoID = 11;
     public static final double kPositionConversionFactor = 360;
-    public static final double kPositionEncoderOffset = 180;
+    public static final double kPositionEncoderOffset = 0.5;
     public static final double kLockingMotorOffset = 0;
     public static final double kLockingBarMotorConversionFactor = 360;
 

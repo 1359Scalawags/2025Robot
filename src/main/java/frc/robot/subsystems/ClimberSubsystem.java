@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.extensions.SimableSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,7 +29,7 @@ public class ClimberSubsystem extends SubsystemBase{
   private double lockingTargetPosition;
   private double positionTargetPosition;
 
-  private boolean moveClimberCommandLock = false;
+  private boolean moveClimberCommandLock = true;
 
   private double curretPosition;
 
@@ -41,6 +42,11 @@ public class ClimberSubsystem extends SubsystemBase{
    
       configureLockingBarMotor();
       configurePositionMotor();
+
+      Shuffleboard.getTab("climber").add("Position Motor", positionMotor);
+      Shuffleboard.getTab("climber").add("Latching Servo", latchingServo);
+      Shuffleboard.getTab("climber").add("Locking Bar", lockingBarMotor);
+      Shuffleboard.getTab("climber").add("Position Motor Position",positionMotor.getEncoder().getPosition());
     }
 
     public double getLockingMotorPosition(){
@@ -68,10 +74,11 @@ public class ClimberSubsystem extends SubsystemBase{
 
       positionMotorConfig.absoluteEncoder
       .zeroOffset(Constants.ClimberSubsystem.kPositionEncoderOffset)
-      .positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor);
+      .positionConversionFactor(Constants.ClimberSubsystem.kPositionConversionFactor)
+      .inverted(true);
        
       positionMotorConfig.closedLoop
-      .p(0.1f)
+      .p(0.01f)
       .i(0.0f)
       .d(0.0)
       .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
@@ -168,6 +175,5 @@ public class ClimberSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       SmartDashboard.putNumber("Climber Motor Position", getPositionMotorPostion());
       SmartDashboard.putNumber("Servo position", getServoAngle());
-
   }
 }

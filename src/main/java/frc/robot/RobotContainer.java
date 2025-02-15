@@ -90,7 +90,7 @@ public class RobotContainer {
       //TODO: is it x or y movment for forwards and backwords?
     m_ClimberSubsystem.setDefaultCommand(
       new MoveClimber(m_ClimberSubsystem, 
-      this::assistantGetY));
+      this::assistantGetX));
       }
 
       // Configure remote movements
