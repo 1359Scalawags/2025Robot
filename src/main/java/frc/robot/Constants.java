@@ -61,6 +61,7 @@ public final class Constants {
 
   }
 
+  // TODO: Create sub classes for each function of the Climber system
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
     public static final int kLockingBarMotorID = 9;
@@ -92,6 +93,7 @@ public final class Constants {
 
   }  
 
+  // TODO: Create sub classes for each function of the Arm system
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
     public static final int kWristMotorID = 16;
