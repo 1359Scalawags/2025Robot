@@ -134,6 +134,8 @@ public final class Constants {
     public static final double minWristLimit = 0;
     public static final double closedClawPosition = 0;
     public static final double openedClawPosition = 0;
+
+    public static final double armGoToTolerance = 0;
   }
 
   public static class Vision { 
