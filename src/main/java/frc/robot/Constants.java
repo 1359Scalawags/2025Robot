@@ -71,8 +71,8 @@ public final class Constants {
     //TODO; make sure these are right
 
 
-    public static final double minBarLockLimit = 0.167*360;
-    public static final double maxBarLockLimit = 0.425*360;
+    public static final double minBarLockLimit = 60;
+    public static final double maxBarLockLimit = 155;
 
     public static final double unlockedBarPosition = 63.0;
     public static final double barLockedPosition = 150.0;
