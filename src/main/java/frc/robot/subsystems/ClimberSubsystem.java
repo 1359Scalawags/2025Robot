@@ -55,7 +55,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
       configureLockingBarMotor();
       configurePositionMotor();
-
+      
       Shuffleboard.getTab("climber").add("Position Motor", positionMotor);
       Shuffleboard.getTab("climber").add("Latching Servo", latchingServo);
       Shuffleboard.getTab("climber").add("Locking Bar", lockingBarMotor);
@@ -84,8 +84,8 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotorConfig
         .idleMode(IdleMode.kCoast)
         .inverted(false)
-        .openLoopRampRate(20.0)
-        .closedLoopRampRate(20.0)
+        .openLoopRampRate(Constants.ClimberSubsystem.PositionMotor.kSlewRate)
+        .closedLoopRampRate(Constants.ClimberSubsystem.PositionMotor.kSlewRate)
         .smartCurrentLimit(70, 30, 120);
 
       positionMotorConfig.absoluteEncoder
@@ -148,7 +148,7 @@ public class ClimberSubsystem extends SubsystemBase{
     public void setClimberAngle(double angle) {
       climberTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.PositionMotor.kMinAngle,  Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
       // if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
-      positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
+      //positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
       // }
     } 
 
@@ -165,8 +165,8 @@ public class ClimberSubsystem extends SubsystemBase{
         // operater controll of the climber 
     public void changeClimberPosition(double delta){
       // positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
-      double newPosition = getClimberPostion() + delta; 
-      MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
+      //MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
+      double newPosition = getClimberPostion() + delta;
       setClimberAngle(newPosition);
     }
     
