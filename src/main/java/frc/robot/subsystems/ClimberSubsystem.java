@@ -144,9 +144,10 @@ public class ClimberSubsystem extends SubsystemBase{
         .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
 
       lockingMotorConfig.closedLoop
-        .p(0.01f)
-        .i(0.0)
+        .p(0.01)
+        .i(0.0000001)
         .d(0.0)
+        .iZone(0.000001)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
@@ -155,7 +156,6 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public void setBarAngle(double angle){
       lockingTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
-      lockingBarMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
     }
 
     public void lockClimberBar(){
