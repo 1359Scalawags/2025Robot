@@ -41,9 +41,9 @@ public class ClimberSubsystem extends SubsystemBase{
   private Timer debugTimer;
 
     public ClimberSubsystem() {
-      lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.kLockingBarMotorID, MotorType.kBrushless, "LockingBarMotor");
+      lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kLockingBarMotorID, MotorType.kBrushless, "LockingBarMotor");
       positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
-      latchingServo = new Servo(Constants.ClimberSubsystem.kLatchingServoID);
+      latchingServo = new Servo(Constants.ClimberSubsystem.LatchServo.kLatchingServoID);
       lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
 
@@ -112,8 +112,8 @@ public class ClimberSubsystem extends SubsystemBase{
         .smartCurrentLimit(70, 30, 120);
 
       lockingMotorConfig.absoluteEncoder
-        .zeroOffset(Constants.ClimberSubsystem.kLockingMotorOffset)
-        .positionConversionFactor(Constants.ClimberSubsystem.kLockingBarMotorConversionFactor);
+        .zeroOffset(Constants.ClimberSubsystem.LockingBarMotor.kLockingMotorOffset)
+        .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kLockingBarMotorConversionFactor);
 
       lockingMotorConfig.closedLoop
         .p(0.00001f)
@@ -126,11 +126,11 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
     public void lockClimberBar(){
-      lockingBarMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.barLockedPosition, ControlType.kPosition);
+      lockingBarMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.LockingBarMotor.barLockedPosition, ControlType.kPosition);
     }
 
     public void unlockClimber(){
-      lockingBarMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.unlockedBarPosition, ControlType.kPosition);
+      lockingBarMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.LockingBarMotor.unlockedBarPosition, ControlType.kPosition);
     }
       //used to set climber using the  buttons
       //TODO: add clamps to specific functions.
@@ -162,17 +162,17 @@ public class ClimberSubsystem extends SubsystemBase{
     
 
     public void setServoAngle(double newAngle){
-      if ((newAngle <= Constants.ClimberSubsystem.maxServoLimit) && (newAngle >= Constants.ClimberSubsystem.minServoLimit)){
+      if ((newAngle <= Constants.ClimberSubsystem.LatchServo.maxServoLimit) && (newAngle >= Constants.ClimberSubsystem.LatchServo.minServoLimit)){
         latchingServo.setAngle(newAngle);
       }
     }
 
     public void latchCLimber(){
-      setServoAngle(Constants.ClimberSubsystem.servoLatchedAngle);
+      setServoAngle(Constants.ClimberSubsystem.LatchServo.servoLatchedAngle);
     }
 
     public void unLatchCLimber(){
-      setServoAngle(Constants.ClimberSubsystem.servoUnLatchedAngle);
+      setServoAngle(Constants.ClimberSubsystem.LatchServo.servoUnLatchedAngle);
     }
 
     public void moveCLimberCommandLock(){
