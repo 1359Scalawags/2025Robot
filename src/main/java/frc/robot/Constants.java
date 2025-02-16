@@ -76,10 +76,11 @@ public final class Constants {
     public static final int kMotorID = 9;
     public static final double kEncoderOffset = 0;
     public static final double kConversionFactor = 360;
-    public static final double minLimit = 60;
-    public static final double maxLimit = 155;
-    public static final double unlockedPosition = 63.0;
-    public static final double lockedPosition = 150.0;
+    public static final double kMinLimit = 60;
+    public static final double kMaxLimit = 155;
+    public static final double kUnLockedPosition = 63.0;
+    public static final double kLockedPosition = 150.0;
+    public static final double kSlewRate = 0;
     }
 
     public class PositionMotor {

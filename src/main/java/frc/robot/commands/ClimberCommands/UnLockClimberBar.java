@@ -24,7 +24,7 @@ public class UnLockClimberBar extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.unlockClimber();
+    m_subsystem.unlockClimberBar();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,7 +38,7 @@ public class UnLockClimberBar extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(MathUtil.isNear(Constants.ClimberSubsystem.LockingBarMotor.unlockedPosition, m_subsystem.getLockingMotorPosition(), 5)){
+    if(MathUtil.isNear(Constants.ClimberSubsystem.LockingBarMotor.kUnLockedPosition, m_subsystem.getLockingMotorPosition(), 5)){
     return true; 
     } else {
       return false;
