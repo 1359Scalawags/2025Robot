@@ -135,8 +135,8 @@ public class ClimberSubsystem extends SubsystemBase{
       lockingMotorConfig
         .idleMode(IdleMode.kBrake)
         .inverted(false)
-        .openLoopRampRate(1.0)
-        .closedLoopRampRate(1.0)
+        .openLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
+        .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
         .smartCurrentLimit(70, 30, 120);
 
       lockingMotorConfig.absoluteEncoder
@@ -144,8 +144,8 @@ public class ClimberSubsystem extends SubsystemBase{
         .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
 
       lockingMotorConfig.closedLoop
-        .p(0.00001f)
-        .i(0.0f)
+        .p(0.01f)
+        .i(0.0)
         .d(0.0)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 

@@ -93,7 +93,7 @@ public final class Constants {
       public static final double kHomeAngle = 160.0; //0.442*360;
 
       public static final double kMaxJoystickSpeed = 10;
-      public static final double kSlewRate = 5.0;
+      public static final double kSlewRate = 30.0;
     }
   }  
 
