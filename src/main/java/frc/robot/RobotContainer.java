@@ -4,49 +4,20 @@
 
 package frc.robot;
 
-import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ArmCommands.closeClawCommand;
-import frc.robot.commands.ArmCommands.goToHeightHumanStation;
-import frc.robot.commands.ArmCommands.goToHeightLevelFour;
-import frc.robot.commands.ArmCommands.goToHeightLevelThree;
-import frc.robot.commands.ArmCommands.goToHeightLevelTwo;
-import frc.robot.commands.ArmCommands.goToHightGround;
-import frc.robot.commands.ArmCommands.openClawCommand;
-import frc.robot.commands.ClimberCommands.DeployClimber;
-import frc.robot.commands.ClimberCommands.InitilizeClimber;
-import frc.robot.commands.ClimberCommands.LatchServo;
-import frc.robot.commands.ClimberCommands.LockClimberBar;
-import frc.robot.commands.ClimberCommands.LockClimberSubsystem;
-import frc.robot.commands.ClimberCommands.MoveClimber;
-import frc.robot.commands.ClimberCommands.RetractClimber;
-import frc.robot.commands.ClimberCommands.UnLatchServo;
-import frc.robot.commands.ClimberCommands.UnLockClimberBar;
-import frc.robot.commands.ClimberCommands.DeInitilizeClimber;
-import frc.robot.commands.ClimberCommands.UnlockClimberSubsystem;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
 import frc.robot.commands.SwerveCommands.FieldCentricCommand;
 import frc.robot.commands.SwerveCommands.RobotCentricCommand;
 import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-
 import java.io.File;
-import java.util.concurrent.locks.Lock;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ClimberCommands.DeployClimber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

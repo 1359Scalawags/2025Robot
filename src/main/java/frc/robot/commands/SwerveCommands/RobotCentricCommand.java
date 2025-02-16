@@ -12,7 +12,8 @@ public class RobotCentricCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsystem m_subsystem;
 
- private boolean robotCentric = true;
+  // XXX: this doesn't appear to be needed
+  // private boolean robotCentric = true;
   /**
    * Creates a new ExampleCommand.
    *

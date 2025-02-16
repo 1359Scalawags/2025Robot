@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.util.function.BooleanSupplier;
-
-import edu.wpi.first.apriltag.AprilTagFields;
+import frc.robot.extensions.ArmPosition;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -55,7 +52,6 @@ public final class Constants {
      */
   }
 
-  // TODO: Create sub classes for each function of the Climber system
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
 
@@ -73,14 +69,14 @@ public final class Constants {
     }
 
     public class LockingBarMotor {
-    public static final int kMotorID = 9;
-    public static final double kEncoderOffset = 0;
-    public static final double kConversionFactor = 360;
-    public static final double kMinLimit = 60;
-    public static final double kMaxLimit = 155;
-    public static final double kUnLockedPosition = 63.0;
-    public static final double kLockedPosition = 150.0;
-    public static final double kSlewRate = 5;
+      public static final int kMotorID = 9;
+      public static final double kEncoderOffset = 0;
+      public static final double kConversionFactor = 360;
+      public static final double kMinLimit = 60;
+      public static final double kMaxLimit = 155;
+      public static final double kUnLockedPosition = 63.0;
+      public static final double kLockedPosition = 150.0;
+      public static final double kSlewRate = 5;
     }
 
     public class PositionMotor {
@@ -97,50 +93,50 @@ public final class Constants {
     }
   }  
 
-  // TODO: Create sub classes for each function of the Arm system
   public static class ArmSubsystem {
-    //Can ID's for Arm are from 16 to 21
-    public static final int kWristMotorID = 16;
-    public static final int kPulleyMotorID = 17;
-    public static final int kClawMotorID = 18;
-    public static final int kElbowMotorID = 19;
-    public static final double kWristMotorOffset = 0;
-    public static final double kWristConversionFactor = 360;
-    public static final double kPulleyMotorOffset = 0;
-    public static final double kPulleyConversionFactor = 360;
-    public static final double kReversedScrewMotorOffset = 0;
-    public static final double kReversedScrewConversionFactor = 360;
 
-      //set-to-point
-    public static final double kL2Height = 0;
-    public static final double kL3Height = 0;
-    public static final double kL4Height = 0;
-    public static final double kGroundHeight = 0;
-    public static final double kHeightHumanStation = 0;
+    // NOTE: Can ID's for Arm are from 16 to 21
 
-    public static final double kElbowPosGround = 0;
-    public static final double kElbowPosL2 = 0;
-    public static final double kElbowPosL3 = 0;
-    public static final double kElbowPosL4 = 0;
-    public static final double kElbowPosHumanStation = 0;
+    public static class Positions {
+      public static final ArmPosition kHumanStation = new ArmPosition(0, 0, 0);
+      public static final ArmPosition kGround= new ArmPosition(0, 0, 0);
+      public static final ArmPosition kLevel1 = new ArmPosition(0, 0, 0);
+      public static final ArmPosition kLevel2 = new ArmPosition(0, 0, 0);
+      public static final ArmPosition kLevel3 = new ArmPosition(0, 0, 0);
+      public static final ArmPosition kLevel4 = new ArmPosition(0, 0, 0);
+    }
 
-    public static final double kWristPosGround = 0;
-    public static final double kWristPosL2 = 0;
-    public static final double kWristPosL3 = 0;
-    public static final double kWristPosL4 = 0;
-    public static final double kWristPosHumanStation = 0;
+    public static class Wrist {
+      public static final int kMotorID = 16;
+      public static final double kMotorOffset = 0;
+      public static final double kConversionFactor = 360;
+      public static final double kMinLimit = 0;
+      public static final double kMaxLimit = 0;
+    }
 
+    public static class Elbow {
+      public static final int kMotorID = 19;
+      public static final double kMinLimit = 0;
+      public static final double kMaxLimit = 0;
+    }
 
-      //Limits
-    public static final double maxPulleyLimit = 0;
-    public static final double minPulleyLimit = 0;
-    public static final double minElbowLimit = 0;
-    public static final double maxElbowLimit = 0;
-    public static final double maxWristLimit = 0;
-    public static final double minWristLimit = 0;
-    public static final double closedClawPosition = 0;
-    public static final double openedClawPosition = 0;
+    public static class Pulley {
+      public static final int kMotorID = 17;
+      public static final double kMotorOffset = 0;
+      public static final double kConversionFactor = 360;   
+      public static final double kMinLimit = 0;
+      public static final double kMaxLimit = 0;
+    }
 
+    public static class Claw {
+      public static final int kMotorID = 18;
+      public static final double kMotorOffset = 0;
+      public static final double kCnversionFactor = 360;
+      public static final double kClosedPosition = 0;
+      public static final double kOpenedClawPosition = 0;
+    }
+
+    // TODO: using the same tolerance for both rotation (elbow, wrist, claw) and linear movement (pulley) is dangerous
     public static final double armGoToTolerance = 0;
   }
 

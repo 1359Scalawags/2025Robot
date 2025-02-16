@@ -48,9 +48,9 @@ public class goToHeightLevelFour extends Command {
   //TODO : Tune tolerances
   @Override
   public boolean isFinished() {
- if (MathUtil.isNear(Constants.ArmSubsystem.kL4Height, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
-    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosL4, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
-    MathUtil.isNear(Constants.ArmSubsystem.kWristPosL4,m_subsystem.getWristMotorPosition(),Constants.ArmSubsystem.armGoToTolerance)) {
+    if (MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel4.pulley, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
+        MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel4.elbow, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
+        MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel4.wrist, m_subsystem.getWristMotorPosition(),Constants.ArmSubsystem.armGoToTolerance)) {
       return true;
     } else {
       return false;

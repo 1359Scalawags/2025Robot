@@ -46,9 +46,9 @@ public class goToHeightLevelThree extends Command {
   
   @Override
   public boolean isFinished() {
-     if (MathUtil.isNear(Constants.ArmSubsystem.kL3Height, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
-    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosL3, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
-    MathUtil.isNear(Constants.ArmSubsystem.kWristPosL3,m_subsystem.getWristMotorPosition(), Constants.ArmSubsystem.armGoToTolerance)) {
+     if (MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel3.pulley, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
+    MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel3.elbow, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
+    MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel3.wrist, m_subsystem.getWristMotorPosition(), Constants.ArmSubsystem.armGoToTolerance)) {
       return true;
     } else {
       return false;

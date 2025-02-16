@@ -24,7 +24,7 @@ public class AbsoluteFieldDrive extends Command {
     private DoubleSupplier omega;
     private DoubleSupplier throttle;
     private BooleanSupplier feildRelitive;
-    private boolean isOpenLoop;
+    //private boolean isOpenLoop; //TODO: is this variable needed for something?
     private SwerveController controller;
 
     /**
@@ -44,7 +44,7 @@ public class AbsoluteFieldDrive extends Command {
         this.omega = omega;
         this.throttle = throttle;
         this.feildRelitive = feildRelitive;
-        this.isOpenLoop = isOpenLoop;
+        //this.isOpenLoop = isOpenLoop;
         this.controller = swerve.getSwerveController();
         addRequirements(swerve);
     }
@@ -95,8 +95,8 @@ public class AbsoluteFieldDrive extends Command {
 
     @Override
     public boolean isFinished() {
-        //TODO Auto-generated method stub
-        return true;   //TODO: Does this need an end condition? 
+        
+        return true;  
     }
 
 }
