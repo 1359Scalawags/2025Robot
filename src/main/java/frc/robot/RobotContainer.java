@@ -15,13 +15,14 @@ import frc.robot.commands.ArmCommands.goToHeightLevelTwo;
 import frc.robot.commands.ArmCommands.goToHightGround;
 import frc.robot.commands.ArmCommands.openClawCommand;
 import frc.robot.commands.ClimberCommands.DeployClimber;
+import frc.robot.commands.ClimberCommands.InitilizeClimber;
 import frc.robot.commands.ClimberCommands.LatchServo;
 import frc.robot.commands.ClimberCommands.LockClimberBar;
 import frc.robot.commands.ClimberCommands.LockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.MoveClimber;
 import frc.robot.commands.ClimberCommands.RetractClimber;
 import frc.robot.commands.ClimberCommands.UnLatchServo;
-import frc.robot.commands.ClimberCommands.UnLockClimberBar;
+import frc.robot.commands.ClimberCommands.DeInitilizeClimber;
 import frc.robot.commands.ClimberCommands.UnlockClimberSubsystem;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
 import frc.robot.commands.SwerveCommands.FieldCentricCommand;
@@ -186,7 +187,7 @@ public class RobotContainer {
   m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
 
   m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
-  m_AssistantJoystick.button(9).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
+  m_AssistantJoystick.button(9).onTrue(new DeInitilizeClimber(m_ClimberSubsystem));
 
   m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
   m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
@@ -200,6 +201,16 @@ public class RobotContainer {
   public Command lockClimberSubsystemWhenDisabled() {
     return new LockClimberSubsystem(m_ClimberSubsystem);
   }
+
+  public Command intializeTheClimber() {
+    return new InitilizeClimber(m_ClimberSubsystem);
+  }
+
+  public Command disabledIntializedClimber() {
+    return new DeInitilizeClimber(m_ClimberSubsystem);
+  }
+
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

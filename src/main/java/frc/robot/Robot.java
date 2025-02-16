@@ -36,6 +36,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(CommandScheduler.getInstance());
   }
 
+  @Override
+  public void robotInit() {
+      super.robotInit();
+
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+  }
+
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -56,6 +63,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     CommandScheduler.getInstance().schedule(m_robotContainer.lockClimberSubsystemWhenDisabled());
+    CommandScheduler.getInstance().schedule(m_robotContainer.disabledIntializedClimber());
   }
 
   @Override
@@ -70,6 +78,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
   /** This function is called periodically during autonomous. */
@@ -85,6 +94,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
   /** This function is called periodically during operator control. */
@@ -95,6 +105,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
   /** This function is called periodically during test mode. */
@@ -103,7 +114,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
