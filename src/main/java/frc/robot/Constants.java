@@ -19,7 +19,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
  */
 public final class Constants {
 
-  public static boolean kDebug = true;
+  public static boolean kDebug = false;
   public static final String robotName = "Flipper";
 
   public static class SwerveSubsystem {
@@ -80,7 +80,7 @@ public final class Constants {
     public static final double kMaxLimit = 155;
     public static final double kUnLockedPosition = 63.0;
     public static final double kLockedPosition = 150.0;
-    public static final double kSlewRate = 0;
+    public static final double kSlewRate = 5;
     }
 
     public class PositionMotor {

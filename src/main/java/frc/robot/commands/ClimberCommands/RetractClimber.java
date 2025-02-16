@@ -23,12 +23,13 @@ public class RetractClimber extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_subsystem.retractClimber();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.retractClimber();
+    
 }
 
   // Called once the command ends or is interrupted.
