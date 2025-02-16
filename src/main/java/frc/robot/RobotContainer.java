@@ -17,6 +17,7 @@ import frc.robot.commands.ArmCommands.openClawCommand;
 import frc.robot.commands.ClimberCommands.DeployClimber;
 import frc.robot.commands.ClimberCommands.LatchServo;
 import frc.robot.commands.ClimberCommands.LockClimberBar;
+import frc.robot.commands.ClimberCommands.LockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.MoveClimber;
 import frc.robot.commands.ClimberCommands.RetractClimber;
 import frc.robot.commands.ClimberCommands.UnLatchServo;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
 import java.io.File;
+import java.util.concurrent.locks.Lock;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -195,6 +197,9 @@ public class RobotContainer {
 
   }
 
+  public Command lockClimberSubsystemWhenDisabled() {
+    return new LockClimberSubsystem(m_ClimberSubsystem);
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

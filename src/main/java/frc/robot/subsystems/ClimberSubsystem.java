@@ -75,8 +75,8 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotorConfig
         .idleMode(IdleMode.kCoast)
         .inverted(false)
-        .openLoopRampRate(1.0)
-        .closedLoopRampRate(1.0)
+        .openLoopRampRate(5.0)
+        .closedLoopRampRate(5.0)
         .smartCurrentLimit(70, 30, 120);
 
       positionMotorConfig.absoluteEncoder
@@ -86,8 +86,9 @@ public class ClimberSubsystem extends SubsystemBase{
        
       positionMotorConfig.closedLoop
       .p(0.01f)
-      .i(0.0f)
+      .i(0.000001f)
       .d(0.0)
+      .iZone(0.001)
       .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
@@ -110,7 +111,7 @@ public class ClimberSubsystem extends SubsystemBase{
         .positionConversionFactor(Constants.ClimberSubsystem.kLockingBarMotorConversionFactor);
 
       lockingMotorConfig.closedLoop
-        .p(0.1f)
+        .p(0.00001f)
         .i(0.0f)
         .d(0.0)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
@@ -126,7 +127,8 @@ public class ClimberSubsystem extends SubsystemBase{
     public void unlockClimber(){
       lockingBarMotor.getClosedLoopController().setReference(Constants.ClimberSubsystem.unlockedBarPosition, ControlType.kPosition);
     }
-
+      //used to set climber using the  buttons
+      //TODO: add clamps to specific functions.
     public void setClimberAngle(double angle) {
       if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
         positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
@@ -183,6 +185,11 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public boolean unlockClimberSubsystem() {
       moveClimberCommandLock = false;
+      return moveClimberCommandLock;
+    }
+
+    public boolean lockClimberSubsystem() {
+      moveClimberCommandLock = true;
       return moveClimberCommandLock;
     }
 

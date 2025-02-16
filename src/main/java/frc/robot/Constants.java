@@ -74,20 +74,22 @@ public final class Constants {
     public static final double minBarLockLimit = 0.167*360;
     public static final double maxBarLockLimit = 0.425*360;
 
-    public static final double unlockedBarPosition = 0;
-    public static final double barLockedPosition = 0;
+    public static final double unlockedBarPosition = 63.0;
+    public static final double barLockedPosition = 150.0;
 
     public static final double servoLatchedAngle = 0;
     public static final double servoUnLatchedAngle = 0;
 
     public class PositionMotor {
       public static final int kMotorID = 10;
-      public static final double kMaxAngle = 282.0; //0.037*360;
-      public static final double kMinAngle = 132.0;//0.457*360;
+      public static final double kMaxAngle = 275.0;//0.037*360;
+      public static final double kMinAngle = 150.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 245.0; // 0.185*360;
-      public static final double kHomeAngle = 135.0; //0.442*360;
+      public static final double kHomeAngle = 160.0; //0.442*360;
+
+      public static final double kMaxJoystickSpeed = 10;
     }
   }  
 
