@@ -37,7 +37,7 @@ public class UnLatchServo extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(MathUtil.isNear(Constants.ClimberSubsystem.servoUnLatchedAngle, m_subsystem.getServoAngle(), 5)){
+    if(MathUtil.isNear(Constants.ClimberSubsystem.LatchServo.unLatchedAngle, m_subsystem.getServoAngle(), 5)){
     return true; 
     } else {
       return false;

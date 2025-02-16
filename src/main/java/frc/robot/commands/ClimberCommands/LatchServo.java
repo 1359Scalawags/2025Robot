@@ -41,7 +41,7 @@ public class LatchServo extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(MathUtil.isNear(Constants.ClimberSubsystem.servoLatchedAngle, m_subsystem.getServoAngle(), 5)){
+    if(MathUtil.isNear(Constants.ClimberSubsystem.LatchServo.latchedAngle, m_subsystem.getServoAngle(), 5)){
     return true; 
     } else {
       return false;

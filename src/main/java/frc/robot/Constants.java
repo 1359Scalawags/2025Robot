@@ -58,27 +58,28 @@ public final class Constants {
   // TODO: Create sub classes for each function of the Climber system
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
+
       //Limits 
       //TODO; make sure these are right
 
 
     public class LatchServo {
-      public static final int kLatchingServoID = 0;
-      public static final double maxServoLimit = 0;
-      public static final double minServoLimit = 0;
-      public static final double servoLatchedAngle = 0;
-      public static final double servoUnLatchedAngle = 0;
+      public static final int kServoID = 0;
+      public static final double maxLimit = 0;
+      public static final double minLimit = 0;
+      public static final double latchedAngle = 0;
+      public static final double unLatchedAngle = 0;
       
     }
 
     public class LockingBarMotor {
-    public static final int kLockingBarMotorID = 9;
-    public static final double kLockingMotorOffset = 0;
-    public static final double kLockingBarMotorConversionFactor = 360;
-    public static final double minBarLockLimit = 60;
-    public static final double maxBarLockLimit = 155;
-    public static final double unlockedBarPosition = 63.0;
-    public static final double barLockedPosition = 150.0;
+    public static final int kMotorID = 9;
+    public static final double kEncoderOffset = 0;
+    public static final double kConversionFactor = 360;
+    public static final double minLimit = 60;
+    public static final double maxLimit = 155;
+    public static final double unlockedPosition = 63.0;
+    public static final double lockedPosition = 150.0;
     }
 
     public class PositionMotor {

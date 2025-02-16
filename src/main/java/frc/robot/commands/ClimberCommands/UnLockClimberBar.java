@@ -38,7 +38,7 @@ public class UnLockClimberBar extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(MathUtil.isNear(Constants.ClimberSubsystem.unlockedBarPosition, m_subsystem.getLockingMotorPosition(), 5)){
+    if(MathUtil.isNear(Constants.ClimberSubsystem.LockingBarMotor.unlockedPosition, m_subsystem.getLockingMotorPosition(), 5)){
     return true; 
     } else {
       return false;
