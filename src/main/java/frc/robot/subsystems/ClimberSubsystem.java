@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -30,7 +31,9 @@ public class ClimberSubsystem extends SubsystemBase{
   private Servo latchingServo;
 
   private double lockingTargetPosition;
-  private double positionTargetPosition;
+  private double climberTargetPosition;
+
+  private SlewRateLimiter positionLimiter;
 
     //TODO: make this make sense to the drivers when it is in the dashboard
   private boolean moveClimberCommandLock = true;
@@ -43,7 +46,9 @@ public class ClimberSubsystem extends SubsystemBase{
       latchingServo = new Servo(Constants.ClimberSubsystem.kLatchingServoID);
       lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
-   
+
+      positionLimiter = new SlewRateLimiter(Constants.ClimberSubsystem.PositionMotor.kSlewRate);
+
       configureLockingBarMotor();
       configurePositionMotor();
 
@@ -130,9 +135,10 @@ public class ClimberSubsystem extends SubsystemBase{
       //used to set climber using the  buttons
       //TODO: add clamps to specific functions.
     public void setClimberAngle(double angle) {
-      if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
-        positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
-      }
+      climberTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.PositionMotor.kMinAngle,  Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
+      // if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
+      //   //positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
+      // }
     } 
 
     public void extendClimber(){
@@ -147,9 +153,11 @@ public class ClimberSubsystem extends SubsystemBase{
 
         // operater controll of the climber 
     public void changeClimberPosition(double delta){
+      // 
+      // newPosition = MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
+      // positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
       double newPosition = getClimberPostion() + delta; 
-      newPosition = MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
-      positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
+      setClimberAngle(newPosition);
     }
     
 
@@ -204,7 +212,8 @@ public class ClimberSubsystem extends SubsystemBase{
         System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
         debugTimer.reset();
       }
-
+      double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
+      positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
 
   }
 }
