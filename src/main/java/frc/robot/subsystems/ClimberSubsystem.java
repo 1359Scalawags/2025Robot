@@ -84,8 +84,8 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotorConfig
         .idleMode(IdleMode.kCoast)
         .inverted(false)
-        .openLoopRampRate(5.0)
-        .closedLoopRampRate(5.0)
+        .openLoopRampRate(20.0)
+        .closedLoopRampRate(20.0)
         .smartCurrentLimit(70, 30, 120);
 
       positionMotorConfig.absoluteEncoder
@@ -95,7 +95,7 @@ public class ClimberSubsystem extends SubsystemBase{
        
       positionMotorConfig.closedLoop
       .p(0.01f)
-      .i(0.000001f)
+      .i(0.0)
       .d(0.0)
       .iZone(0.001)
       .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
