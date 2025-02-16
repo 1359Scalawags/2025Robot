@@ -22,6 +22,7 @@ import frc.robot.commands.ClimberCommands.LockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.MoveClimber;
 import frc.robot.commands.ClimberCommands.RetractClimber;
 import frc.robot.commands.ClimberCommands.UnLatchServo;
+import frc.robot.commands.ClimberCommands.UnLockClimberBar;
 import frc.robot.commands.ClimberCommands.DeInitilizeClimber;
 import frc.robot.commands.ClimberCommands.UnlockClimberSubsystem;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
