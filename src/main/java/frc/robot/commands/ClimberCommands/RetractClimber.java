@@ -23,12 +23,12 @@ public class RetractClimber extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_subsystem.retractClimber();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.retractClimber();
 }
 
   // Called once the command ends or is interrupted.
@@ -38,10 +38,11 @@ public class RetractClimber extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kHomeAngle, m_subsystem.getClimberPostion(), 5)){
-    return true; 
-    } else {
-      return false;
-    }
+    // if(MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kHomeAngle, m_subsystem.getClimberPostion(), 5)){
+    // return true; 
+    // } else {
+    //   return false;
+    // }
+    return true;
   }
 }

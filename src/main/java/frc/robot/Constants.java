@@ -19,7 +19,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
  */
 public final class Constants {
 
-  public static boolean kDebug = true;
+  public static boolean kDebug = false;
   public static final String robotName = "Flipper";
 
   public static class SwerveSubsystem {
