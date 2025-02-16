@@ -13,6 +13,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -211,6 +213,8 @@ public class ClimberSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
+
+      if (Constants.kDebug == true){
       SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
       SmartDashboard.putNumber("Servo position", getServoAngle());
@@ -220,10 +224,14 @@ public class ClimberSubsystem extends SubsystemBase{
         System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
         debugTimer.reset();
       }
-      double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
-      positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
-
-      double lockingImmediateTargetAngle = lockingPositionLimiter.calculate(lockingTargetPosition);
-      lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
-  }
+    }
+    
+      if (RobotState.isTeleop() || RobotState.isAutonomous()){
+        double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
+        positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
+  
+        double lockingImmediateTargetAngle = lockingPositionLimiter.calculate(lockingTargetPosition);
+        lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
+      }
+  }     
 }
