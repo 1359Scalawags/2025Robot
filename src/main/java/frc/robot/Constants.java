@@ -97,6 +97,7 @@ public final class Constants {
 
     // NOTE: Can ID's for Arm are from 16 to 21
 
+    // XXX: Store desired arm positions as triplets (pulley, elbow, wrist) using ArmPosition class
     public static class Positions {
       public static final ArmPosition kHumanStation = new ArmPosition(0, 0, 0);
       public static final ArmPosition kGround= new ArmPosition(0, 0, 0);
@@ -106,6 +107,7 @@ public final class Constants {
       public static final ArmPosition kLevel4 = new ArmPosition(0, 0, 0);
     }
 
+    // XXX: Split arm motors into subclasses
     public static class Wrist {
       public static final int kMotorID = 16;
       public static final double kMotorOffset = 0;

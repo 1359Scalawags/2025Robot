@@ -34,6 +34,7 @@ public class ArmSubsystem extends SubsystemBase {
       configureClawMotor();
     }
 
+    // XXX: Fixed mismatched motor and config names
     private void configureWristMotor() {
     SparkMaxConfig wristMotorConfig = new SparkMaxConfig();
 
@@ -52,12 +53,13 @@ public class ArmSubsystem extends SubsystemBase {
       .p(1.0f)
       .i(0.0f)
       .d(0.0);
+      // TODO: add feedback sensor?
 
       // apply configuration
       wristMotor.configure(wristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-      //TODO: make sure to add ".feedbackSensor(FeedbackSensor.kAbsoluteEncoder)" to any motor with a absolute encoder
+    // XXX: Fixed mismatched motor and config names
     private void configureArmMotor() {
       SparkMaxConfig elbowMotorConfig = new SparkMaxConfig();
   
@@ -77,11 +79,14 @@ public class ArmSubsystem extends SubsystemBase {
         .p(1.0f)
         .i(0.0f)
         .d(0.0);
-  
-        // apply configuration
-        elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      }
+        // TODO: add feedback sensor?
 
+  
+      // apply configuration
+      elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
+
+    // XXX: Fixed mismatched motor and config names
     private void configurePulleyMotor() {
     SparkMaxConfig pulleyMotorConfig = new SparkMaxConfig();
 
@@ -160,8 +165,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     ///*
-    /// XXX: Example of method to set arm position in one function call
-    ///      Calling them all individually is very verbose
+    /// XXX: This is an example of method to an ArmPosition instance to set positions in a single function call
+    ///      Calling them all individually is rather verbose
     /// */
     public void goToPosition(ArmPosition position) {
       goToPulleyMotorPosition(position.pulley);
