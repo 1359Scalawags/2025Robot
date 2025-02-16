@@ -30,8 +30,8 @@ public class ClimberSubsystem extends SubsystemBase{
 
   private Servo latchingServo;
 
-  private double lockingTargetPosition;
-  private double climberTargetPosition;
+  private double lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
+  private double climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
 
   private SlewRateLimiter positionLimiter;
   private SlewRateLimiter lockingPositionLimiter;
