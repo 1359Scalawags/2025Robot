@@ -21,6 +21,8 @@ public class ArmSubsystem extends SubsystemBase {
     private SimableSparkMax clawMotor;
     private static double ARM_HEIGHT; 
 
+    private boolean isInitialized = false;
+
 
     public ArmSubsystem() {
       wristMotor = new SimableSparkMax(Constants.ArmSubsystem.Wrist.kMotorID,MotorType.kBrushless);
@@ -32,6 +34,10 @@ public class ArmSubsystem extends SubsystemBase {
       configureArmMotor();
       configurePulleyMotor();
       configureClawMotor();
+    }
+
+    public void initializePulley() {
+      
     }
 
     // XXX: Fixed mismatched motor and config names
@@ -250,5 +256,11 @@ public class ArmSubsystem extends SubsystemBase {
         // This method will be called once per scheduler run
 
         ARM_HEIGHT = getCalculatedHeight();
+
+        if(!isInitialized) {
+          // move to touch the 
+          pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomeVelocity, ControlType.kVelocity);
+
+        }
     }
 }

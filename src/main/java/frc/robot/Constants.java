@@ -128,6 +128,7 @@ public final class Constants {
       public static final double kConversionFactor = 360;   
       public static final double kMinLimit = 0;
       public static final double kMaxLimit = 0;
+      public static final double kHomeVelocity = 0;
     }
 
     public static class Claw {
