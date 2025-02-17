@@ -93,6 +93,8 @@ public class ArmSubsystem extends SubsystemBase {
       pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomingVelocity, ControlType.kVelocity);         
     }
 
+    // TODO: are there other motors than need to be homed?
+
   }
 
   // XXX: Fixed mismatched motor and config names
@@ -158,6 +160,9 @@ public class ArmSubsystem extends SubsystemBase {
       .closedLoopRampRate(1.0)
       .smartCurrentLimit(70, 30, 120);
 
+    pulleyMotorConfig.encoder
+      .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
+    
     pulleyMotorConfig.absoluteEncoder
     .zeroOffset(Constants.ArmSubsystem.Pulley.kMotorOffset)
     .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
@@ -290,9 +295,8 @@ public class ArmSubsystem extends SubsystemBase {
     return wristMotor.getEncoder().getPosition();
   }
   
-  //TODO : Get formula
   public double getPulleyMotorPosition(){
-  return pulleyMotor.getEncoder().getPosition(); 
+    return pulleyMotor.getEncoder().getPosition(); 
   }
 
   @Override
@@ -308,6 +312,8 @@ public class ArmSubsystem extends SubsystemBase {
         pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
         double homeTarget = pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley);
         pulleyMotor.setReferencePosition(pulleyLimiter, homeTarget);
+
+        // TODO: Are there other motors that need to be homed?
 
         // consider arm initialized
         initialized = true;
