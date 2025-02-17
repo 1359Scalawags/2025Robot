@@ -46,9 +46,7 @@ public class goToHeightHumanStation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      if (MathUtil.isNear(Constants.ArmSubsystem.kHeightHumanStation, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
-    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosHumanStation, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
-    MathUtil.isNear(Constants.ArmSubsystem.kWristPosHumanStation, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance)) {
+      if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.kHumanStation)) {
       return true;
     } else {
       return false;

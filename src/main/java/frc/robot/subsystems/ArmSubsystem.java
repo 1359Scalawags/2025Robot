@@ -7,19 +7,23 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.SendableCANSparkMax;
 import frc.robot.extensions.SimableSparkMax;
 
 
 public class ArmSubsystem extends SubsystemBase {
 
-    private SimableSparkMax wristMotor; 
-    private SimableSparkMax elbowMotor;
-    private SimableSparkMax pulleyMotor;
-    private SimableSparkMax clawMotor;
+    private SimableSparkMax pulleyMotor,elbowMotor, wristMotor, clawMotor;
+    private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;
+    private double pullyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
     private static double ARM_HEIGHT; 
+
+
 
 
     public ArmSubsystem() {
@@ -27,6 +31,11 @@ public class ArmSubsystem extends SubsystemBase {
       elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);       
       wristMotor = new SimableSparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
       clawMotor = new SimableSparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
+
+      pulleyLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Pulley.kSlewRate);
+      elbowLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Elbow.kSlewRate);
+      wristLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Wrist.kSlewRate);
+      clawLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Claw.kSlewRate);
 
       configureWristMotor();
       configureElbowMotor();
@@ -143,84 +152,68 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void goToPulleyMotorPosition(double pulleyMotorPosition) {
-      if (pulleyMotorPosition < Constants.ArmSubsystem.maxPulleyLimit && pulleyMotorPosition > Constants.ArmSubsystem.minPulleyLimit) {
-        pulleyMotor.getClosedLoopController().setReference(pulleyMotorPosition, ControlType.kPosition);
-      }
+      pulleyMotorPosition = MathUtil.clamp(pulleyMotorPosition, Constants.ArmSubsystem.Pulley.kMinLimit, Constants.ArmSubsystem.Pulley.kMaxLimit);
     } 
 
     public void goToElbowMotorPosition(double elbowMotorPosition) {
-      if (elbowMotorPosition < Constants.ArmSubsystem.maxElbowLimit && elbowMotorPosition > Constants.ArmSubsystem.minElbowLimit) {
-        elbowMotor.getClosedLoopController().setReference(elbowMotorPosition, ControlType.kPosition);
-      }
+      elbowMotorPosition = MathUtil.clamp(elbowMotorPosition, Constants.ArmSubsystem.Elbow.kMinLimit, Constants.ArmSubsystem.Elbow.kMaxLimit);
     } 
 
     public void goToWristMotorPosition(double wristMotorPosition) {
-      if (wristMotorPosition < Constants.ArmSubsystem.maxWristLimit && wristMotorPosition > Constants.ArmSubsystem.minWristLimit) {
-        wristMotor.getClosedLoopController().setReference(wristMotorPosition, ControlType.kPosition);
-      }
+      wristMotorPosition = MathUtil.clamp(wristMotorPosition, Constants.ArmSubsystem.Wrist.kMinLimit, Constants.ArmSubsystem.Wrist.kMaxLimit);
     }
-    
+
+    public ArmPosition getArmPosition() {
+      return new ArmPosition(getArmHeight(), getElbowMotorPosition(), getWristMotorPosition());
+    }
+
     //Sets arm height to the ground
     public void goToHeightGround(){
-      double heightPos = Constants.ArmSubsystem.kGroundHeight;
-      goToPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kGround.pulley);
     }
     //Sets arm height to Level Two
     public void goToHeightL2(){
-      double heightPos = Constants.ArmSubsystem.kL2Height;
-      goToPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kLevel2.pulley);
     }
     //Sets arm height to Level Three
     public void goToHeightL3(){
-      double heightPos = Constants.ArmSubsystem.kL3Height;
-      goToPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.klevel3.pulley);
     }
+
     //Sets arm height to Level Four
     public void goToHeightL4(){
-      double heightPos = Constants.ArmSubsystem.kL4Height;
-      goToPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.klevel4.pulley);
     }
     //Sets arm height to the Human Station
     public void goToHeightHumanStation(){
-      double heightPos = Constants.ArmSubsystem.kHeightHumanStation;
-      goToPulleyMotorPosition(heightPos);
+      goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.pulley);
 
     }
 
     //Sets arm position to the Ground
     public void goToArmGround(){
-      double elbowPos = Constants.ArmSubsystem.kElbowPosGround;
-      double wristPos = Constants.ArmSubsystem.kWristPosGround;
-      goToElbowMotorPosition(elbowPos);
-      goToWristMotorPosition(wristPos);
+      goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kGround.elbow);
+      goToWristMotorPosition(Constants.ArmSubsystem.Positions.kGround.wrist);
     }
     //Sets arm position to Level Two
     public void goToArmL2(){
-      double elbowPos = Constants.ArmSubsystem.kElbowPosL2;
-      double wristPos = Constants.ArmSubsystem.kWristPosL2;
-      goToElbowMotorPosition(elbowPos);
-      goToWristMotorPosition(wristPos);
+      goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kLevel2.elbow);
+      goToWristMotorPosition(Constants.ArmSubsystem.Positions.kLevel2.wrist);
     }
     //Sets arm postion to Level Three
     public void goToArmL3(){
-      double elbowPos = Constants.ArmSubsystem.kElbowPosL3;
-      double wristPos = Constants.ArmSubsystem.kWristPosL3;
-      goToElbowMotorPosition(elbowPos);
-      goToWristMotorPosition(wristPos);
+      goToElbowMotorPosition(Constants.ArmSubsystem.Positions.klevel3.elbow);
+      goToWristMotorPosition(Constants.ArmSubsystem.Positions.klevel3.wrist);
     }
     //Sets arm position to Level Four
     public void goToArmL4(){
-      double elbowPos = Constants.ArmSubsystem.kElbowPosL4;
-      double wristPos = Constants.ArmSubsystem.kWristPosL4;
-      goToElbowMotorPosition(elbowPos);
-      goToWristMotorPosition(wristPos);
+      goToElbowMotorPosition(Constants.ArmSubsystem.Positions.klevel4.elbow);
+      goToWristMotorPosition(Constants.ArmSubsystem.Positions.klevel4.wrist);
     }
     //Sets arm position to the Human Station
     public void goToArmHumanStation(){
-      double elbowPos = Constants.ArmSubsystem.kElbowPosHumanStation;
-      double wristPos = Constants.ArmSubsystem.kWristPosHumanStation;
-      goToElbowMotorPosition(elbowPos);
-      goToWristMotorPosition(wristPos);
+      goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.elbow);
+      goToWristMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.wrist);
     }
 
     public static double getArmHeight(){
@@ -244,6 +237,10 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        pulleyMotor.setReferencePosition(pulleyLimiter, pullyMotorTarget);
+        elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
+        wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
+        clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
 
         ARM_HEIGHT = getCalculatedHeight();
     }
