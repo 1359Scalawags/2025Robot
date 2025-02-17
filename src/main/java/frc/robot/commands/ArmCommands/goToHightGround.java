@@ -45,12 +45,10 @@ public class goToHightGround extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-        if (MathUtil.isNear(Constants.ArmSubsystem.kGroundHeight, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
-    MathUtil.isNear(Constants.ArmSubsystem.kElbowPosGround, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
-    MathUtil.isNear(Constants.ArmSubsystem.kWristPosGround, m_subsystem.getWristMotorPosition(), Constants.ArmSubsystem.armGoToTolerance)) {
+    if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.kGround)) {
       return true;
     } else {
       return false;
-  }
+    }
  }
 }
