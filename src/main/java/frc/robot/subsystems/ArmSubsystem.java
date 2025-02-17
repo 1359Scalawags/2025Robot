@@ -26,7 +26,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   // there will be a limit switch to calibrate the zero position of the elevator 
   private DigitalInput homeLimitSwitch;
-  private static double ARM_HEIGHT; 
 
   // has the arm been properly initialized?
   private boolean initialized = false;
