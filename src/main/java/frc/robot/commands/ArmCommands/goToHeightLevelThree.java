@@ -5,7 +5,6 @@
 
 package frc.robot.commands.ArmCommands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -46,9 +45,8 @@ public class goToHeightLevelThree extends Command {
   
   @Override
   public boolean isFinished() {
-     if (MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel3.pulley, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
-    MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel3.elbow, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
-    MathUtil.isNear(Constants.ArmSubsystem.Positions.kLevel3.wrist, m_subsystem.getWristMotorPosition(), Constants.ArmSubsystem.armGoToTolerance)) {
+    // XXX: Move the tolerance checking to the ArmPosition class
+    if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.kLevel3)) {
       return true;
     } else {
       return false;

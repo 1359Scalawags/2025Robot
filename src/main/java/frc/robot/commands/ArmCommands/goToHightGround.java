@@ -5,7 +5,6 @@
 
 package frc.robot.commands.ArmCommands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -45,12 +44,11 @@ public class goToHightGround extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-        if (MathUtil.isNear(Constants.ArmSubsystem.Positions.kGround.pulley, m_subsystem.getCalculatedHeight(), Constants.ArmSubsystem.armGoToTolerance) && 
-            MathUtil.isNear(Constants.ArmSubsystem.Positions.kGround.elbow, m_subsystem.getElbowMotorPosition(), Constants.ArmSubsystem.armGoToTolerance) &&
-            MathUtil.isNear(Constants.ArmSubsystem.Positions.kGround.wrist, m_subsystem.getWristMotorPosition(), Constants.ArmSubsystem.armGoToTolerance)) {
+    // XXX: Move the tolerance checking to the ArmPosition class
+    if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.kGround)) {
       return true;
     } else {
       return false;
-  }
+    }
  }
 }

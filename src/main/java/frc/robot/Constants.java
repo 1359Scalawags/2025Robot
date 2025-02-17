@@ -99,6 +99,7 @@ public final class Constants {
 
     // XXX: Store desired arm positions as triplets (pulley, elbow, wrist) using ArmPosition class
     public static class Positions {
+      public static final ArmPosition kHome= new ArmPosition(0, 0, 0);
       public static final ArmPosition kHumanStation = new ArmPosition(0, 0, 0);
       public static final ArmPosition kGround= new ArmPosition(0, 0, 0);
       public static final ArmPosition kLevel1 = new ArmPosition(0, 0, 0);
@@ -108,39 +109,51 @@ public final class Constants {
     }
 
     // XXX: Split arm motors into subclasses
+    // TODO: Set these values
     public static class Wrist {
       public static final int kMotorID = 16;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
       public static final double kMinLimit = 0;
       public static final double kMaxLimit = 0;
+      public static final double kSlewRate = 0;
+      public static final double kPositionTolerance = 1.5;
     }
 
+    // TODO: Set these values
     public static class Elbow {
       public static final int kMotorID = 19;
       public static final double kMinLimit = 0;
       public static final double kMaxLimit = 0;
+      public static final double kSlewRate = 0;
+      public static final double kPositionTolerance = 1.5;
     }
 
+    // TODO: Set these values
     public static class Pulley {
       public static final int kMotorID = 17;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;   
       public static final double kMinLimit = 0;
       public static final double kMaxLimit = 0;
-      public static final double kHomeVelocity = 0;
+      public static final double kHomingVelocity = 0;
+      public static final boolean kLimitSwitchPressedState = false;
+      public static final double kSlewRate = 0;
+      public static final double kPositionTolerance = 0.25;
     }
 
+    // TODO: Set these values
     public static class Claw {
       public static final int kMotorID = 18;
       public static final double kMotorOffset = 0;
       public static final double kCnversionFactor = 360;
       public static final double kClosedPosition = 0;
-      public static final double kOpenedClawPosition = 0;
+      public static final double kOpenedPosition = 0;
+      public static final double kSlewRate = 0;
+      public static final double kPositionTolerance = 1.5; 
     }
-
-    // TODO: using the same tolerance for both rotation (elbow, wrist, claw) and linear movement (pulley) is dangerous
-    public static final double armGoToTolerance = 0;
+    
+    public static final int kHomeLimitSwitchID = 0;
   }
 
   public static class Vision { 
