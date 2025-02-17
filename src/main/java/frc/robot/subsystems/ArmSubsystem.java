@@ -9,6 +9,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
@@ -20,11 +22,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     private SimableSparkMax pulleyMotor,elbowMotor, wristMotor, clawMotor;
     private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;
-    private double pullyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
+    private double pulleyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
     private static double ARM_HEIGHT; 
 
+    private DigitalInput homeLimitSwitch;
 
-
+    private boolean initialized = false;
 
     public ArmSubsystem() {
       pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);     
@@ -41,6 +44,37 @@ public class ArmSubsystem extends SubsystemBase {
       configureElbowMotor();
       configurePulleyMotor();
       configureClawMotor();
+
+      homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
+    }
+
+    public void initializeArm(boolean findHome) {
+      pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
+      elbowMotorTarget = elbowMotor.getEncoder().getPosition();
+      wristMotorTarget = wristMotor.getEncoder().getPosition();
+      clawMotorTarget = clawMotor.getEncoder().getPosition();
+  
+      pulleyLimiter.reset(pulleyMotorTarget);
+      elbowLimiter.reset(elbowMotorTarget);
+      wristLimiter.reset(wristMotorTarget);
+      clawLimiter.reset(clawMotorTarget);
+      
+      pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+      elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
+      wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
+      clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
+
+      if(this.homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState){
+        pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
+        initialized = true;
+      }
+
+      if(initialized || !findHome){
+        pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+      } else {
+        pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomingVelocity, ControlType.kVelocity);
+      }
+
     }
 
     private void configureWristMotor() {
@@ -236,12 +270,24 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+      if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState){
+        pulleyMotor.stopMotor();
+        pulleyMotor.getEncoder().setPosition(0);
+        pulleyLimiter.reset(0);
+
+        pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
+        double homeTarget = pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley);
+        pulleyMotor.setReferencePosition(pulleyLimiter, homeTarget);
+
+      } else if (RobotState.isTeleop() || RobotState.isAutonomous()){
         // This method will be called once per scheduler run
-        pulleyMotor.setReferencePosition(pulleyLimiter, pullyMotorTarget);
+        pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
 
         ARM_HEIGHT = getCalculatedHeight();
+      }
     }
 }
