@@ -60,7 +60,7 @@ public class RobotContainer {
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Flipper"));
    //private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-   //private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
    private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
 
@@ -93,9 +93,9 @@ public class RobotContainer {
       ));
 
       //TODO: is it x or y movment for forwards and backwords?
-    // m_ClimberSubsystem.setDefaultCommand(
-    //   new MoveClimber(m_ClimberSubsystem, 
-    //   this::assistantGetY));
+    m_ClimberSubsystem.setDefaultCommand(
+      new MoveClimber(m_ClimberSubsystem, 
+      this::assistantGetY));
       }
 
       // Configure remote movements
@@ -182,16 +182,16 @@ public class RobotContainer {
             //}
             // then just make a button that flips that variable. talk to drive team about it.
 
-  // m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
+  m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
-  // m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));
-  // m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
+  m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));
+  m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
 
-  // m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
-  // m_AssistantJoystick.button(9).onTrue(new DeInitilizeClimber(m_ClimberSubsystem));
+  m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
+  m_AssistantJoystick.button(9).onTrue(new DeInitilizeClimber(m_ClimberSubsystem));
 
-  // m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
-  // m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
+  m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
+  m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
   m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
   m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
@@ -199,17 +199,17 @@ public class RobotContainer {
 
   }
 
-  // public Command lockClimberSubsystemWhenDisabled() {
-  //   return new LockClimberSubsystem(m_ClimberSubsystem);
-  // }
+  public Command lockClimberSubsystemWhenDisabled() {
+    return new LockClimberSubsystem(m_ClimberSubsystem);
+  }
 
-  // public Command intializeTheClimber() {
-  //   return new InitilizeClimber(m_ClimberSubsystem);
-  // }
+  public Command intializeTheClimber() {
+    return new InitilizeClimber(m_ClimberSubsystem);
+  }
 
-  // public Command disabledIntializedClimber() {
-  //   return new DeInitilizeClimber(m_ClimberSubsystem);
-  // }
+  public Command disabledIntializedClimber() {
+    return new DeInitilizeClimber(m_ClimberSubsystem);
+  }
 
 
   /**
