@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -280,10 +281,9 @@ public class ArmSubsystem extends SubsystemBase {
   }
   
   //TODO : Get formula
-      public double getCalculatedHeight(){
-      return pulleyMotor.getEncoder().getPosition(); 
-      }
-
+  public double getCalculatedHeight(){
+  return pulleyMotor.getEncoder().getPosition(); 
+  }
 
   @Override
   public void periodic() {
@@ -295,15 +295,23 @@ public class ArmSubsystem extends SubsystemBase {
       if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {       
         pulleyMotor.stopMotor();
         pulleyMotor.getEncoder().setPosition(0);
-        pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Positions.kHome.pulley, ControlType.kPosition);
+        pulleyLimiter.reset(0);        
+
+        // start going home
+        pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
+        double homeTarget = pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley);
+        pulleyMotor.getClosedLoopController().setReference(homeTarget, ControlType.kPosition);
+
+        // consider arm initialized
         initialized = true;
       }
       else if(RobotState.isTeleop() || RobotState.isAutonomous()) {
-        pulleyMotor.getClosedLoopController().setReference(pulleyMotorTarget, ControlType.kPosition);
-        elbowMotor.getClosedLoopController().setReference(elbowMotorTarget, ControlType.kPosition);
-        wristMotor.getClosedLoopController().setReference(wristMotorTarget, ControlType.kPosition);
-        clawMotor.getClosedLoopController().setReference(clawMotorTarget, ControlType.kPosition);
-      }
+        // These use the updated SendableCanSparkMax with a custom function to perform this task more directly
+        pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+        elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
+        wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
+        clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
+      } 
 
   }
 }
