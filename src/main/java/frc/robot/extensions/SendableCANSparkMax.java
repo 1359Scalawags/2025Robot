@@ -2,6 +2,7 @@ package frc.robot.extensions;
 
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
@@ -49,6 +50,10 @@ public class SendableCANSparkMax extends SparkMax implements Sendable {
 
     public boolean getInverted() {
         return super.configAccessor.getInverted();
+    }
+
+    public void setReferencePosition(SlewRateLimiter limiter, double position) {
+        this.closedLoopController.setReference(limiter.calculate(position), ControlType.kPosition);
     }
 
     
