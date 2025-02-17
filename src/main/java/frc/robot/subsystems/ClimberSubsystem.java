@@ -71,6 +71,7 @@ public class ClimberSubsystem extends SubsystemBase{
       if (isInitialized == false) {
       climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
       lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
+      unLatchCLimber();
 
       positionLimiter.reset(getClimberPostion());
       lockingPositionLimiter.reset(getLockingMotorPosition());
@@ -139,16 +140,18 @@ public class ClimberSubsystem extends SubsystemBase{
         .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
         .smartCurrentLimit(70, 30, 120);
 
-      lockingMotorConfig.absoluteEncoder
+      lockingMotorConfig.absoluteEncoder 
+        .inverted(true)
         .zeroOffset(Constants.ClimberSubsystem.LockingBarMotor.kEncoderOffset)
         .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
 
       lockingMotorConfig.closedLoop
-        .p(0.01)
-        .i(0.0000001)
+        .p(0.005)
+        .i(0.0)
         .d(0.0)
-        .iZone(0.000001)
-        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        .iZone(0.0)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+        .positionWrappingEnabled(true);
 
       // apply configuration
       lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

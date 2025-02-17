@@ -83,7 +83,7 @@ public final class Constants {
       public static final double kMaxLimit = 155;
       public static final double kUnLockedPosition = 63.0;
       public static final double kLockedPosition = 150.0;
-      public static final double kSlewRate = 5;
+      public static final double kSlewRate = 15;
     }
 
     public static class PositionMotor {
