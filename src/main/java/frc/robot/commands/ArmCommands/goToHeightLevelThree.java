@@ -46,7 +46,7 @@ public class goToHeightLevelThree extends Command {
   
   @Override
   public boolean isFinished() {
-     if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.klevel3)) {
+    if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.klevel3)) {
       return true;
     } else {
       return false;
