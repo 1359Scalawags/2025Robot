@@ -24,11 +24,16 @@ public class ArmSubsystem extends SubsystemBase {
   private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;    
   private double wristMotorTarget, elbowMotorTarget, pulleyMotorTarget, clawMotorTarget;
 
-  // there will be a limit switch to calibrate the zero position of the elevator 
+  // XXX: there will need to be a limit switch to calibrate the zero position of the elevator 
   private DigitalInput homeLimitSwitch;
 
-  // has the arm been properly initialized?
+  // TODO: there is likely a limit switch needed to calibrate the claw's zero position
+
+  // is the arm properly initialized?
   private boolean initialized = false;
+
+  // XXX: This variable keeps track of the most recently created arm instance (should only be one)
+  // It's used to return the pulleymotor's position instead of needing a special variable for that
   private static ArmSubsystem instance;
 
   public ArmSubsystem() {
@@ -58,7 +63,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   /**
-   * XXX: Initializes motor targets and the slew rate limiters.
+   * XXX: Initializes motor targets, slew rate limiters and initial reference positions.
    * @param findHome Should the initialization routine search for the lower limit?
    */
   public void initializeArm(boolean findHome) {
@@ -223,7 +228,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   /**
    * XXX: Set preconfigured positions of the arm motors in a single function call
-   * @param position
+   * @param position An {@link ArmPosition} object storing the desired pulley, elbow and wrist motor positions
    */
   public void goToPosition(ArmPosition position) {
     goToPulleyMotorPosition(position.pulley);
@@ -231,6 +236,15 @@ public class ArmSubsystem extends SubsystemBase {
     goToWristMotorPosition(position.wrist);
   }
 
+  /**
+   * XXX: This method returns an {@link ArmPosition} object storing the positions of all motors except the claw.
+   * This can be also by used to compare the current position with predefined positions.
+   * <p><b>Example Usage:</b></p>  
+   * <pre>
+   *   <code>myArm.getArmPosition().isNear(anotherArmPosition)</code>
+   * </pre>
+   * @return The position of the arm as an {@link ArmPosition}.
+   */
   public ArmPosition getArmPosition() {
     return new ArmPosition(getArmHeight(), getElbowMotorPosition(), getWristMotorPosition());
   }
