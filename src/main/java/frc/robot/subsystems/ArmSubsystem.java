@@ -30,9 +30,13 @@ public class ArmSubsystem extends SubsystemBase {
 
   // has the arm been properly initialized?
   private boolean initialized = false;
+  private static ArmSubsystem instance;
 
   public ArmSubsystem() {
-
+    // keep track of the robot instance
+    if(instance == null) {
+      instance = this;
+    } 
     // setup the motors
     pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID,MotorType.kBrushless);     
     elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.Elbow.kMotorID,MotorType.kBrushless);       
@@ -56,32 +60,40 @@ public class ArmSubsystem extends SubsystemBase {
 
   /**
    * XXX: Initializes motor targets and the slew rate limiters.
-   * @param findLimits Should the initialization routine search for the lower limit?
+   * @param findHome Should the initialization routine search for the lower limit?
    */
-  public void initializeArm(boolean findLimits) {
-    if(!initialized) {
-      pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
-      elbowMotorTarget = elbowMotor.getEncoder().getPosition();
-      wristMotorTarget = wristMotor.getEncoder().getPosition();
-      clawMotorTarget = clawMotor.getEncoder().getPosition();
+  public void initializeArm(boolean findHome) {
 
-      pulleyLimiter.reset(pulleyMotor.getEncoder().getPosition());
-      elbowLimiter.reset(elbowMotor.getEncoder().getPosition());
-      wristLimiter.reset(wristMotor.getEncoder().getPosition());
-      clawLimiter.reset(clawMotor.getEncoder().getPosition());
+    // set initial state to current position
+    pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
+    elbowMotorTarget = elbowMotor.getEncoder().getPosition();
+    wristMotorTarget = wristMotor.getEncoder().getPosition();
+    clawMotorTarget = clawMotor.getEncoder().getPosition();
 
-      //If looking for limit, start the elevator moving down at a safe speed
-      if(findLimits) {
-        pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomingVelocity, ControlType.kVelocity);        
-      } else {
-        pulleyMotor.getClosedLoopController().setReference(pulleyMotorTarget, ControlType.kPosition);
-      }
+    pulleyLimiter.reset(pulleyMotorTarget);
+    elbowLimiter.reset(elbowMotorTarget);
+    wristLimiter.reset(wristMotorTarget);
+    clawLimiter.reset(clawMotorTarget);
+    
+    //set the initial reference of motors to current position 
+    pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+    elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
+    wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
+    clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
 
-      //set the target of other motors to current position
-      elbowMotor.getClosedLoopController().setReference(elbowMotorTarget, ControlType.kPosition);
-      wristMotor.getClosedLoopController().setReference(wristMotorTarget, ControlType.kPosition);
-      clawMotor.getClosedLoopController().setReference(clawMotorTarget, ControlType.kPosition);
+    // determine if currently at home position
+    if(this.homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
+      pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
+      initialized = true;
+    } 
+    
+    // if we are already initialized or we don't want to find home
+    if(initialized || !findHome) {
+      pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+    } else {
+      pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomingVelocity, ControlType.kVelocity);         
     }
+
   }
 
   // XXX: Fixed mismatched motor and config names
@@ -161,7 +173,7 @@ public class ArmSubsystem extends SubsystemBase {
     pulleyMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-
+  // XXX: Fixed mismatched motor and config names
   private void configureClawMotor() {
     SparkMaxConfig clawMotorConfig = new SparkMaxConfig();
 
@@ -175,7 +187,6 @@ public class ArmSubsystem extends SubsystemBase {
       clawMotorConfig.absoluteEncoder
       .zeroOffset(Constants.ArmSubsystem.Claw.kMotorOffset)
       .positionConversionFactor(Constants.ArmSubsystem.Claw.kCnversionFactor);
-      
       
       clawMotorConfig.closedLoop
       .p(1.0f)
@@ -268,7 +279,8 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public static double getArmHeight(){
-    return ARM_HEIGHT;
+    // XXX: use an instance to remove the need to keep a variable in sync
+    return instance.getPulleyMotorPosition();
   }
 
   public double getElbowMotorPosition(){
@@ -280,15 +292,12 @@ public class ArmSubsystem extends SubsystemBase {
   }
   
   //TODO : Get formula
-  public double getCalculatedHeight(){
+  public double getPulleyMotorPosition(){
   return pulleyMotor.getEncoder().getPosition(); 
   }
 
   @Override
   public void periodic() {
-      // This method will be called once per scheduler run
-
-      ARM_HEIGHT = getCalculatedHeight();
 
       // XXX: if the limit switch is pressed, home the pulley.
       if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {       
@@ -299,7 +308,7 @@ public class ArmSubsystem extends SubsystemBase {
         // start going home
         pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
         double homeTarget = pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley);
-        pulleyMotor.getClosedLoopController().setReference(homeTarget, ControlType.kPosition);
+        pulleyMotor.setReferencePosition(pulleyLimiter, homeTarget);
 
         // consider arm initialized
         initialized = true;
