@@ -123,7 +123,7 @@ public class ArmSubsystem extends SubsystemBase {
         .d(0.0);
   
         // apply configuration
-        wristMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       }
 
     private void configurePulleyMotor() {
@@ -147,32 +147,32 @@ public class ArmSubsystem extends SubsystemBase {
       .d(0.0);
 
       // apply configuration
-      wristMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      pulleyMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
 
     private void configureClawMotor() {
-      SparkMaxConfig reversedScrewMotorConfig = new SparkMaxConfig();
+      SparkMaxConfig clawMotorConfig = new SparkMaxConfig();
   
-        reversedScrewMotorConfig
+        clawMotorConfig
           .idleMode(IdleMode.kBrake)
           .inverted(false)
           .openLoopRampRate(1.0)
           .closedLoopRampRate(1.0)
           .smartCurrentLimit(70, 30, 120);
   
-        reversedScrewMotorConfig.absoluteEncoder
+        clawMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Claw.kMotorOffset)
         .positionConversionFactor(Constants.ArmSubsystem.Claw.kConversionFactor);
        
        
-        reversedScrewMotorConfig.closedLoop
+        clawMotorConfig.closedLoop
         .p(1.0f)
         .i(0.0f)
         .d(0.0);
   
         // apply configuration
-        wristMotor.configure(reversedScrewMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       }
 
     public void closeClaw(){
