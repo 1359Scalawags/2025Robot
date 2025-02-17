@@ -23,13 +23,13 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public ArmSubsystem() {
-      wristMotor = new SimableSparkMax(Constants.ArmSubsystem.kWristMotorID,MotorType.kBrushless);
-      elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.kElbowMotorID,MotorType.kBrushless);
-      pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.kPulleyMotorID,MotorType.kBrushless);
-      clawMotor = new SimableSparkMax(Constants.ArmSubsystem.kClawMotorID,MotorType.kBrushless);
+      pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);     
+      elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);       
+      wristMotor = new SimableSparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
+      clawMotor = new SimableSparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
 
       configureWristMotor();
-      configureArmMotor();
+      configureElbowMotor();
       configurePulleyMotor();
       configureClawMotor();
     }
@@ -45,8 +45,8 @@ public class ArmSubsystem extends SubsystemBase {
         .smartCurrentLimit(70, 30, 120);
 
       wristMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ArmSubsystem.kWristMotorOffset)
-      .positionConversionFactor(Constants.ArmSubsystem.kWristConversionFactor);
+      .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
+      .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
      
      
       wristMotorConfig.closedLoop
@@ -59,28 +59,28 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
       //TODO: make sure to add ".feedbackSensor(FeedbackSensor.kAbsoluteEncoder)" to any motor with a absolute encoder
-    private void configureArmMotor() {
-      SparkMaxConfig armMotorConfig = new SparkMaxConfig();
+    private void configureElbowMotor() {
+      SparkMaxConfig elbowMotorConfig = new SparkMaxConfig();
   
-        armMotorConfig
+        elbowMotorConfig
           .idleMode(IdleMode.kBrake)
           .inverted(false)
           .openLoopRampRate(1.0)
           .closedLoopRampRate(1.0)
           .smartCurrentLimit(70, 30, 120);
   
-        armMotorConfig.absoluteEncoder
-        .zeroOffset(Constants.ArmSubsystem.kWristMotorOffset)
-        .positionConversionFactor(Constants.ArmSubsystem.kWristConversionFactor);
+        elbowMotorConfig.absoluteEncoder
+        .zeroOffset(Constants.ArmSubsystem.Elbow.kMotorOffset)
+        .positionConversionFactor(Constants.ArmSubsystem.Elbow.kConversionFactor);
        
        
-        armMotorConfig.closedLoop
+        elbowMotorConfig.closedLoop
         .p(1.0f)
         .i(0.0f)
         .d(0.0);
   
         // apply configuration
-        wristMotor.configure(armMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        wristMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       }
 
     private void configurePulleyMotor() {
@@ -94,8 +94,8 @@ public class ArmSubsystem extends SubsystemBase {
         .smartCurrentLimit(70, 30, 120);
 
       pulleyMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ArmSubsystem.kPulleyMotorOffset)
-      .positionConversionFactor(Constants.ArmSubsystem.kPulleyConversionFactor);
+      .zeroOffset(Constants.ArmSubsystem.Pulley.kMotorOffset)
+      .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
      
      
       pulleyMotorConfig.closedLoop
@@ -119,8 +119,8 @@ public class ArmSubsystem extends SubsystemBase {
           .smartCurrentLimit(70, 30, 120);
   
         reversedScrewMotorConfig.absoluteEncoder
-        .zeroOffset(Constants.ArmSubsystem.kReversedScrewMotorOffset)
-        .positionConversionFactor(Constants.ArmSubsystem.kReversedScrewConversionFactor);
+        .zeroOffset(Constants.ArmSubsystem.Claw.kMotorOffset)
+        .positionConversionFactor(Constants.ArmSubsystem.Claw.kConversionFactor);
        
        
         reversedScrewMotorConfig.closedLoop
