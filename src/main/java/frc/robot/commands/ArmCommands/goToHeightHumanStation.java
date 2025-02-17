@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
+// XXX: I can show you a way to consolidate these commands into one
 
 /** An example command that uses an example subsystem. */
 public class goToHeightHumanStation extends Command {
