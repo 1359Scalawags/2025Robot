@@ -23,6 +23,8 @@ public class SparkMaxPIDTuner {
     private PIDController tuner;
     private GenericEntry ffEntry;
     private GenericEntry referenceEntry;
+    private GenericEntry velocityEntry;
+    private GenericEntry accelerationEntry;
     private double lastReference;
 
     public SparkMaxPIDTuner(String name, SparkMax motor, ControlType controlType) {
@@ -31,12 +33,16 @@ public class SparkMaxPIDTuner {
         this.lastReference = 0;
         this.configAccessor = motor.configAccessor.closedLoop;
         this.tuner = new PIDController(configAccessor.getP(), configAccessor.getI(), configAccessor.getD());
-        this.tab = Shuffleboard.getTab(name + " Tuner");
+        this.tab = Shuffleboard.getTab(name + "PID");
         this.tab.add(name, tuner).withPosition(0, 0).withSize(2, 2);
-        this.ffEntry = this.tab.add(name + " FF", 0).withWidget(BuiltInWidgets.kTextView).withPosition(2, 0).withSize(2,1).getEntry();
-        this.referenceEntry = this.tab.add(name + " Reference", this.lastReference).withWidget(BuiltInWidgets.kTextView).withPosition(2, 1).withSize(2,1).getEntry();
-        this.tab.add("Apply " + name + " values", new ApplyValues(this)).withPosition(0, 2).withSize(2, 1);
-        this.tab.add("Reset " + name + " values", new ResetValues(this)).withPosition(2, 2).withSize(2, 1);
+        this.ffEntry = this.tab.add("Feed Forward", 0).withWidget(BuiltInWidgets.kTextView).withPosition(2, 0).withSize(2,1).getEntry();
+        this.referenceEntry = this.tab.add("Reference", this.lastReference).withWidget(BuiltInWidgets.kTextView).withPosition(2, 1).withSize(2,1).getEntry();
+        this.tab.add("Apply " + name + " Values", new ApplyValues(this)).withPosition(0, 2).withSize(2, 1);
+        this.tab.add("Reset " + name + " Values", new ResetValues(this)).withPosition(2, 2).withSize(2, 1);
+        if(controlType == ControlType.kMAXMotionPositionControl) {
+            this.velocityEntry = this.tab.add("MAX Velocity", 0).withWidget(BuiltInWidgets.kTextView).withPosition(4, 0).withSize(2,1).getEntry();
+            this.accelerationEntry = this.tab.add("MAX Acceleration", 0).withWidget(BuiltInWidgets.kTextView).withPosition(4, 1).withSize(2,1).getEntry();
+        }
 
     }
 
@@ -47,6 +53,13 @@ public class SparkMaxPIDTuner {
             .i(tuner.getI())
             .d(tuner.getD())
             .velocityFF(ffEntry.getDouble(0));
+
+        if(controlType == ControlType.kMAXMotionPositionControl) {
+            newConfig.closedLoop.maxMotion
+                .maxVelocity(velocityEntry.getDouble(0.1))
+                .maxAcceleration(accelerationEntry.getDouble(0.1));
+        }
+
         motor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
         this.lastReference = this.referenceEntry.getDouble(0);
         motor.getClosedLoopController().setReference(this.lastReference, controlType);
@@ -58,6 +71,10 @@ public class SparkMaxPIDTuner {
         tuner.setD(configAccessor.getD());
         ffEntry.setDouble(configAccessor.getFF());
         referenceEntry.setDouble(this.lastReference);
+        if(controlType == ControlType.kMAXMotionPositionControl) {
+            velocityEntry.setDouble(configAccessor.maxMotion.getMaxVelocity());
+            accelerationEntry.setDouble(configAccessor.maxMotion.getMaxAcceleration());            
+        }
     }
 
     public Command getApplyCommand() {
