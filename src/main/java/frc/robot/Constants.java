@@ -16,8 +16,8 @@ import frc.robot.extensions.ArmPosition;
  */
 public final class Constants {
 
-  public static boolean kTuning = true;
-  public static boolean kDebug = false;
+  public static final boolean kTuning = true;
+  public static final boolean kDebug = false;
   public static final String robotName = "Flipper";
 
   public static class SwerveSubsystem {

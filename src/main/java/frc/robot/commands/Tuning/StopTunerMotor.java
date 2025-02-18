@@ -1,0 +1,23 @@
+package frc.robot.commands.Tuning;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.extensions.SparkMaxPIDTuner;
+
+public class StopTunerMotor extends Command {
+    SparkMaxPIDTuner tuner;
+
+    public StopTunerMotor(SparkMaxPIDTuner tuner) {
+        this.tuner = tuner;
+    }
+
+    @Override
+    public void initialize() {
+        tuner.stopMotor();
+        System.out.println("Stopping Tuner Motor");
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
+}

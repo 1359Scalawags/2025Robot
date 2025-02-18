@@ -315,7 +315,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    if (Constants.kTuning == false) {
       // XXX: if the limit switch is pressed, home the pulley.
       if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {       
         pulleyMotor.stopMotor();
@@ -339,6 +339,7 @@ public class ArmSubsystem extends SubsystemBase {
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
       } 
+    }
 
   }
 }

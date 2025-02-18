@@ -241,25 +241,27 @@ public class ClimberSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
+      if (Constants.kTuning == false) {
+        
+        if (Constants.kDebug == true) {
+          SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
+          SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
+          SmartDashboard.putNumber("Servo position", getServoAngle());
+          SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
+          if(debugTimer.get() > 1.5) {
+            System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
+            System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
+            debugTimer.reset();
+          }
+        }
 
-      if (Constants.kDebug == true){
-      SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
-      SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
-      SmartDashboard.putNumber("Servo position", getServoAngle());
-      SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
-      if(debugTimer.get() > 1.5) {
-        System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
-        System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
-        debugTimer.reset();
-      }
-    }
+        if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
+          double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
+          positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
     
-      if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
-        double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
-        positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
-  
-        double lockingImmediateTargetAngle = lockingPositionLimiter.calculate(lockingTargetPosition);
-        lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
+          double lockingImmediateTargetAngle = lockingPositionLimiter.calculate(lockingTargetPosition);
+          lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
+        }
       }
   }     
 }
