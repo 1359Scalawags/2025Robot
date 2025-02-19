@@ -126,6 +126,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-
+      lockBarTuner.updateEncoderValues();
+      positionMotorTuner.updateEncoderValues();
     }     
 }

@@ -156,7 +156,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+      pulleyTuner.updateEncoderValues();
+      elbowTuner.updateEncoderValues();
+      wristTuner.updateEncoderValues();
+      clawTuner.updateEncoderValues();
      
     }
 }
