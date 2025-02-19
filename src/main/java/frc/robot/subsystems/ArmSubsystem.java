@@ -36,6 +36,11 @@ public class ArmSubsystem extends SubsystemBase {
       configurePulleyMotor();
       configureClawMotor();
 
+      pulleyTuner = new SparkMaxPIDTuner("A: Pulley", pulleyMotor, ControlType.kPosition);
+      elbowTuner = new SparkMaxPIDTuner("A: Elbow", elbowMotor, ControlType.kPosition);
+      wristTuner = new SparkMaxPIDTuner("A: Wrist", wristMotor, ControlType.kPosition);
+      clawTuner = new SparkMaxPIDTuner("A: Claw", clawMotor, ControlType.kPosition);
+
       homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
 
     }
