@@ -62,7 +62,7 @@ public class SparkMaxPIDTuner {
 
     private void setupShuffleboard(String name) {
         // setup interface in Shuffleboard
-        this.tab = Shuffleboard.getTab(name + "PID");
+        this.tab = Shuffleboard.getTab(name + " PID");
         this.tuningLayout = this.tab.getLayout("Value Tuning", BuiltInLayouts.kList);
         this.tuningLayout
             .withPosition(0,0)
