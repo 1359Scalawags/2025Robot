@@ -16,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.SendableCANSparkMax;
 import frc.robot.extensions.SimableSparkMax;
+import frc.robot.extensions.SparkMaxPIDTuner;
 
 
 public class ArmSubsystem extends SubsystemBase {
@@ -26,6 +27,8 @@ public class ArmSubsystem extends SubsystemBase {
     private static double ARM_HEIGHT; 
 
     private DigitalInput homeLimitSwitch;
+
+    private SparkMaxPIDTuner pulleyTuner, elbowTuner, wristTuner, clawTuner;
 
     private boolean initialized = false;
 
@@ -41,6 +44,11 @@ public class ArmSubsystem extends SubsystemBase {
       configureClawMotor();
 
       homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
+      pulleyTuner = new SparkMaxPIDTuner("A: Pulley", pulleyMotor, ControlType.kPosition);
+      elbowTuner = new SparkMaxPIDTuner("A: Elbow", elbowMotor, ControlType.kPosition);
+      wristTuner = new SparkMaxPIDTuner("A: Wrist", wristMotor, ControlType.kPosition);
+      clawTuner = new SparkMaxPIDTuner("A: Claw", clawMotor, ControlType.kPosition);
+
     }
 
     private void configureWristMotor() {

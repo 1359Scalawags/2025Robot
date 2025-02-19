@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.extensions.SimableSparkMax;
+import frc.robot.extensions.SparkMaxPIDTuner;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -37,6 +38,9 @@ public class ClimberSubsystem extends SubsystemBase{
 
   private SlewRateLimiter positionLimiter;
   private SlewRateLimiter lockingPositionLimiter;
+
+  private SparkMaxPIDTuner lockBarTuner;
+  private SparkMaxPIDTuner positionMotorTuner;
 
     //TODO: make this make sense to the drivers when it is in the dashboard
   private boolean moveClimberCommandLock = true;
@@ -58,13 +62,9 @@ public class ClimberSubsystem extends SubsystemBase{
       configureLockingBarMotor();
       configurePositionMotor();
       
-      Shuffleboard.getTab("climber").add("Position Motor", positionMotor);
-      Shuffleboard.getTab("climber").add("Latching Servo", latchingServo); 
-      Shuffleboard.getTab("climber").add("Locking Bar", lockingBarMotor);
-      Shuffleboard.getTab("climber").add("Position Motor Position",positionMotor.getEncoder().getPosition());
+      lockBarTuner = new SparkMaxPIDTuner("C: Lock Bar", lockingBarMotor, ControlType.kPosition);
+      positionMotorTuner = new SparkMaxPIDTuner("C: Position", positionMotor, ControlType.kPosition);
 
-      debugTimer = new Timer();
-      debugTimer.start();
     }
 
 

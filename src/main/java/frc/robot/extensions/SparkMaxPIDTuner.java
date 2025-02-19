@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.Tuning.ApplyTunerValues;
 import frc.robot.commands.Tuning.ResetTunerValues;
+import frc.robot.commands.Tuning.StartTunerMotor;
 import frc.robot.commands.Tuning.StopTunerMotor;
 
 public class SparkMaxPIDTuner {
@@ -84,6 +85,7 @@ public class SparkMaxPIDTuner {
         //this.commandLayout = this.tab.getLayout("Value Tuning", BuiltInLayouts.kList);
         this.commandLayout.add("Apply", new ApplyTunerValues(this));
         this.commandLayout.add("Reset", new ResetTunerValues(this));
+        this.commandLayout.add("Start", new StartTunerMotor(this));
         this.commandLayout.add("STOP!", new StopTunerMotor(this));
     }
 
@@ -101,9 +103,8 @@ public class SparkMaxPIDTuner {
                 .maxAcceleration(accelerationEntry.getDouble(0.1));
         }
         motor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-
         this.lastReference = tuner.getSetpoint();
-        motor.getClosedLoopController().setReference(this.lastReference, controlType);
+        
     }
 
     public void resetTunerValues() {
@@ -116,6 +117,10 @@ public class SparkMaxPIDTuner {
             velocityEntry.setDouble(this.v0);
             accelerationEntry.setDouble(this.a0);            
         }
+    }
+
+    public void startMotor() {
+        motor.getClosedLoopController().setReference(this.lastReference, controlType);
     }
 
     public void stopMotor() {
