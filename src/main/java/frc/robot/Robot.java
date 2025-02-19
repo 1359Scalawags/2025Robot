@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ClimberCommands.LockClimberSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
 /**
@@ -39,7 +38,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
       super.robotInit();
 
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
   /**
@@ -61,8 +59,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    CommandScheduler.getInstance().schedule(m_robotContainer.lockClimberSubsystemWhenDisabled());
-    CommandScheduler.getInstance().schedule(m_robotContainer.disabledIntializedClimber());
+
   }
 
   @Override
@@ -77,7 +74,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
   /** This function is called periodically during autonomous. */
@@ -93,7 +89,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
   /** This function is called periodically during operator control. */
@@ -104,7 +99,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+
   }
 
   /** This function is called periodically during test mode. */
@@ -114,7 +109,6 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-   CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
   /** This function is called periodically whilst in simulation. */
