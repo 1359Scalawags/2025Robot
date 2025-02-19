@@ -67,40 +67,6 @@ public class ClimberSubsystem extends SubsystemBase{
       debugTimer.start();
     }
 
-    public void initializeClimber() {
-      if (isInitialized == false) {
-      climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
-      lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
-      unLatchCLimber();
-
-      positionLimiter.reset(getClimberPostion());
-      lockingPositionLimiter.reset(getLockingMotorPosition());
-
-      positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
-      lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
-
-
-      isInitialized = true;
-      moveClimberCommandLock = false;
-      }
-    }
-
-        //Run in robots disabled init.
-    public void deInitialize() {
-      isInitialized = false;
-    }
-
-    public double getLockingMotorPosition(){
-      return lockingBarEncoder.getPosition();
-    }
-
-    public double getClimberPostion(){
-      return positionEncoder.getPosition();
-    }
-
-    public double getServoAngle(){
-      return latchingServo.getAngle();
-    }
 
     private void configurePositionMotor(){
       // create a new sparkmax config
@@ -157,108 +123,9 @@ public class ClimberSubsystem extends SubsystemBase{
       lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void setBarAngle(double angle){
-      lockingTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
-    }
-
-    public void lockClimberBar(){
-      double targetpostion = Constants.ClimberSubsystem.LockingBarMotor.kLockedPosition;
-      setBarAngle(targetpostion);
-    }
-
-    public void unlockClimberBar(){
-      double targetpostion = Constants.ClimberSubsystem.LockingBarMotor.kUnLockedPosition;
-      setBarAngle(targetpostion);
-    }
-      //used to set climber using the  buttons
-      //TODO: add clamps to specific functions.
-    public void setClimberAngle(double angle) {
-      climberTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.PositionMotor.kMinAngle,  Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
-      // if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
-      //positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
-      // }
-    } 
-
-    public void extendClimber(){
-      double targetpostion = Constants.ClimberSubsystem.PositionMotor.kDeployedAngle;
-      setClimberAngle(targetpostion);
-    }
-
-    public void retractClimber(){
-      double targetpostion = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
-      setClimberAngle(targetpostion);
-    }
-
-        // operater controll of the climber 
-    public void changeClimberPosition(double delta){
-      // positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
-      //MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
-      double newPosition = getClimberPostion() + delta;
-      setClimberAngle(newPosition);
-    }
-    
-
-    public void setServoValue(double newValue){
-      newValue = MathUtil.clamp(newValue, Constants.ClimberSubsystem.LatchServo.minLimit, Constants.ClimberSubsystem.LatchServo.maxLimit);
-      latchingServo.set(newValue);
-      
-    }
-
-    public void latchCLimber(){
-      setServoValue(Constants.ClimberSubsystem.LatchServo.latchedValue);
-    }
-
-    public void unLatchCLimber(){
-      setServoValue(Constants.ClimberSubsystem.LatchServo.unLatchedValue);
-    }
-
-    public void moveCLimberCommandLock(){
-      moveClimberCommandLock = false;
-    }
-    
-    public void moveCLimberCommandUnLock(){
-      moveClimberCommandLock = true;
-    }
-
-    public boolean isClimberCommandLocked() {
-      return moveClimberCommandLock;
-    }
-
-    public boolean isClimberLocked() {
-      return moveClimberCommandLock;
-    }
-
-    public boolean unlockClimberSubsystem() {
-      moveClimberCommandLock = false;
-      return moveClimberCommandLock;
-    }
-
-    public boolean lockClimberSubsystem() {
-      moveClimberCommandLock = true;
-      return moveClimberCommandLock;
-    }
 
     @Override
     public void periodic() {
 
-      if (Constants.kDebug == true){
-      SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
-      SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
-      SmartDashboard.putNumber("Servo position", getServoAngle());
-      SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
-      if(debugTimer.get() > 1.5) {
-        System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
-        System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
-        debugTimer.reset();
-      }
-    }
-    
-      if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
-        double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
-        positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
-  
-        double lockingImmediateTargetAngle = lockingPositionLimiter.calculate(lockingTargetPosition);
-        lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
-      }
-  }     
+    }     
 }
