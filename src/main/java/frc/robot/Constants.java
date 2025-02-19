@@ -123,6 +123,7 @@ public final class Constants {
       public static final double kSlewRate = 0;
       public static final boolean kLimitSwitchPressedState = false;
       public static final double kHomingVelocity = 0;
+      public static final double kPositionTolerance = 1.5;
     }
 
     public static class Elbow {
@@ -132,6 +133,7 @@ public final class Constants {
       public static final double kMaxLimit = 0;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
+      public static final double kPositionTolerance = 1.5;
     }
 
     public static class Wrist {
@@ -141,6 +143,7 @@ public final class Constants {
       public static final double kMaxLimit = 0;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
+      public static final double kPositionTolerance = 1.5;
     }
 
     public static class Claw {
@@ -150,6 +153,7 @@ public final class Constants {
       public static final double kMaxLimit = 0;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
+      public static final double kPositionTolerance = 1.5;
     }
 
     public static final double armGoToTolerance = 0;
