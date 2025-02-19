@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import java.io.File;
@@ -22,9 +20,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here
-
-  private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
-    new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Flipper"));
 
    private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();

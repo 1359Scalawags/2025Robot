@@ -4,12 +4,6 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.util.function.BooleanSupplier;
-
-import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
-
-import edu.wpi.first.apriltag.AprilTagFields;
 import frc.robot.extensions.ArmPosition;
 
 /**

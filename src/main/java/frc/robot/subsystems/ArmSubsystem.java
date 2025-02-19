@@ -7,14 +7,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.extensions.ArmPosition;
-import frc.robot.extensions.SendableCANSparkMax;
 import frc.robot.extensions.SimableSparkMax;
 import frc.robot.extensions.SparkMaxPIDTuner;
 
@@ -23,14 +19,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     private SimableSparkMax pulleyMotor,elbowMotor, wristMotor, clawMotor;
     private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;
-    private double pulleyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
-    private static double ARM_HEIGHT; 
+
 
     private DigitalInput homeLimitSwitch;
 
     private SparkMaxPIDTuner pulleyTuner, elbowTuner, wristTuner, clawTuner;
 
-    private boolean initialized = false;
 
     public ArmSubsystem() {
       pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);     
