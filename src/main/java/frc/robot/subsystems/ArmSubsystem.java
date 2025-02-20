@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -95,13 +96,13 @@ public class ArmSubsystem extends SubsystemBase {
       wristMotorConfig.closedLoop
       .p(1.0f)
       .i(0.0f)
-      .d(0.0);
+      .d(0.0)
+      .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);;
 
       // apply configuration
       wristMotor.configure(wristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-      //TODO: make sure to add ".feedbackSensor(FeedbackSensor.kAbsoluteEncoder)" to any motor with a absolute encoder
     private void configureElbowMotor() {
       SparkMaxConfig elbowMotorConfig = new SparkMaxConfig();
   
@@ -120,7 +121,8 @@ public class ArmSubsystem extends SubsystemBase {
         elbowMotorConfig.closedLoop
         .p(1.0f)
         .i(0.0f)
-        .d(0.0);
+        .d(0.0)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
   
         // apply configuration
         elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
