@@ -135,21 +135,21 @@ public class ClimberSubsystem extends SubsystemBase{
 
       lockingMotorConfig
         .idleMode(IdleMode.kBrake)
-        .inverted(false)
+        .inverted(false) // this is correct
         .openLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
         .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
-        .smartCurrentLimit(70, 30, 120);
+        .smartCurrentLimit(70, 30, 900);
 
       lockingMotorConfig.absoluteEncoder 
-        .inverted(true)
+        .inverted(false) // this is correct
         .zeroOffset(Constants.ClimberSubsystem.LockingBarMotor.kEncoderOffset)
         .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
 
       lockingMotorConfig.closedLoop
-        .p(0.005)
-        .i(0.0)
+        .p(0.1)
+        .i(0.000001)
         .d(0.0)
-        .iZone(0.0)
+        .iZone(0.01)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         .positionWrappingEnabled(true);
 
@@ -241,17 +241,17 @@ public class ClimberSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
 
-      if (Constants.kDebug == true){
-      SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
-      SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
-      SmartDashboard.putNumber("Servo position", getServoAngle());
-      SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
-      if(debugTimer.get() > 1.5) {
-        System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
-        System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
-        debugTimer.reset();
-      }
-    }
+      // if (Constants.kDebug == true){
+      // SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
+      // SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
+      // SmartDashboard.putNumber("Servo position", getServoAngle());
+      // SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
+      // if(debugTimer.get() > 1.5) {
+      //   System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
+      //   System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
+      //   debugTimer.reset();
+      // }
+    //}
     
       if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
         double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
