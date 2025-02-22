@@ -4,11 +4,6 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.util.function.BooleanSupplier;
-
-import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
-
 import edu.wpi.first.apriltag.AprilTagFields;
 import frc.robot.extensions.ArmPosition;
 
@@ -58,7 +53,6 @@ public final class Constants {
      */
   }
 
-  // TODO: Create sub classes for each function of the Climber system
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
 
@@ -72,6 +66,7 @@ public final class Constants {
       public static final double minLimit = 0;
       public static final double latchedValue = 0.8;
       public static final double unLatchedValue = 0.2;
+      public static final double kNaxActuateTime = 5.0; //max time to run the servo
       
     }
 
@@ -100,7 +95,6 @@ public final class Constants {
     }
   }  
 
-  // TODO: Create sub classes for each function of the Arm system
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
 
