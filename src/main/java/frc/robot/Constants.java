@@ -62,7 +62,7 @@ public final class Constants {
 
     public static class LatchServo {
       public static final int kServoID = 0;
-      public static final double maxLimit = 0;
+      public static final double maxLimit = 1;
       public static final double minLimit = 0;
       public static final double latchedValue = 0.8;
       public static final double unLatchedValue = 0.2;

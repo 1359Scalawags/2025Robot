@@ -55,7 +55,7 @@ public class LatchServo extends Command {
       return true;
     }
 
-    if(MathUtil.isNear(Constants.ClimberSubsystem.LatchServo.latchedValue, m_subsystem.getServoAngle(), 5)){
+    if(MathUtil.isNear(Constants.ClimberSubsystem.LatchServo.latchedValue, m_subsystem.getServoValue(), 5)){
       return true; 
     } else {
       return false;
