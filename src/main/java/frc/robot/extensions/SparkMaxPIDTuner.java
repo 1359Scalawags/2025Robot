@@ -65,7 +65,7 @@ public class SparkMaxPIDTuner {
         updateTimer.start();
     }
 
-    private void setupShuffleboard(String name) {
+    protected void setupShuffleboard(String name) {
         // setup interface in Shuffleboard
         this.tab = Shuffleboard.getTab(name + " PID");
 
