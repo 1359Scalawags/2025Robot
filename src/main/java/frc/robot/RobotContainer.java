@@ -188,7 +188,7 @@ public class RobotContainer {
   m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
 
   m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
-  m_AssistantJoystick.button(9).onTrue(new DeInitilizeClimber(m_ClimberSubsystem));
+  m_AssistantJoystick.button(9).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
 
   m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
   m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
