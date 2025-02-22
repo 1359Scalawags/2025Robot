@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -267,6 +268,9 @@ public class ArmSubsystem extends SubsystemBase {
     public double getElbowMotorPosition(){
       return elbowMotor.getEncoder().getPosition();
     }
+
+    // TODO: Write a function for calculating the pulleymotor's feedforward based on stage of lift
+    // TODO: Write a function for calculating the elbowmotor's feedforward based on angle position
     
     public double getWristMotorPosition(){
       return wristMotor.getEncoder().getPosition();
@@ -304,6 +308,7 @@ public class ArmSubsystem extends SubsystemBase {
           pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);   // - this is now in the limit switch if statment.
         
           // TODO: Add gravity assisted feedforward to elbow motor
+        //elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(getElbowMotorPosition()), ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.1); // must change
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
