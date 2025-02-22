@@ -73,7 +73,7 @@ public final class Constants {
       public static final int kMotorID = 9;
       public static final double kEncoderOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMinLimit = 60;
+      public static final double kMinLimit = 72;
       public static final double kMaxLimit = 155;
       public static final double kUnLockedPosition = 63.0;
       public static final double kLockedPosition = 150.0;

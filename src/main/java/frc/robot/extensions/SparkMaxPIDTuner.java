@@ -101,7 +101,7 @@ public class SparkMaxPIDTuner {
             .withPosition(2, 2)
             .withSize(2, 1);
         this.tab.add("STOP!", new StopTunerMotor(this))
-            .withPosition(2, 3)
+            .withPosition(4, 2)
             .withSize(2, 1);
 
         this.actualPositionEntry = this.tab.add("Encoder Position", this.motor.getAbsoluteEncoder().getPosition())

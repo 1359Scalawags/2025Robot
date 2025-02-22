@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -33,6 +34,7 @@ public class ClimberSubsystem extends SubsystemBase{
     configurePositionMotor();
     
     lockBarTuner = new SparkMaxPIDTuner("C: Lock Bar", lockingBarMotor, ControlType.kPosition);
+    //lockBarTuner = new SparkMaxPIDTuner("C: Lock Bar", lockingBarMotor, ControlType.kMAXMotionPositionControl);
     positionMotorTuner = new SparkMaxPIDTuner("C: Position", positionMotor, ControlType.kPosition);
 
   }
@@ -71,23 +73,36 @@ public class ClimberSubsystem extends SubsystemBase{
 
     lockingMotorConfig
       .idleMode(IdleMode.kBrake)
-      .inverted(false)
+      .inverted(true)
       .openLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
       .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
-      .smartCurrentLimit(70, 30, 120);
+      .smartCurrentLimit(70, 30, 1000);
+      
+    lockingMotorConfig.softLimit
+      .reverseSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMinLimit)
+      .forwardSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit)
+      .forwardSoftLimitEnabled(true)
+      .reverseSoftLimitEnabled(true);
 
     lockingMotorConfig.absoluteEncoder 
-      .inverted(true)
+      .inverted(false)
       .zeroOffset(Constants.ClimberSubsystem.LockingBarMotor.kEncoderOffset)
-      .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
+      .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor)
+      .velocityConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
 
     lockingMotorConfig.closedLoop
       .p(0.005)
       .i(0.0)
       .d(0.0)
-      .iZone(0.0)
+      .iZone(5)
       .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-      .positionWrappingEnabled(true);
+      .positionWrappingEnabled(false)
+      .positionWrappingInputRange(0,360);
+
+    lockingMotorConfig.closedLoop.maxMotion
+      .maxVelocity(5)
+      .maxAcceleration(1)
+      .allowedClosedLoopError(0.01);
 
     // apply configuration
     lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
