@@ -144,10 +144,13 @@ public final class Constants {
       public static final double kMaxLimit = 0;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
+    public static final double kCloseClaw = 0;
+    public static final double kOpenClaw = 0;
     }
 
     public static final double armGoToTolerance = 0;
     public static final int kHomeLimitSwitchID = 0;
+    public static final int kClawLimitSwitch = 0;
   }
 
   public static class Vision { 
