@@ -22,6 +22,7 @@ import frc.robot.extensions.SimableSparkMax;
 
 public class ArmSubsystem extends SubsystemBase {
 
+    //TODO: elbow motor will need a gravity feedforward to be tuned properly
     private SimableSparkMax pulleyMotor,elbowMotor, wristMotor, clawMotor;
     private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;
     private double pulleyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
@@ -301,7 +302,8 @@ public class ArmSubsystem extends SubsystemBase {
       if (RobotState.isTeleop() || RobotState.isAutonomous()){
         // This method will be called once per scheduler run
           pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);   // - this is now in the limit switch if statment.
-        // TODO: Add gravity assisted feedforward to elbow motor?
+        
+          // TODO: Add gravity assisted feedforward to elbow motor
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
