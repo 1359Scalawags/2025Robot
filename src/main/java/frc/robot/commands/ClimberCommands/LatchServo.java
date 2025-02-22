@@ -32,7 +32,8 @@ public class LatchServo extends Command {
   public void initialize() {
     safetyTimer.reset();
     safetyTimer.start();
-    m_subsystem.latchCLimber();
+    //TODO: Need to prevent this from doing something if position motor is not ready for latching
+    m_subsystem.latchCLimber();      
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,7 +49,7 @@ public class LatchServo extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
+
     // stop a stuck servo to avoid burnout
     if(safetyTimer.get() > Constants.ClimberSubsystem.LatchServo.kNaxActuateTime) {
       m_subsystem.setServoValue(m_subsystem.getServoValue());

@@ -76,7 +76,6 @@ public class ClimberSubsystem extends SubsystemBase{
         positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
         lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
 
-
         isInitialized = true;
       }
     }
@@ -110,16 +109,16 @@ public class ClimberSubsystem extends SubsystemBase{
         .smartCurrentLimit(70, 30, 120);
 
       positionMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ClimberSubsystem.PositionMotor.kEncoderOffset)
-      .positionConversionFactor(Constants.ClimberSubsystem.PositionMotor.kConversionFactor)
-      .inverted(true);
+        .zeroOffset(Constants.ClimberSubsystem.PositionMotor.kEncoderOffset)
+        .positionConversionFactor(Constants.ClimberSubsystem.PositionMotor.kConversionFactor)
+        .inverted(true);
        
       positionMotorConfig.closedLoop
-      .p(0.01f)
-      .i(0.0)
-      .d(0.0)
-      .iZone(0.001)
-      .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        .p(0.01f)
+        .i(0.0)
+        .d(0.0)
+        .iZone(0.001)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
       positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -201,6 +200,7 @@ public class ClimberSubsystem extends SubsystemBase{
       setClimberAngle(newPosition);
     }
     
+    //TODO: This should be private so that you can't bypass the intended methods below
     public void setServoValue(double newValue){
       newValue = MathUtil.clamp(newValue, Constants.ClimberSubsystem.LatchServo.minLimit, Constants.ClimberSubsystem.LatchServo.maxLimit);
       latchingServo.set(newValue);
@@ -211,7 +211,9 @@ public class ClimberSubsystem extends SubsystemBase{
       return latchingServo.get();
     }
 
+    //
     public void latchCLimber(){
+      //TODO: Make sure you can't latch until position is correct
       setServoValue(Constants.ClimberSubsystem.LatchServo.latchedValue);
     }
 
