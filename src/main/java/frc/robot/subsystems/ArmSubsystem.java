@@ -133,7 +133,7 @@ public class ArmSubsystem extends SubsystemBase {
 
       pulleyMotorConfig
         .idleMode(IdleMode.kBrake)
-        .inverted(false)
+        .inverted(true)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
         .smartCurrentLimit(70, 30, 120);
