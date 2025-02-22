@@ -92,6 +92,7 @@ public final class Constants {
 
       public static final double kMaxJoystickSpeed = 10;
       public static final double kSlewRate = 30.0;
+      //TODO: need constant for target position to enable servo latching
     }
   }  
 
