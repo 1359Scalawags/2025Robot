@@ -19,19 +19,19 @@ import frc.robot.commands.Tuning.StartTunerMotor;
 import frc.robot.commands.Tuning.StopTunerMotor;
 
 public class SparkMaxPIDTuner {
-    private SparkMax motor;
-    private ControlType controlType;
+    protected SparkMax motor;
+    protected ControlType controlType;
     private ClosedLoopConfigAccessor configAccessor;
-    private PIDController tuner;    
-    private ShuffleboardTab tab;
+    protected PIDController tuner;    
+    protected ShuffleboardTab tab;
     private GenericEntry ffEntry;
     private GenericEntry velocityEntry;
     private GenericEntry accelerationEntry;
-    private double lastReference;
-    private double p0, i0, d0, f0, v0, a0;
+    protected double lastReference;
+    private double p0, i0, d0, f0, vel0, acc0;
     private GenericEntry actualPositionEntry;
     private GenericEntry actualVelocityEntry;
-    private Timer updateTimer;
+    protected Timer updateTimer;
 
     public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
@@ -55,8 +55,8 @@ public class SparkMaxPIDTuner {
         this.tuner.setSetpoint(this.lastReference);
         
         if(controlType == ControlType.kMAXMotionPositionControl) {
-            this.v0 = configAccessor.maxMotion.getMaxVelocity();
-            this.a0 = configAccessor.maxMotion.getMaxAcceleration();
+            this.vel0 = configAccessor.maxMotion.getMaxVelocity();
+            this.acc0 = configAccessor.maxMotion.getMaxAcceleration();
         }
 
         setupShuffleboard(name);
@@ -79,12 +79,12 @@ public class SparkMaxPIDTuner {
             .getEntry();  
 
         if(controlType == ControlType.kMAXMotionPositionControl) {
-            this.accelerationEntry = this.tab.add("MAX Acceleration", this.a0)
+            this.accelerationEntry = this.tab.add("MAX Acceleration", this.acc0)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(4, 0)
             .withSize(1, 1)
             .getEntry();
-            this.velocityEntry = this.tab.add("MAX Velocity", this.v0)
+            this.velocityEntry = this.tab.add("MAX Velocity", this.vel0)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(4, 1)
             .withSize(1, 1)
@@ -154,8 +154,8 @@ public class SparkMaxPIDTuner {
         ffEntry.setDouble(this.f0);
         tuner.setSetpoint(0);
         if(controlType == ControlType.kMAXMotionPositionControl) {
-            velocityEntry.setDouble(this.v0);
-            accelerationEntry.setDouble(this.a0);            
+            velocityEntry.setDouble(this.vel0);
+            accelerationEntry.setDouble(this.acc0);            
         }
     }
 
