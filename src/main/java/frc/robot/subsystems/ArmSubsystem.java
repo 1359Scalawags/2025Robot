@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
@@ -27,6 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
     private static double ARM_HEIGHT; 
 
     private DigitalInput homeLimitSwitch;
+    private DigitalInput clawLimitSwitch;
 
     private boolean initialized = false;
 
@@ -47,6 +49,10 @@ public class ArmSubsystem extends SubsystemBase {
       configureClawMotor();
 
       homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
+      clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kClawLimitSwitch);
+
+      Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
+      Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
     }
 
     public void initializeArm(boolean findHome) {
@@ -75,7 +81,6 @@ public class ArmSubsystem extends SubsystemBase {
       } else {
         pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomingVelocity, ControlType.kVelocity);
       }
-
     }
 
     private void configureWristMotor() {
@@ -133,7 +138,7 @@ public class ArmSubsystem extends SubsystemBase {
 
       pulleyMotorConfig
         .idleMode(IdleMode.kBrake)
-        .inverted(true)
+        .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
         .smartCurrentLimit(70, 30, 120);
@@ -178,13 +183,11 @@ public class ArmSubsystem extends SubsystemBase {
       }
 
     public void closeClaw(){
-      System.err.println("closeClaw not implemented");
-      //clawMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.closedClawPosition, ControlType.kPosition);
+      goToClawMotorPosition(Constants.ArmSubsystem.Claw.kCloseClaw);
     }
 
     public void openClaw(){
-      System.err.println("openClaw not implemented");
-      //clawMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.openedClawPosition, ControlType.kPosition);
+      goToClawMotorPosition(Constants.ArmSubsystem.Claw.kOpenClaw);
     }
 
     public void goToPulleyMotorPosition(double pulleyMotorPosition) {
@@ -197,6 +200,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void goToWristMotorPosition(double wristMotorPosition) {
       wristMotorPosition = MathUtil.clamp(wristMotorPosition, Constants.ArmSubsystem.Wrist.kMinLimit, Constants.ArmSubsystem.Wrist.kMaxLimit);
+    }
+
+    public void goToClawMotorPosition(double clawMotorPosition) {
+      clawMotorPosition = MathUtil.clamp(clawMotorPosition, Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
     }
 
     public ArmPosition getArmPosition() {
@@ -271,20 +278,29 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     @Override
-    public void periodic() {
+    public void periodic() { //TODO: will the 20ms affect the time it takes, make make sure the motors arnt moving fast when within the range of the limit switch?
+          //Limit switch  for pully
+      if (pulleyMotor.getAppliedOutput() < 0) {
+        if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
+          pulleyMotor.set(0); 
+          pulleyMotor.getEncoder().setPosition(0);
+          pulleyLimiter.reset(0);
 
-      if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState){
-        pulleyMotor.stopMotor();
-        pulleyMotor.getEncoder().setPosition(0);
-        pulleyLimiter.reset(0);
+          pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
+          double homeTarget = pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley);
+          pulleyMotor.setReferencePosition(pulleyLimiter, homeTarget);
+        }
+      } 
 
-        pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
-        double homeTarget = pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley);
-        pulleyMotor.setReferencePosition(pulleyLimiter, homeTarget);
-
-      } else if (RobotState.isTeleop() || RobotState.isAutonomous()){
+      if (clawLimitSwitch.get() == true) {
+        clawMotor.getEncoder().setPosition(0);
+        clawLimiter.reset(0);
+      }
+      
+          //run motors
+      if (RobotState.isTeleop() || RobotState.isAutonomous()){
         // This method will be called once per scheduler run
-        pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+          pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);   // - this is now in the limit switch if statment.
         // TODO: Add gravity assisted feedforward to elbow motor?
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
