@@ -162,7 +162,10 @@ public final class Constants {
   public static class Operator {
 
     public static class DriverJoystick {
-      public static final int kPort = 0;
+    public static final int kPort = 0;
+    public static final int driveForwardButton = 12;
+    public static final int driveRightButton = 13;
+    public static final int rotateCCWButton = 14;
     }
 
     public static class AssistJoystick {

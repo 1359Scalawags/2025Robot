@@ -27,8 +27,10 @@ import frc.robot.commands.ClimberCommands.DeInitilizeClimber;
 import frc.robot.commands.ClimberCommands.UnlockClimberSubsystem;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
 import frc.robot.commands.SwerveCommands.DriveForwardCommand;
+import frc.robot.commands.SwerveCommands.DriveRightCommand;
 import frc.robot.commands.SwerveCommands.FieldCentricCommand;
 import frc.robot.commands.SwerveCommands.RobotCentricCommand;
+import frc.robot.commands.SwerveCommands.RotateCCWCommand;
 import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -199,7 +201,18 @@ public class RobotContainer {
   m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
   m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
   m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
-  m_DriverJoystick.button(4).onTrue(new DriveForwardCommand(m_SwerveSubsystem));
+
+  // if (Constants.kDebug) {
+  //   new JoystickButton(m_DriverJoystick, Constants.Operator.DriverJoystick.driveForwardButton)
+  //     .onTrue(new DriveForwardCommand(m_SwerveSubsystem));
+
+  //   new JoystickButton(m_DriverJoystick, Constants.Operator.DriverJoystick.driveRightButton)
+  //     .onTrue(new DriveRightCommand(m_SwerveSubsystem));
+
+  //   new JoystickButton(m_DriverJoystick, Constants.Operator.DriverJoystick.rotateCCWButton)
+  //     .onTrue(new RotateCCWCommand(m_SwerveSubsystem));    
+  //   }
+  //}
 
   }
 
