@@ -33,7 +33,7 @@ public class SparkMaxPIDTuner {
     private GenericEntry actualVelocityEntry;
     private Timer updateTimer;
 
-    public static double UPDATE_INTERVAL_SECONDS = 1.0;
+    public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
     public SparkMaxPIDTuner(String name, SparkMax motor, ControlType controlType) {
         
@@ -167,10 +167,6 @@ public class SparkMaxPIDTuner {
 
     public void stopMotor() {
         motor.stopMotor();
-    }
-
-    public Command getApplyCommand() {
-        return new ApplyTunerValues(this);
     }
 
 }
