@@ -65,9 +65,13 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * AprilTag field layout.
    */
+<<<<<<< HEAD
 
   // TODO: Is this variable needed for something?
   //private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
+=======
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded); // TODO: Is this the correct option for AprilTags?
+>>>>>>> development
   /**
    * Enable vision odometry updates while driving.
    */

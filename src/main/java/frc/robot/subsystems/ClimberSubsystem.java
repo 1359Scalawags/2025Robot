@@ -73,18 +73,18 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public void initializeClimber() {
       if (isInitialized == false) {
-      climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
-      lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
+        climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
+        lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
+        unLatchCLimber();
 
-      positionLimiter.reset(getClimberPostion());
-      lockingPositionLimiter.reset(getLockingMotorPosition());
+        positionLimiter.reset(getClimberPostion());
+        lockingPositionLimiter.reset(getLockingMotorPosition());
 
-      positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
-      lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
+        positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
+        lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
 
 
-      isInitialized = true;
-      moveClimberCommandLock = false;
+        isInitialized = true;
       }
     }
 
@@ -135,29 +135,44 @@ public class ClimberSubsystem extends SubsystemBase{
     private void configureLockingBarMotor() {
       // create a new sparkmax config
       SparkMaxConfig lockingMotorConfig = new SparkMaxConfig();
-
+  
       lockingMotorConfig
         .idleMode(IdleMode.kBrake)
-        .inverted(false)
+        .inverted(true)
         .openLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
         .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
-        .smartCurrentLimit(70, 30, 120);
-
-      lockingMotorConfig.absoluteEncoder
+        .smartCurrentLimit(70, 30, 1000);
+        
+      lockingMotorConfig.softLimit
+        .reverseSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMinLimit)
+        .forwardSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit)
+        .forwardSoftLimitEnabled(true)
+        .reverseSoftLimitEnabled(true);
+  
+      lockingMotorConfig.absoluteEncoder 
+        .inverted(false)
         .zeroOffset(Constants.ClimberSubsystem.LockingBarMotor.kEncoderOffset)
-        .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
-
+        .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor)
+        .velocityConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
+  
       lockingMotorConfig.closedLoop
         .p(0.01)
-        .i(0.0000001)
-        .d(0.0)
-        .iZone(0.000001)
-        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-
+        .i(0.000001)
+        .d(0.007)
+        .iZone(5)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+        .positionWrappingEnabled(false)
+        .positionWrappingInputRange(0,360);
+  
+      lockingMotorConfig.closedLoop.maxMotion
+        .maxVelocity(5)
+        .maxAcceleration(1)
+        .allowedClosedLoopError(0.01);
+  
       // apply configuration
       lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-
+  
     public void setBarAngle(double angle){
       lockingTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
     }
@@ -175,9 +190,6 @@ public class ClimberSubsystem extends SubsystemBase{
       //TODO: add clamps to specific functions.
     public void setClimberAngle(double angle) {
       climberTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.PositionMotor.kMinAngle,  Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
-      // if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
-      //positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
-      // }
     } 
 
     public void extendClimber(){
@@ -192,33 +204,34 @@ public class ClimberSubsystem extends SubsystemBase{
 
         // operater controll of the climber 
     public void changeClimberPosition(double delta){
-      // positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
-      //MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
       double newPosition = getClimberPostion() + delta;
       setClimberAngle(newPosition);
     }
     
+    public void setServoValue(double newValue){
+      newValue = MathUtil.clamp(newValue, Constants.ClimberSubsystem.LatchServo.minLimit, Constants.ClimberSubsystem.LatchServo.maxLimit);
+      latchingServo.set(newValue);
+      
+    }
 
-    public void setServoAngle(double newAngle){
-      if ((newAngle <= Constants.ClimberSubsystem.LatchServo.maxLimit) && (newAngle >= Constants.ClimberSubsystem.LatchServo.minLimit)){
-        latchingServo.setAngle(newAngle);
-      }
+    public double getServoValue() {
+      return latchingServo.get();
     }
 
     public void latchCLimber(){
-      setServoAngle(Constants.ClimberSubsystem.LatchServo.latchedAngle);
+      setServoValue(Constants.ClimberSubsystem.LatchServo.latchedValue);
     }
 
     public void unLatchCLimber(){
-      setServoAngle(Constants.ClimberSubsystem.LatchServo.unLatchedAngle);
+      setServoValue(Constants.ClimberSubsystem.LatchServo.unLatchedValue);
     }
 
     public void moveCLimberCommandLock(){
-      moveClimberCommandLock = false;
+      moveClimberCommandLock = true;
     }
     
     public void moveCLimberCommandUnLock(){
-      moveClimberCommandLock = true;
+      moveClimberCommandLock = false;
     }
 
     public boolean isClimberCommandLocked() {
@@ -255,6 +268,7 @@ public class ClimberSubsystem extends SubsystemBase{
           }
         }
 
+<<<<<<< HEAD
         if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
           double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
           positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
@@ -262,6 +276,26 @@ public class ClimberSubsystem extends SubsystemBase{
           double lockingImmediateTargetAngle = lockingPositionLimiter.calculate(lockingTargetPosition);
           lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
         }
+=======
+      // if (Constants.kDebug == true){
+      // SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
+      // SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
+      // SmartDashboard.putNumber("Servo position", getServoAngle());
+      // SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
+      // if(debugTimer.get() > 1.5) {
+      //   System.out.println("Applied Position Motor Output: " + positionMotor.getAppliedOutput());
+      //   System.out.println("Current Absolute Angle: " + positionMotor.getAbsoluteEncoder().getPosition());
+      //   debugTimer.reset();
+      // }
+    //}
+    
+      if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
+        double immediateTargetAngle = MathUtil.clamp(positionLimiter.calculate(climberTargetPosition), Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
+        positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
+  
+        double lockingImmediateTargetAngle = MathUtil.clamp(lockingPositionLimiter.calculate(lockingTargetPosition), Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
+        lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
+>>>>>>> development
       }
   }     
 }

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFields;
 import frc.robot.extensions.ArmPosition;
 
 /**
@@ -60,27 +61,28 @@ public final class Constants {
       //TODO; make sure these are right
 
 
-    public class LatchServo {
+    public static class LatchServo {
       public static final int kServoID = 0;
-      public static final double maxLimit = 0;
+      public static final double maxLimit = 1;
       public static final double minLimit = 0;
-      public static final double latchedAngle = 0;
-      public static final double unLatchedAngle = 0;
+      public static final double latchedValue = 0.8;
+      public static final double unLatchedValue = 0.2;
+      public static final double kNaxActuateTime = 5.0; //max time to run the servo
       
     }
 
-    public class LockingBarMotor {
+    public static class LockingBarMotor {
       public static final int kMotorID = 9;
       public static final double kEncoderOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMinLimit = 60;
+      public static final double kMinLimit = 72;
       public static final double kMaxLimit = 155;
-      public static final double kUnLockedPosition = 63.0;
-      public static final double kLockedPosition = 150.0;
-      public static final double kSlewRate = 5;
+      public static final double kUnLockedPosition = 72.0;
+      public static final double kLockedPosition = 155.0;
+      public static final double kSlewRate = 90;
     }
 
-    public class PositionMotor {
+    public static class PositionMotor {
       public static final int kMotorID = 10;
       public static final double kMaxAngle = 275.0;//0.037*360;
       public static final double kMinAngle = 150.0;//0.457*360;
@@ -95,66 +97,61 @@ public final class Constants {
   }  
 
   public static class ArmSubsystem {
+    //Can ID's for Arm are from 16 to 21
 
-    // NOTE: Can ID's for Arm are from 16 to 21
-
-    // XXX: Store desired arm positions as triplets (pulley, elbow, wrist) using ArmPosition class
     public static class Positions {
-      public static final ArmPosition kHome= new ArmPosition(0, 0, 0);
-      public static final ArmPosition kHumanStation = new ArmPosition(0, 0, 0);
-      public static final ArmPosition kGround= new ArmPosition(0, 0, 0);
-      public static final ArmPosition kLevel1 = new ArmPosition(0, 0, 0);
-      public static final ArmPosition kLevel2 = new ArmPosition(0, 0, 0);
-      public static final ArmPosition kLevel3 = new ArmPosition(0, 0, 0);
-      public static final ArmPosition kLevel4 = new ArmPosition(0, 0, 0);
+      public static final ArmPosition kHome = new ArmPosition(0,0,0);
+      public static final ArmPosition kHumanStation = new ArmPosition(0,0,0);
+      public static final ArmPosition kGround = new ArmPosition(0,0,0);
+      public static final ArmPosition kLevel1 = new ArmPosition(0,0,0);
+      public static final ArmPosition kLevel2 = new ArmPosition(0,0,0);
+      public static final ArmPosition klevel3 = new ArmPosition(0,0,0);
+      public static final ArmPosition klevel4 = new ArmPosition(0,0,0);
     }
 
-    // XXX: Split arm motors into subclasses
-    // TODO: Set these values
+    public static class Pulley{
+      public static final int kMotorID = 17;
+      public static final double kMotorOffset = 0;
+      public static final double kConversionFactor = 360;
+      public static final double kMaxLimit = 0;
+      public static final double kMinLimit = 0;
+      public static final double kSlewRate = 0;
+      public static final boolean kLimitSwitchPressedState = false;
+      public static final double kHomingVelocity = 0;
+    }
+
+    public static class Elbow {
+      public static final int kMotorID = 19;
+      public static final double kMotorOffset = 0;
+      public static final double kConversionFactor = 360;
+      public static final double kMaxLimit = 0;
+      public static final double kMinLimit = 0;
+      public static final double kSlewRate = 0;
+    }
+
     public static class Wrist {
       public static final int kMotorID = 16;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMinLimit = 0;
       public static final double kMaxLimit = 0;
+      public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
-      public static final double kPositionTolerance = 1.5;
     }
 
-    // TODO: Set these values
-    public static class Elbow {
-      public static final int kMotorID = 19;
-      public static final double kMinLimit = 0;
-      public static final double kMaxLimit = 0;
-      public static final double kSlewRate = 0;
-      public static final double kPositionTolerance = 1.5;
-    }
-
-    // TODO: Set these values
-    public static class Pulley {
-      public static final int kMotorID = 17;
-      public static final double kMotorOffset = 0;
-      public static final double kConversionFactor = 360;   
-      public static final double kMinLimit = 0;
-      public static final double kMaxLimit = 0;
-      public static final double kHomingVelocity = 0;
-      public static final boolean kLimitSwitchPressedState = false;
-      public static final double kSlewRate = 0;
-      public static final double kPositionTolerance = 0.25;
-    }
-
-    // TODO: Set these values
     public static class Claw {
       public static final int kMotorID = 18;
       public static final double kMotorOffset = 0;
-      public static final double kCnversionFactor = 360;
-      public static final double kClosedPosition = 0;
-      public static final double kOpenedPosition = 0;
+      public static final double kConversionFactor = 360;
+      public static final double kMaxLimit = 0;
+      public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
-      public static final double kPositionTolerance = 1.5; 
+    public static final double kCloseClaw = 0;
+    public static final double kOpenClaw = 0;
     }
-    
+
+    public static final double armGoToTolerance = 0;
     public static final int kHomeLimitSwitchID = 0;
+    public static final int kClawLimitSwitch = 0;
   }
 
   public static class Vision { 

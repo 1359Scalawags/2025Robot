@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  //private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final RobotContainer m_robotContainer;
 
   /**
@@ -112,7 +111,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+   CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
   /** This function is called periodically whilst in simulation. */

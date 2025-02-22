@@ -46,7 +46,6 @@ public class goToHeightHumanStation extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // XXX: Move the tolerance checking to the ArmPosition class
     if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.kHumanStation)) {
       return true;
     } else {

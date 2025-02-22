@@ -48,8 +48,7 @@ public class goToHeightLevelFour extends Command {
   //TODO : Tune tolerances
   @Override
   public boolean isFinished() {
-    // XXX: Move the tolerance checking to the ArmPosition class
-    if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.kLevel4)) {
+    if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.klevel4)) {
       return true;
     } else {
       return false;

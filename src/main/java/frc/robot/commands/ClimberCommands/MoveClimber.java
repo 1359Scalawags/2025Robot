@@ -5,9 +5,7 @@
 package frc.robot.commands.ClimberCommands;
 
 import frc.robot.subsystems.ClimberSubsystem;
-
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 
