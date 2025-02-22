@@ -98,6 +98,7 @@ public class RobotContainer {
       this::assistantGetY));
       }
 
+      //TODO: Are deadbands implemented for joysticks?
       // Configure remote movements
   public double assistantGetY() {
     return -m_AssistantJoystick.getY();
@@ -182,6 +183,7 @@ public class RobotContainer {
             //}
             // then just make a button that flips that variable. talk to drive team about it.
 
+  //TODO: Replace hard-coded button numbers with constants
   m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
   m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));

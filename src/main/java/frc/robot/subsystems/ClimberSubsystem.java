@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.derive;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -13,7 +11,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
@@ -174,9 +171,6 @@ public class ClimberSubsystem extends SubsystemBase{
       //TODO: add clamps to specific functions.
     public void setClimberAngle(double angle) {
       climberTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.PositionMotor.kMinAngle,  Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
-      // if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
-      //positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
-      // }
     } 
 
     public void extendClimber(){
@@ -191,8 +185,6 @@ public class ClimberSubsystem extends SubsystemBase{
 
         // operater controll of the climber 
     public void changeClimberPosition(double delta){
-      // positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
-      //MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
       double newPosition = getClimberPostion() + delta;
       setClimberAngle(newPosition);
     }

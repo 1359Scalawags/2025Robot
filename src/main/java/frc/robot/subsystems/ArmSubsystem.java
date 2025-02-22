@@ -264,7 +264,7 @@ public class ArmSubsystem extends SubsystemBase {
       return wristMotor.getEncoder().getPosition();
     }
     
-    //TODO : Get formula
+    //TODO : Write formula for mapping raw position to height
        public double getCalculatedHeight(){
         return pulleyMotor.getEncoder().getPosition(); 
        }
@@ -285,6 +285,7 @@ public class ArmSubsystem extends SubsystemBase {
       } else if (RobotState.isTeleop() || RobotState.isAutonomous()){
         // This method will be called once per scheduler run
         pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+        // TODO: Add gravity assisted feedforward to elbow motor?
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
