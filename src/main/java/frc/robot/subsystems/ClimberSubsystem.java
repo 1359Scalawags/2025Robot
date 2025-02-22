@@ -81,7 +81,6 @@ public class ClimberSubsystem extends SubsystemBase{
 
 
       isInitialized = true;
-      moveClimberCommandLock = false;
       }
     }
 
@@ -132,31 +131,44 @@ public class ClimberSubsystem extends SubsystemBase{
     private void configureLockingBarMotor() {
       // create a new sparkmax config
       SparkMaxConfig lockingMotorConfig = new SparkMaxConfig();
-
+  
       lockingMotorConfig
         .idleMode(IdleMode.kBrake)
-        .inverted(false) // this is correct
+        .inverted(true)
         .openLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
         .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
-        .smartCurrentLimit(70, 30, 900);
-
+        .smartCurrentLimit(70, 30, 1000);
+        
+      lockingMotorConfig.softLimit
+        .reverseSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMinLimit)
+        .forwardSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit)
+        .forwardSoftLimitEnabled(true)
+        .reverseSoftLimitEnabled(true);
+  
       lockingMotorConfig.absoluteEncoder 
-        .inverted(false) // this is correct
+        .inverted(false)
         .zeroOffset(Constants.ClimberSubsystem.LockingBarMotor.kEncoderOffset)
-        .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
-
+        .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor)
+        .velocityConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
+  
       lockingMotorConfig.closedLoop
-        .p(0.1)
+        .p(0.01)
         .i(0.000001)
-        .d(0.0)
-        .iZone(0.01)
+        .d(0.007)
+        .iZone(5)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-        .positionWrappingEnabled(true);
-
+        .positionWrappingEnabled(false)
+        .positionWrappingInputRange(0,360);
+  
+      lockingMotorConfig.closedLoop.maxMotion
+        .maxVelocity(5)
+        .maxAcceleration(1)
+        .allowedClosedLoopError(0.01);
+  
       // apply configuration
       lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-
+  
     public void setBarAngle(double angle){
       lockingTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
     }
@@ -213,11 +225,11 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
     public void moveCLimberCommandLock(){
-      moveClimberCommandLock = false;
+      moveClimberCommandLock = true;
     }
     
     public void moveCLimberCommandUnLock(){
-      moveClimberCommandLock = true;
+      moveClimberCommandLock = false;
     }
 
     public boolean isClimberCommandLocked() {
