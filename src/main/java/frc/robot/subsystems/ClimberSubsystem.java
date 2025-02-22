@@ -197,11 +197,14 @@ public class ClimberSubsystem extends SubsystemBase{
       setClimberAngle(newPosition);
     }
     
-
     public void setServoValue(double newValue){
       newValue = MathUtil.clamp(newValue, Constants.ClimberSubsystem.LatchServo.minLimit, Constants.ClimberSubsystem.LatchServo.maxLimit);
       latchingServo.set(newValue);
       
+    }
+
+    public double getServoValue() {
+      return latchingServo.get();
     }
 
     public void latchCLimber(){

@@ -72,6 +72,7 @@ public final class Constants {
       public static final double minLimit = 0;
       public static final double latchedValue = 0.8;
       public static final double unLatchedValue = 0.2;
+      public static final double kNaxActuateTime = 5.0; //max time to run the servo
       
     }
 
