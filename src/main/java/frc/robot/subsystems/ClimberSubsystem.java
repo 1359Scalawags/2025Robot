@@ -66,18 +66,18 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public void initializeClimber() {
       if (isInitialized == false) {
-      climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
-      lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
-      unLatchCLimber();
+        climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
+        lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
+        unLatchCLimber();
 
-      positionLimiter.reset(getClimberPostion());
-      lockingPositionLimiter.reset(getLockingMotorPosition());
+        positionLimiter.reset(getClimberPostion());
+        lockingPositionLimiter.reset(getLockingMotorPosition());
 
-      positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
-      lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
+        positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
+        lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
 
 
-      isInitialized = true;
+        isInitialized = true;
       }
     }
 
@@ -261,10 +261,10 @@ public class ClimberSubsystem extends SubsystemBase{
     //}
     
       if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
-        double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
+        double immediateTargetAngle = MathUtil.clamp(positionLimiter.calculate(climberTargetPosition), Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
         positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
   
-        double lockingImmediateTargetAngle = lockingPositionLimiter.calculate(lockingTargetPosition);
+        double lockingImmediateTargetAngle = MathUtil.clamp(lockingPositionLimiter.calculate(lockingTargetPosition), Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
         lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
       }
   }     
