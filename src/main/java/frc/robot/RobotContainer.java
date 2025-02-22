@@ -26,6 +26,7 @@ import frc.robot.commands.ClimberCommands.UnLockClimberBar;
 import frc.robot.commands.ClimberCommands.DeInitilizeClimber;
 import frc.robot.commands.ClimberCommands.UnlockClimberSubsystem;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
+import frc.robot.commands.SwerveCommands.DriveForwardCommand;
 import frc.robot.commands.SwerveCommands.FieldCentricCommand;
 import frc.robot.commands.SwerveCommands.RobotCentricCommand;
 import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
@@ -198,6 +199,7 @@ public class RobotContainer {
   m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
   m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
   m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
+  m_DriverJoystick.button(4).onTrue(new DriveForwardCommand(m_SwerveSubsystem));
 
   }
 
