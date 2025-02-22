@@ -48,7 +48,7 @@ public class SparkMaxPIDTuner {
         this.tuner = new PIDController(this.p0, this.i0, this.d0);
 
         if(controlType == ControlType.kPosition || controlType == ControlType.kMAXMotionPositionControl) {
-            this.lastReference = this.motor.getEncoder().getPosition();
+            this.lastReference = this.motor.getAbsoluteEncoder().getPosition();
         } else {
             this.lastReference = 0;         
         }
@@ -79,8 +79,16 @@ public class SparkMaxPIDTuner {
             .getEntry();  
 
         if(controlType == ControlType.kMAXMotionPositionControl) {
-            this.accelerationEntry = this.tab.add("MAX Acceleration", this.a0).withWidget(BuiltInWidgets.kTextView).getEntry();
-            this.velocityEntry = this.tab.add("MAX Velocity", this.v0).withWidget(BuiltInWidgets.kTextView).getEntry();
+            this.accelerationEntry = this.tab.add("MAX Acceleration", this.a0)
+            .withWidget(BuiltInWidgets.kTextView)
+            .withPosition(4, 0)
+            .withSize(1, 1)
+            .getEntry();
+            this.velocityEntry = this.tab.add("MAX Velocity", this.v0)
+            .withWidget(BuiltInWidgets.kTextView)
+            .withPosition(4, 1)
+            .withSize(1, 1)
+            .getEntry();
         } 
 
         this.tab.add("Apply", new ApplyTunerValues(this))
@@ -96,13 +104,13 @@ public class SparkMaxPIDTuner {
             .withPosition(2, 3)
             .withSize(2, 1);
 
-        this.actualPositionEntry = this.tab.add("Encoder Position", this.motor.getEncoder().getPosition())
+        this.actualPositionEntry = this.tab.add("Encoder Position", this.motor.getAbsoluteEncoder().getPosition())
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(5,0)
             .withSize(2,1)
             .getEntry();  
 
-        this.actualVelocityEntry = this.tab.add("Encoder Velocity", this.motor.getEncoder().getVelocity())
+        this.actualVelocityEntry = this.tab.add("Encoder Velocity", this.motor.getAbsoluteEncoder().getVelocity())
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(5,1)
             .withSize(2,1)
@@ -111,8 +119,8 @@ public class SparkMaxPIDTuner {
 
     public void updateEncoderValues() {
         if(updateTimer.get() > UPDATE_INTERVAL_SECONDS) {
-            this.actualPositionEntry.setDouble(motor.getEncoder().getPosition());
-            this.actualVelocityEntry.setDouble(motor.getEncoder().getVelocity());      
+            this.actualPositionEntry.setDouble(motor.getAbsoluteEncoder().getPosition());
+            this.actualVelocityEntry.setDouble(motor.getAbsoluteEncoder().getVelocity());      
             updateTimer.reset();      
         }
     }
@@ -131,8 +139,12 @@ public class SparkMaxPIDTuner {
                 .maxAcceleration(accelerationEntry.getDouble(0.1));
         }
         motor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        this.lastReference = tuner.getSetpoint();
-        
+        StringBuilder sb = new StringBuilder();
+        sb.append("P: " + configAccessor.getP() + "  ");
+        sb.append("I: " + configAccessor.getI() + "  ");
+        sb.append("D: " + configAccessor.getD() + "  ");
+        System.out.println(sb.toString());
+
     }
 
     public void resetTunerValues() {
@@ -148,7 +160,9 @@ public class SparkMaxPIDTuner {
     }
 
     public void startMotor() {
+        this.lastReference = this.tuner.getSetpoint();
         motor.getClosedLoopController().setReference(this.lastReference, controlType);
+        System.out.println("Setpoint: " + this.lastReference);
     }
 
     public void stopMotor() {
