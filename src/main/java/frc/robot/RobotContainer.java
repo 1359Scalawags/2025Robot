@@ -14,17 +14,18 @@ import frc.robot.commands.ArmCommands.goToHeightLevelThree;
 import frc.robot.commands.ArmCommands.goToHeightLevelTwo;
 import frc.robot.commands.ArmCommands.goToHightGround;
 import frc.robot.commands.ArmCommands.openClawCommand;
-import frc.robot.commands.ClimberCommands.DeployClimber;
-import frc.robot.commands.ClimberCommands.InitilizeClimber;
-import frc.robot.commands.ClimberCommands.LatchServo;
-import frc.robot.commands.ClimberCommands.LockClimberBar;
-import frc.robot.commands.ClimberCommands.LockClimberSubsystem;
-import frc.robot.commands.ClimberCommands.MoveClimber;
-import frc.robot.commands.ClimberCommands.RetractClimber;
-import frc.robot.commands.ClimberCommands.UnLatchServo;
-import frc.robot.commands.ClimberCommands.UnLockClimberBar;
-import frc.robot.commands.ClimberCommands.DeInitilizeClimber;
-import frc.robot.commands.ClimberCommands.UnlockClimberSubsystem;
+import frc.robot.commands.ClimberCommands.Functionality.DeInitilizeClimber;
+import frc.robot.commands.ClimberCommands.Functionality.InitilizeClimber;
+import frc.robot.commands.ClimberCommands.Functionality.LockClimberSubsystem;
+import frc.robot.commands.ClimberCommands.Functionality.UnlockClimberSubsystem;
+import frc.robot.commands.ClimberCommands.Movment.LockedPosition;
+import frc.robot.commands.ClimberCommands.Movment.LockingPosition;
+import frc.robot.commands.ClimberCommands.Movment.LockClimberBar;
+import frc.robot.commands.ClimberCommands.Movment.MoveClimber;
+import frc.robot.commands.ClimberCommands.Movment.RetractClimber;
+import frc.robot.commands.ClimberCommands.Movment.UnLockClimberBar;
+import frc.robot.commands.ClimberCommands.Servo.LatchServo;
+import frc.robot.commands.ClimberCommands.Servo.UnLatchServo;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
 import frc.robot.commands.SwerveCommands.DriveForwardCommand;
 import frc.robot.commands.SwerveCommands.DriveRightCommand;
@@ -49,7 +50,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.ClimberCommands.DeployClimber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -95,7 +95,6 @@ public class RobotContainer {
       false
       ));
 
-      //TODO: is it x or y movment for forwards and backwords?
     m_ClimberSubsystem.setDefaultCommand(
       new MoveClimber(m_ClimberSubsystem, 
       this::assistantGetY));
@@ -103,27 +102,27 @@ public class RobotContainer {
 
       //TODO: Are deadbands implemented for joysticks?
       // Configure remote movements
-  public double assistantGetY() {
-    return -m_AssistantJoystick.getY();
-  }
-  public double assistantGetX() {
-    return -m_AssistantJoystick.getX();
-  }
-  public double assistantGetZ() {
-    return -m_AssistantJoystick.getZ();
-  }
-  public double driverGetRight() {
-    return -m_DriverJoystick.getX();
-  }
-  public double driverGetForward() {
-    return -m_DriverJoystick.getY();
-  }
-  public double driverGetZ() {
-    return m_DriverJoystick.getZ();
-  }
-  public double driverGetThrottle() {
-    return m_DriverJoystick.getThrottle();
-  }
+    public double assistantGetY() {
+      return -m_AssistantJoystick.getY();
+    }
+    public double assistantGetX() {
+      return -m_AssistantJoystick.getX();
+    }
+    public double assistantGetZ() {
+      return -m_AssistantJoystick.getZ();
+    }
+    public double driverGetRight() {
+      return -m_DriverJoystick.getX();
+    }
+    public double driverGetForward() {
+      return -m_DriverJoystick.getY();
+    }
+    public double driverGetZ() {
+      return m_DriverJoystick.getZ();
+    }
+    public double driverGetThrottle() {
+      return m_DriverJoystick.getThrottle();
+    }
 
 
 
@@ -173,7 +172,7 @@ public class RobotContainer {
   // m_AssistantJoystick.button(0).onTrue(new goToHightGround(m_ArmSubsystem));
 
   //Binding Climber Commands
-      //TODO: should these be toggles, and can we make this simpler (sequential command)?
+      //can we make this simpler (sequential command)?
       //TODO: how are we going to lay out the climber and arm commands?
           //proposed solution
             //if (useClimber == false) {
@@ -186,21 +185,24 @@ public class RobotContainer {
             //}
             // then just make a button that flips that variable. talk to drive team about it.
 
-  //TODO: Replace hard-coded button numbers with constants
-  m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
+    m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
-  m_AssistantJoystick.button(7).onTrue(new DeployClimber(m_ClimberSubsystem));
-  m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
+    m_AssistantJoystick.button(7).onTrue(new LockedPosition(m_ClimberSubsystem));
+    m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
 
-  m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
-  m_AssistantJoystick.button(9).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
+    m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
+    m_AssistantJoystick.button(9).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
 
-  m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
-  m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
+    m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
+    m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
-  m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
-  m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
-  m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
+    m_AssistantJoystick.button(6).onTrue(new LockedPosition(m_ClimberSubsystem));
+    m_AssistantJoystick.button(11).onTrue(new LockingPosition(m_ClimberSubsystem));
+
+
+    m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
+    m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
+    m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
 
   // if (Constants.kDebug) {
   //   new JoystickButton(m_DriverJoystick, Constants.Operator.DriverJoystick.driveForwardButton)

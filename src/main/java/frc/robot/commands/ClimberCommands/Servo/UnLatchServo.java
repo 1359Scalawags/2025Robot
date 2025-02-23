@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ClimberCommands;
+package frc.robot.commands.ClimberCommands.Servo;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -10,17 +10,13 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class LatchServo extends Command {
+
+public class UnLatchServo extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
   private Timer safetyTimer;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public LatchServo(ClimberSubsystem subsystem) {
+  public UnLatchServo(ClimberSubsystem subsystem) {
     m_subsystem = subsystem;
     safetyTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,8 +28,7 @@ public class LatchServo extends Command {
   public void initialize() {
     safetyTimer.reset();
     safetyTimer.start();
-    //TODO: Need to prevent this from doing something if position motor is not ready for latching
-    m_subsystem.latchCLimber();      
+    m_subsystem.unLatchCLimber();  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,8 +51,8 @@ public class LatchServo extends Command {
       return true;
     }
 
-    if(MathUtil.isNear(Constants.ClimberSubsystem.LatchServo.latchedValue, m_subsystem.getServoValue(), 5)){
-      return true; 
+    if(MathUtil.isNear(Constants.ClimberSubsystem.LatchServo.unLatchedValue, m_subsystem.getServoAngle(), 5)){
+    return true; 
     } else {
       return false;
     }

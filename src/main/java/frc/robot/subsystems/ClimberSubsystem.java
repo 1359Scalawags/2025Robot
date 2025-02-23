@@ -178,8 +178,7 @@ public class ClimberSubsystem extends SubsystemBase{
       double targetpostion = Constants.ClimberSubsystem.LockingBarMotor.kUnLockedPosition;
       setBarAngle(targetpostion);
     }
-      //used to set climber using the  buttons
-      //TODO: add clamps to specific functions.
+      //used to set climber using position buttons
     public void setClimberAngle(double angle) {
       climberTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.PositionMotor.kMinAngle,  Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
     } 
@@ -191,6 +190,16 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public void retractClimber(){
       double targetpostion = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
+      setClimberAngle(targetpostion);
+    }
+      //Puts the climber in the position to be locked with the servo
+    public void climberLockingPosition() {
+      double targetpostion = Constants.ClimberSubsystem.PositionMotor.kLockingPosition;
+      setClimberAngle(targetpostion);
+    }
+      //moves the climber (with the servo) to lock the climber to prepare for the loss of power.
+    public void climberLockedPosition() {
+      double targetpostion = Constants.ClimberSubsystem.PositionMotor.kLockedPosition;
       setClimberAngle(targetpostion);
     }
 
