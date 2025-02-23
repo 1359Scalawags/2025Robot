@@ -173,7 +173,6 @@ public class RobotContainer {
 
   //Binding Climber Commands
       //can we make this simpler (sequential command)?
-      //TODO: how are we going to lay out the climber and arm commands?
           //proposed solution
             //if (useClimber == false) {
             // - 

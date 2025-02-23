@@ -13,11 +13,11 @@ public class ArmPosition {
         this.elbow = elbow;
         this.wrist = wrist;
     }
-
+        //TODO: tune these tolerances?
     public boolean isNear(ArmPosition position){
-        if(MathUtil.isNear(this.pulley, position.pulley, 0) && 
-            MathUtil.isNear(this.pulley, position.pulley, 0) &&
-            MathUtil.isNear(this.pulley, position.pulley, 0)){
+        if(MathUtil.isNear(this.pulley, position.pulley, 5) && 
+            MathUtil.isNear(this.pulley, position.pulley, 5)&&
+            MathUtil.isNear(this.pulley, position.pulley, 5)){
             return true;
         } else {
             return false;

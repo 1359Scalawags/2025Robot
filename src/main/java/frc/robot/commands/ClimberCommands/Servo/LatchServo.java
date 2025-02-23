@@ -32,8 +32,13 @@ public class LatchServo extends Command {
   public void initialize() {
     safetyTimer.reset();
     safetyTimer.start();
-    //TODO: Need to prevent this from doing something if position motor is not ready for latching
-    m_subsystem.latchCLimber();      
+    
+    if (MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kLockedPosition, m_subsystem.getClimberPostion(), 3)) {
+      m_subsystem.latchCLimber();    
+    } else {
+      System.out.println("--------  Climber Not in latch position --------");
+    }
+      
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,7 +60,7 @@ public class LatchServo extends Command {
       m_subsystem.setServoValue(m_subsystem.getServoValue());
       return true;
     }
-
+      //TODO: does getServoValue return anything?
     if(MathUtil.isNear(Constants.ClimberSubsystem.LatchServo.latchedValue, m_subsystem.getServoValue(), 5)){
       return true; 
     } else {
