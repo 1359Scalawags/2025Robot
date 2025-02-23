@@ -1,12 +1,12 @@
 package frc.robot.commands.Tuning;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.extensions.SparkMaxPIDTuner;
+import frc.robot.extensions.SparkMaxPIDTunerBase;
 
 public class ApplyTunerValues extends Command {
-    SparkMaxPIDTuner tuner;
+    SparkMaxPIDTunerBase tuner;
 
-    public ApplyTunerValues(SparkMaxPIDTuner tuner) {
+    public ApplyTunerValues(SparkMaxPIDTunerBase tuner) {
         this.tuner = tuner;
     }
 
