@@ -101,15 +101,15 @@ public class ArmSubsystem extends SubsystemBase {
         .smartCurrentLimit(70, 30, 120);
 
       wristMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
-      .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
+        .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
+        .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
      
      
       wristMotorConfig.closedLoop
-      .p(1.0f)
-      .i(0.0f)
-      .d(0.0)
-      .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);;
+        .p(1.0f)
+        .i(0.0f)
+        .d(0.0)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
       wristMotor.configure(wristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -118,30 +118,30 @@ public class ArmSubsystem extends SubsystemBase {
     private void configureElbowMotor() {
       SparkMaxConfig elbowMotorConfig = new SparkMaxConfig();
   
-        elbowMotorConfig
-          .idleMode(IdleMode.kBrake)
-          .inverted(false)
-          .openLoopRampRate(1.0)
-          .closedLoopRampRate(1.0)
-          .smartCurrentLimit(70, 30, 120);
-  
-        elbowMotorConfig.absoluteEncoder
+      elbowMotorConfig
+        .idleMode(IdleMode.kBrake)
+        .inverted(false)
+        .openLoopRampRate(1.0)
+        .closedLoopRampRate(1.0)
+        .smartCurrentLimit(70, 30, 120);
+
+      elbowMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Elbow.kMotorOffset)
         .positionConversionFactor(Constants.ArmSubsystem.Elbow.kConversionFactor);
-       
-       
-        elbowMotorConfig.closedLoop
+      
+      
+      elbowMotorConfig.closedLoop
         .p(1.0f)
         .i(0.0f)
         .d(0.0)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-  
-        // apply configuration
-        elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      }
+
+      // apply configuration
+      elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
 
     private void configurePulleyMotor() {
-    SparkMaxConfig pulleyMotorConfig = new SparkMaxConfig();
+      SparkMaxConfig pulleyMotorConfig = new SparkMaxConfig();
 
       pulleyMotorConfig
         .idleMode(IdleMode.kBrake)
@@ -151,14 +151,14 @@ public class ArmSubsystem extends SubsystemBase {
         .smartCurrentLimit(70, 30, 120);
 
       pulleyMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ArmSubsystem.Pulley.kMotorOffset)
-      .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
+        .zeroOffset(Constants.ArmSubsystem.Pulley.kMotorOffset)
+        .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
      
      
       pulleyMotorConfig.closedLoop
-      .p(1.0f)
-      .i(0.0f)
-      .d(0.0);
+        .p(1.0f)
+        .i(0.0f)
+        .d(0.0);
 
       // apply configuration
       pulleyMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -168,26 +168,26 @@ public class ArmSubsystem extends SubsystemBase {
     private void configureClawMotor() {
       SparkMaxConfig clawMotorConfig = new SparkMaxConfig();
   
-        clawMotorConfig
-          .idleMode(IdleMode.kBrake)
-          .inverted(false)
-          .openLoopRampRate(1.0)
-          .closedLoopRampRate(1.0)
-          .smartCurrentLimit(70, 30, 120);
-  
-        clawMotorConfig.absoluteEncoder
+      clawMotorConfig
+        .idleMode(IdleMode.kBrake)
+        .inverted(false)
+        .openLoopRampRate(1.0)
+        .closedLoopRampRate(1.0)
+        .smartCurrentLimit(70, 30, 120);
+
+      clawMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Claw.kMotorOffset)
         .positionConversionFactor(Constants.ArmSubsystem.Claw.kConversionFactor);
-       
-       
-        clawMotorConfig.closedLoop
+      
+      
+      clawMotorConfig.closedLoop
         .p(1.0f)
         .i(0.0f)
         .d(0.0);
-  
-        // apply configuration
-        clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      }
+
+      // apply configuration
+      clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
 
     public void closeClaw(){
       goToClawMotorPosition(Constants.ArmSubsystem.Claw.kCloseClaw);
