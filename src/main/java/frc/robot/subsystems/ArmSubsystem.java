@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
+import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SendableCANSparkMax;
 import frc.robot.extensions.SimableSparkMax;
 
@@ -33,6 +34,8 @@ public class ArmSubsystem extends SubsystemBase {
     private DigitalInput clawLimitSwitch;
 
     private boolean initialized = false;
+
+    private GravityAssistedFeedForward elbowFF;
 
     public ArmSubsystem() {
       pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);     
@@ -52,6 +55,8 @@ public class ArmSubsystem extends SubsystemBase {
 
       homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
       clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kClawLimitSwitch);
+
+      elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.kMINGravityFF, Constants.ArmSubsystem.Elbow.kGravityFF, 232.0);
 
       Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
       Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
@@ -270,7 +275,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     // TODO: Write a function for calculating the pulleymotor's feedforward based on stage of lift
-    // TODO: Write a function for calculating the elbowmotor's feedforward based on angle position
     
     public double getWristMotorPosition(){
       return wristMotor.getEncoder().getPosition();
@@ -280,7 +284,11 @@ public class ArmSubsystem extends SubsystemBase {
        public double getCalculatedHeight(){
         return pulleyMotor.getEncoder().getPosition(); 
        }
-
+          //TODO: figure out way to make this work
+      public double getRelativeWristAngle (){
+        double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() + elbowMotor.getAbsoluteEncoder().getPosition();
+        return wristAngle;
+      }
 
     @Override
     public void periodic() { //TODO: will the 20ms affect the time it takes, make make sure the motors arnt moving fast when within the range of the limit switch?
@@ -305,10 +313,11 @@ public class ArmSubsystem extends SubsystemBase {
           //run motors
       if (RobotState.isTeleop() || RobotState.isAutonomous()){
         // This method will be called once per scheduler run
-          pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);   // - this is now in the limit switch if statment.
+        pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);   // - this is now in the limit switch if statment.
         
           // TODO: Add gravity assisted feedforward to elbow motor
-        //elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(getElbowMotorPosition()), ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.1); // must change
+        // elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+        // pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.055);
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
