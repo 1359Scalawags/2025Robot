@@ -119,6 +119,9 @@ public final class Constants {
       public static final double kSlewRate = 0;
       public static final boolean kLimitSwitchPressedState = false;
       public static final double kHomingVelocity = 0;
+    public static final double kStageOneFF = 0.055;
+    public static final double kStageTwoFF = 0.06; //TODO: find the stage two FF
+    public static final double kStageTwoPulleyPosition = 0; //TODO: find the switch over poinit
     }
 
     public static class Elbow {

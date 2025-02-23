@@ -22,7 +22,6 @@ import frc.robot.extensions.SimableSparkMax;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  // TODO: elbow motor will need a gravity feedforward to be tuned properly
   private SimableSparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
   private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;
   private double pulleyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
@@ -55,7 +54,7 @@ public class ArmSubsystem extends SubsystemBase {
     clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kClawLimitSwitch);
 
     elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.kMINGravityFF,
-        Constants.ArmSubsystem.Elbow.kGravityFF, 232.0);
+        Constants.ArmSubsystem.Elbow.kGravityFF, 232);
 
     Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
     Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
@@ -151,10 +150,12 @@ public class ArmSubsystem extends SubsystemBase {
         pulleyMotorConfig.encoder
         .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
        
-        pulleyMotorConfig.closedLoop
-        .p(1.0f)
-        .i(0.0f)
-        .d(0.0);
+        pulleyMotorConfig.closedLoop //TODO: do we want a second slot for the upper part of the Pulley?
+        .pidf(0.045f, 0.00001f, 0.045, pulleyMotorFF(), ClosedLoopSlot.kSlot0)
+        .iZone(2, ClosedLoopSlot.kSlot0);
+
+        // .pidf(0.045f, 0.00001f, 0.045, 0.6, ClosedLoopSlot.kSlot1)
+        // .iZone(2, ClosedLoopSlot.kSlot1);
 
     // apply configuration
     pulleyMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -279,14 +280,18 @@ public class ArmSubsystem extends SubsystemBase {
     return elbowMotor.getEncoder().getPosition();
   }
 
-  // TODO: Write a function for calculating the pulleymotor's feedforward based on
-  // stage of lift
+  public double pulleyMotorFF() {
+    if (getArmHeight() <= Constants.ArmSubsystem.Pulley.kStageTwoPulleyPosition) {
+      return Constants.ArmSubsystem.Pulley.kStageOneFF;
+    } else {
+      return Constants.ArmSubsystem.Pulley.kStageTwoFF;
+    }
+  }
 
   public double getWristMotorPosition() {
     return wristMotor.getEncoder().getPosition();
   }
 
-  // TODO : Write formula for mapping raw position to height
   public double getCalculatedHeight() {
     return pulleyMotor.getEncoder().getPosition();
   }
@@ -296,7 +301,6 @@ public class ArmSubsystem extends SubsystemBase {
     double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() + elbowMotor.getAbsoluteEncoder().getPosition();
     return wristAngle;
   }
-// TODO: will the 20ms affect the time it takes, make make sure the motors arnt
 // moving fast when within the range of the limit switch?
 //TODO: does getappliedoutput do what we think it does?
 @Override
@@ -323,8 +327,8 @@ public class ArmSubsystem extends SubsystemBase {
         pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);   // - this is now in the limit switch if statment.
         
           // TODO: Add gravity assisted feedforward to elbow motor
-        // elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
-        // pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.055);
+        elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.055);
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
