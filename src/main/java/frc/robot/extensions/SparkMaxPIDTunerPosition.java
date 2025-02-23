@@ -10,7 +10,9 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
 public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
@@ -54,34 +56,36 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         this.tuner.setSetpoint(this.lastPositionReference);
         
         // setup items specific to this inherited class
-        setupShuffleboard(name);
+        if(!super.isShuffleboardCreated()) {
+            setupShuffleboard();            
+        }
+
     }
 
-    protected void setupShuffleboard(String name) {
+    protected void setupShuffleboard() {
+        super.setupShuffleboard();
         // NOTE: base shuffleboard interface already configured in constructor
         // setup interface in Shuffleboard
         if(this.controlType == ControlType.kMAXMotionPositionControl) {
-            this.maxMotionLayout = this.tab.getLayout("MAX Motion");
-            this.accelerationEntry = this.maxMotionLayout.add("MAX Acceleration", this.acceleration0)
+            this.accelerationEntry = super.getValueTuningLayout().add("MAX Acceleration", this.acceleration0)
             .withWidget(BuiltInWidgets.kTextView)
             .getEntry();
-            this.velocityEntry = this.maxMotionLayout.add("MAX Velocity", this.velocity0)
+            this.velocityEntry = super.getValueTuningLayout().add("MAX Velocity", this.velocity0)
             .withWidget(BuiltInWidgets.kTextView)
             .getEntry();
         } 
 
-        this.arbitraryFFEntry = this.tab.add("Arbitrary FF", this.arbitraryFF0)
+        this.arbitraryFFEntry = super.getValueTuningLayout().add("Arbitrary FF", this.arbitraryFF0)
             .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(0,2)
-            .withSize(2,1)
+            //.withPosition(0,2)
+            //.withSize(2,1)
             .getEntry();  
-
-        this.actualPositionEntry = this.tab.add("Encoder Position", this.positionEncoderSupplier.getAsDouble())
+        this.actualPositionEntry = super.getEncoderFeedbackLayout().add("Encoder Position", this.positionEncoderSupplier.getAsDouble())
             .withWidget(BuiltInWidgets.kTextView)
-            .withPosition(5,0)
-            .withSize(2,1)
+            //.withPosition(5,0)
+            //.withSize(2,1)
             .getEntry();  
-
+        super.setShuffleboardCreated();
     }
 
     @Override

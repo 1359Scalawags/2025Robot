@@ -8,8 +8,10 @@ import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.commands.Tuning.ApplyTunerValues;
 import frc.robot.commands.Tuning.ResetTunerValues;
@@ -17,19 +19,25 @@ import frc.robot.commands.Tuning.StartTunerMotor;
 import frc.robot.commands.Tuning.StopTunerMotor;
 
 public abstract class SparkMaxPIDTunerBase {
+    private String name;
     protected SparkMax motor;
     protected ControlType controlType;
+    private ShuffleboardLayout valueTunerLayout;
+    private ShuffleboardLayout commandButtonLayout;
+    private ShuffleboardLayout encoderFeedbackLayout;
     protected ClosedLoopConfigAccessor configAccessor;
     protected PIDController tuner;    
-    protected ShuffleboardTab tab;
+    private ShuffleboardTab tab;
     private double p0, i0, d0;
     private double lastReference; 
     protected Timer updateTimer;
+    private boolean shuffleboardCreated;
 
     public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
     public SparkMaxPIDTunerBase(String name, SparkMax motor) {
-        
+        this.name = name;
+        this.shuffleboardCreated = false;
         this.motor = motor;
         this.configAccessor = motor.configAccessor.closedLoop;
         this.controlType = ControlType.kDutyCycle;
@@ -43,30 +51,46 @@ public abstract class SparkMaxPIDTunerBase {
         updateTimer.reset();
         updateTimer.start();
 
-        //setup basic PID shuffleboard items
-        setupShuffleboard(name);
     }
 
-    protected void setupShuffleboard(String name) {
-        // setup interface in Shuffleboard
-        this.tab = Shuffleboard.getTab(name + " PID");
+    protected boolean isShuffleboardCreated() {
+        return this.shuffleboardCreated;
+    }
 
-        this.tab.add("PID", tuner).withWidget(BuiltInWidgets.kPIDController)
+    protected void setShuffleboardCreated() {
+        this.shuffleboardCreated = true;
+    }
+
+    protected void setupShuffleboard() {
+        // setup interface in Shuffleboard
+        this.tab = Shuffleboard.getTab(this.name + " Tuner");
+        System.out.println(this.tab);
+        this.commandButtonLayout = this.tab.getLayout("Commands", BuiltInLayouts.kGrid)
+            .withPosition(0, 0)
+            .withSize(4,1);
+
+        this.valueTunerLayout = this.tab.getLayout("Value Tuner", BuiltInLayouts.kList)
+            .withPosition(0, 0)
+            .withSize(2,4);
+
+        this.valueTunerLayout.add("PID", tuner).withWidget(BuiltInWidgets.kPIDController)
             .withPosition(0, 0)
             .withSize(2,2);        
 
-        this.tab.add("Apply", new ApplyTunerValues(this))
+        this.commandButtonLayout.add("Apply", new ApplyTunerValues(this))
             .withPosition(2, 0)
             .withSize(2, 1);
-        this.tab.add("Reset", new ResetTunerValues(this))
+        this.commandButtonLayout.add("Reset", new ResetTunerValues(this))
             .withPosition(2, 1)
             .withSize(2, 1);
-        this.tab.add("Start", new StartTunerMotor(this))
+        this.commandButtonLayout.add("Start", new StartTunerMotor(this))
             .withPosition(2, 2)
             .withSize(2, 1);
-        this.tab.add("STOP!", new StopTunerMotor(this))
+        this.commandButtonLayout.add("STOP!", new StopTunerMotor(this))
             .withPosition(4, 2)
             .withSize(2, 1);
+
+        this.setShuffleboardCreated();
     }
 
     public void updateEncoderValues() {
@@ -101,6 +125,18 @@ public abstract class SparkMaxPIDTunerBase {
 
     public void stopMotor() {
         motor.stopMotor();
+    }
+
+    protected ShuffleboardLayout getCommandButtonLayout() {
+        return this.commandButtonLayout;
+    }
+
+    protected ShuffleboardLayout getValueTuningLayout() {
+        return this.valueTunerLayout;
+    }
+
+    protected ShuffleboardLayout getEncoderFeedbackLayout() {
+        return this.encoderFeedbackLayout;
     }
 
 }
