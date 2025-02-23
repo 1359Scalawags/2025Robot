@@ -29,8 +29,8 @@ public class SparkMaxPIDTunerWithGravityAssist extends SparkMaxPIDTunerPosition 
     private GenericEntry minimumFFEntry;
     private double gravFF0, minFF0;
 
-    public SparkMaxPIDTunerWithGravityAssist(String name, SparkMax motor, GravityAssistedFeedForward gravityFFController, boolean useAbsoluteEncoder, boolean useMaxMotion) {
-        super(name,motor,useAbsoluteEncoder, useMaxMotion);
+    public SparkMaxPIDTunerWithGravityAssist(String name, SparkMax motor, GravityAssistedFeedForward gravityFFController, ControlType controlType) {
+        super(name,motor,controlType);
         super.setupShuffleboard(name);
         this.ffController = gravityFFController;
         this.gravFF0 = ffController.getGravityFF();

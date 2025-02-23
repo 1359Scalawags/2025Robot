@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.SimableSparkMax;
-import frc.robot.extensions.SparkMaxPIDTuner;
+import frc.robot.extensions.SparkMaxPIDTunerPosition;
 
 
 public class ArmSubsystem extends SubsystemBase {
@@ -22,7 +22,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     private DigitalInput homeLimitSwitch;
 
-    private SparkMaxPIDTuner pulleyTuner, elbowTuner, wristTuner, clawTuner;
+    private SparkMaxPIDTunerPosition pulleyTuner, elbowTuner, wristTuner, clawTuner;
 
 
     public ArmSubsystem() {
@@ -36,10 +36,10 @@ public class ArmSubsystem extends SubsystemBase {
       configurePulleyMotor();
       configureClawMotor();
 
-      pulleyTuner = new SparkMaxPIDTuner("A: Pulley", pulleyMotor, ControlType.kPosition);
-      elbowTuner = new SparkMaxPIDTuner("A: Elbow", elbowMotor, ControlType.kPosition);
-      wristTuner = new SparkMaxPIDTuner("A: Wrist", wristMotor, ControlType.kPosition);
-      clawTuner = new SparkMaxPIDTuner("A: Claw", clawMotor, ControlType.kPosition);
+      pulleyTuner = new SparkMaxPIDTunerPosition("A: Pulley", pulleyMotor, ControlType.kPosition);
+      elbowTuner = new SparkMaxPIDTunerPosition("A: Elbow", elbowMotor, ControlType.kPosition);
+      wristTuner = new SparkMaxPIDTunerPosition("A: Wrist", wristMotor, ControlType.kPosition);
+      clawTuner = new SparkMaxPIDTunerPosition("A: Claw", clawMotor, ControlType.kPosition);
 
       homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
 

@@ -11,7 +11,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.extensions.SimableSparkMax;
-import frc.robot.extensions.SparkMaxPIDTuner;
+import frc.robot.extensions.SparkMaxPIDTunerPosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -21,8 +21,8 @@ public class ClimberSubsystem extends SubsystemBase{
 
   private Servo latchingServo;
 
-  private SparkMaxPIDTuner lockBarTuner;
-  private SparkMaxPIDTuner positionMotorTuner;
+  private SparkMaxPIDTunerPosition lockBarTuner;
+  private SparkMaxPIDTunerPosition positionMotorTuner;
 
 
   public ClimberSubsystem() {
@@ -33,9 +33,9 @@ public class ClimberSubsystem extends SubsystemBase{
     configureLockingBarMotor();
     configurePositionMotor();
     
-    lockBarTuner = new SparkMaxPIDTuner("C: Lock Bar", lockingBarMotor, ControlType.kPosition);
+    lockBarTuner = new SparkMaxPIDTunerPosition("C: Lock Bar", lockingBarMotor, ControlType.kPosition);
     //lockBarTuner = new SparkMaxPIDTuner("C: Lock Bar", lockingBarMotor, ControlType.kMAXMotionPositionControl);
-    positionMotorTuner = new SparkMaxPIDTuner("C: Position", positionMotor, ControlType.kPosition);
+    positionMotorTuner = new SparkMaxPIDTunerPosition("C: Position", positionMotor, ControlType.kPosition);
 
   }
 

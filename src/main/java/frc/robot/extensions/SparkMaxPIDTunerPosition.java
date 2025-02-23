@@ -5,12 +5,15 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
+import java.security.InvalidParameterException;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
@@ -32,26 +35,30 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     protected double lastPositionReference;
     private double f0, vel0, acc0;
     private GenericEntry actualPositionEntry;
-    DoubleSupplier positionEncoderSupplier;
-    private boolean useMaxMotion;
-    private boolean useAbsoluteEncoder;
+    private DoubleSupplier positionEncoderSupplier;
+    private boolean useAbsoluteEncoder = false;
 
     public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
-    public SparkMaxPIDTunerPosition(String name, SparkMax motor, boolean useAbsoluteEncoder, boolean useMaxMotion) {
+    public SparkMaxPIDTunerPosition(String name, SparkMax motor, ControlType controlType) {
         super(name, motor);
+
+        if(controlType != ControlType.kPosition && controlType != ControlType.kMAXMotionPositionControl) {
+            throw new InvalidParameterException("Must be a position control type.");
+        }
+        
         this.motor = motor;
         this.f0 = 0;
 
-        this.useAbsoluteEncoder = useAbsoluteEncoder;   
-        if(useAbsoluteEncoder) {
+        if(this.configAccessor.getFeedbackSensor() == FeedbackSensor.kAbsoluteEncoder) {
+            useAbsoluteEncoder = true;
             positionEncoderSupplier = motor.getAbsoluteEncoder()::getPosition;
         } else {
             positionEncoderSupplier = motor.getEncoder()::getPosition;
         }
 
-        this.useMaxMotion = useMaxMotion;
-        if(this.useMaxMotion) {
+        super.controlType = controlType;
+        if(this.controlType == ControlType.kMAXMotionPositionControl) {
             controlType = ControlType.kMAXMotionPositionControl;
             this.vel0 = configAccessor.maxMotion.getMaxVelocity();
             this.acc0 = configAccessor.maxMotion.getMaxAcceleration();            
@@ -67,7 +74,7 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
 
     protected void setupShuffleboard(String name) {
         // setup interface in Shuffleboard
-        if(this.useMaxMotion) {
+        if(this.controlType == ControlType.kMAXMotionPositionControl) {
             this.maxMotionLayout = this.tab.getLayout("MAX Motion");
             this.accelerationEntry = this.maxMotionLayout.add("MAX Acceleration", this.acc0)
             .withWidget(BuiltInWidgets.kTextView)
@@ -105,7 +112,7 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         super.applyTunerValues();
         SparkMaxConfig newConfig = new SparkMaxConfig();
 
-        if(this.useMaxMotion) {
+        if(this.controlType == ControlType.kMAXMotionPositionControl) {
             newConfig.closedLoop.maxMotion
                 .maxVelocity(velocityEntry.getDouble(0.1))
                 .maxAcceleration(accelerationEntry.getDouble(0.1));
@@ -123,7 +130,7 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         super.resetTunerValues();
         tuner.setSetpoint(0);
         this.ffEntry.setDouble(0);
-        if(this.useMaxMotion) {
+        if(this.controlType == ControlType.kMAXMotionPositionControl) {
             velocityEntry.setDouble(this.vel0);
             accelerationEntry.setDouble(this.acc0);            
         }
