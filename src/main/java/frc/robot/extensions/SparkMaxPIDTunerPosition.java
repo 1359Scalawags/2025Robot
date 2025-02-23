@@ -16,11 +16,9 @@ import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
 public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
-    private ShuffleboardLayout maxMotionLayout;
-    protected GenericEntry arbitraryFFEntry;
+    private GenericEntry arbitraryFFEntry;
     private GenericEntry velocityEntry;
     private GenericEntry accelerationEntry;
-    protected double lastPositionReference;
     private double arbitraryFF0, velocity0, acceleration0;
     private GenericEntry actualPositionEntry;
     private DoubleSupplier positionEncoderSupplier;
@@ -43,47 +41,51 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
             positionEncoderSupplier = motor.getEncoder()::getPosition;
         }
 
-        super.controlType = controlType;
-        if(this.controlType == ControlType.kMAXMotionPositionControl) {
+        this.setControlType(controlType);
+        if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
             controlType = ControlType.kMAXMotionPositionControl;
             this.velocity0 = configAccessor.maxMotion.getMaxVelocity();
             this.acceleration0 = configAccessor.maxMotion.getMaxAcceleration();            
         } else {
             controlType = ControlType.kPosition;
         }
-
-        this.lastPositionReference = positionEncoderSupplier.getAsDouble();
-        this.tuner.setSetpoint(this.lastPositionReference);
         
         // setup items specific to this inherited class
         if(!super.isShuffleboardCreated()) {
             setupShuffleboard();            
         }
+    }
 
+    protected double getArbitraryFF() {
+        return arbitraryFFEntry.getDouble(0);
     }
 
     protected void setupShuffleboard() {
         super.setupShuffleboard();
         // NOTE: base shuffleboard interface already configured in constructor
         // setup interface in Shuffleboard
-        if(this.controlType == ControlType.kMAXMotionPositionControl) {
+        if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
             this.accelerationEntry = super.getValueTuningLayout().add("MAX Acceleration", this.acceleration0)
             .withWidget(BuiltInWidgets.kTextView)
+            .withPosition(2, 0)
+            .withSize(1,1)
             .getEntry();
             this.velocityEntry = super.getValueTuningLayout().add("MAX Velocity", this.velocity0)
             .withWidget(BuiltInWidgets.kTextView)
+            .withPosition(2, 1)
+            .withSize(1,1)
             .getEntry();
         } 
 
         this.arbitraryFFEntry = super.getValueTuningLayout().add("Arbitrary FF", this.arbitraryFF0)
             .withWidget(BuiltInWidgets.kTextView)
-            //.withPosition(0,2)
-            //.withSize(2,1)
+            .withPosition(3,0)
+            .withSize(1,1)
             .getEntry();  
         this.actualPositionEntry = super.getEncoderFeedbackLayout().add("Encoder Position", this.positionEncoderSupplier.getAsDouble())
             .withWidget(BuiltInWidgets.kTextView)
-            //.withPosition(5,0)
-            //.withSize(2,1)
+            .withPosition(0,0)
+            .withSize(1,1)
             .getEntry();  
         super.setShuffleboardCreated();
     }
@@ -102,24 +104,26 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         super.applyTunerValues(); // also apply values in base class
         SparkMaxConfig newConfig = new SparkMaxConfig();
 
-        if(this.controlType == ControlType.kMAXMotionPositionControl) {
+        if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
             newConfig.closedLoop.maxMotion
                 .maxVelocity(velocityEntry.getDouble(0.1))
                 .maxAcceleration(accelerationEntry.getDouble(0.1));
         }
         motor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
         StringBuilder sb = new StringBuilder();
-        sb.append("MAX Velocity: " + velocityEntry.getDouble(0.1) + " - ");
-        sb.append("MAX Acceleration: " + accelerationEntry.getDouble(0.1) + " - ");
-        sb.append("ArbFF: " + arbitraryFFEntry.getDouble(0) + " - ");
+        if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
+            sb.append("MAX Velocity: " + velocityEntry.getDouble(0.1) + " - ");
+            sb.append("MAX Acceleration: " + accelerationEntry.getDouble(0.1) + " - ");
+        }
+        sb.append("Arbitrary FF: " + arbitraryFFEntry.getDouble(0) + " - ");
+        System.out.println(sb.toString());
     }
 
     @Override
     public void resetTunerValues() {
         super.resetTunerValues(); // also reset values in base class
-        tuner.setSetpoint(0);
         this.arbitraryFFEntry.setDouble(0);
-        if(this.controlType == ControlType.kMAXMotionPositionControl) {
+        if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
             velocityEntry.setDouble(this.velocity0);
             accelerationEntry.setDouble(this.acceleration0);            
         }
@@ -127,9 +131,7 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
 
     @Override
     public void startMotor() {
-        this.lastPositionReference = this.tuner.getSetpoint();
-        motor.getClosedLoopController().setReference(this.lastPositionReference, controlType, ClosedLoopSlot.kSlot0, arbitraryFFEntry.getDouble(0));
-        System.out.println("Setpoint: " + this.lastPositionReference);
+        motor.getClosedLoopController().setReference(this.getReference(), this.getControlType(), ClosedLoopSlot.kSlot0, arbitraryFFEntry.getDouble(0));
     }
 
 }

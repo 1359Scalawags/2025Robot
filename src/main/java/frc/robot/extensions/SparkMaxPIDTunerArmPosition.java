@@ -31,13 +31,13 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition {
         // setup gravity assist interface in Shuffleboard
         this.minimumFFEntry = super.getValueTuningLayout().add("Minimum FF", this.ffController.getMinimumFF())
             .withWidget(BuiltInWidgets.kTextView)
-            //.withPosition(5,2)
-            //.withSize(2,1)
+            .withPosition(1,0)
+            .withSize(1,1)
             .getEntry();  
         this.gravityFFEntry = super.getValueTuningLayout().add("Gravity FF", this.ffController.getMinimumFF())
             .withWidget(BuiltInWidgets.kTextView)
-            //.withPosition(5,2)
-            //.withSize(2,1)
+            .withPosition(1,1)
+            .withSize(1,1)
             .getEntry();  
         super.setShuffleboardCreated();
     }
@@ -49,6 +49,10 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition {
             ffController.setMinimumFF(this.minimumFFEntry.getDouble(0));
             ffController.setGravityFF(this.gravityFFEntry.getDouble(0));
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append("Gravity FF: " + gravityFFEntry.getDouble(0) + " - ");
+        sb.append("Minimum FF: " + minimumFFEntry.getDouble(0) + " - ");
+        System.out.println(sb.toString());
     }
 
     @Override
@@ -60,9 +64,8 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition {
 
     @Override
     public void startMotor() {
-        this.lastPositionReference = this.tuner.getSetpoint();
         double gravityFF = ffController.calculate(this.motor.getAbsoluteEncoder().getPosition());
-        motor.getClosedLoopController().setReference(this.lastPositionReference, controlType, ClosedLoopSlot.kSlot0, gravityFF + super.arbitraryFFEntry.getDouble(0));
+        motor.getClosedLoopController().setReference(this.getReference(), this.getControlType(), ClosedLoopSlot.kSlot0, gravityFF + this.getArbitraryFF());
 
     }
 

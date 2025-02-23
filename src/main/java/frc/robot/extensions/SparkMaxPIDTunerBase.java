@@ -2,6 +2,9 @@ package frc.robot.extensions;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import java.util.Map;
+
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
@@ -13,23 +16,23 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.commands.Tuning.ApplyTunerValues;
-import frc.robot.commands.Tuning.ResetTunerValues;
-import frc.robot.commands.Tuning.StartTunerMotor;
-import frc.robot.commands.Tuning.StopTunerMotor;
+import frc.robot.commands.Tuning.Apply_Values;
+import frc.robot.commands.Tuning.Reset_Values;
+import frc.robot.commands.Tuning.Start_Motor;
+import frc.robot.commands.Tuning.Stop_Motor;
 
 public abstract class SparkMaxPIDTunerBase {
     private String name;
     protected SparkMax motor;
-    protected ControlType controlType;
+    private ControlType controlType;
     private ShuffleboardLayout valueTunerLayout;
     private ShuffleboardLayout commandButtonLayout;
     private ShuffleboardLayout encoderFeedbackLayout;
     protected ClosedLoopConfigAccessor configAccessor;
-    protected PIDController tuner;    
+    private PIDController tuner;    
     private ShuffleboardTab tab;
     private double p0, i0, d0;
-    private double lastReference; 
+    private double reference; 
     protected Timer updateTimer;
     private boolean shuffleboardCreated;
 
@@ -53,6 +56,18 @@ public abstract class SparkMaxPIDTunerBase {
 
     }
 
+    protected ControlType getControlType() {
+        return this.controlType;
+    }
+
+    protected void setControlType(ControlType type) {
+        this.controlType = type;
+    }
+
+    protected double getReference() {
+        return this.reference;
+    }
+
     protected boolean isShuffleboardCreated() {
         return this.shuffleboardCreated;
     }
@@ -64,31 +79,42 @@ public abstract class SparkMaxPIDTunerBase {
     protected void setupShuffleboard() {
         // setup interface in Shuffleboard
         this.tab = Shuffleboard.getTab(this.name + " Tuner");
-        System.out.println(this.tab);
+ 
         this.commandButtonLayout = this.tab.getLayout("Commands", BuiltInLayouts.kGrid)
             .withPosition(0, 0)
-            .withSize(4,1);
+            .withSize(6,1)
+            .withProperties(Map.of("Label position", "HIDDEN","Number of columns", 4, "Number of rows", 1, "Show Glyph", true, "Glphy", "PLAY"));
 
-        this.valueTunerLayout = this.tab.getLayout("Value Tuner", BuiltInLayouts.kList)
+        this.commandButtonLayout.add("Apply", new Apply_Values(this))
             .withPosition(0, 0)
-            .withSize(2,4);
-
-        this.valueTunerLayout.add("PID", tuner).withWidget(BuiltInWidgets.kPIDController)
-            .withPosition(0, 0)
-            .withSize(2,2);        
-
-        this.commandButtonLayout.add("Apply", new ApplyTunerValues(this))
+            .withSize(2, 1);
+        this.commandButtonLayout.add("Reset", new Reset_Values(this))
+            .withPosition(1, 0)
+            .withSize(2, 1);
+        this.commandButtonLayout.add("Start", new Start_Motor(this))
             .withPosition(2, 0)
             .withSize(2, 1);
-        this.commandButtonLayout.add("Reset", new ResetTunerValues(this))
+        this.commandButtonLayout.add("STOP!", new Stop_Motor(this))
+            .withPosition(3, 0)
+            .withSize(2, 1);
+
+        this.valueTunerLayout = this.tab.getLayout("Value Tuner", BuiltInLayouts.kGrid)
             .withPosition(2, 1)
-            .withSize(2, 1);
-        this.commandButtonLayout.add("Start", new StartTunerMotor(this))
-            .withPosition(2, 2)
-            .withSize(2, 1);
-        this.commandButtonLayout.add("STOP!", new StopTunerMotor(this))
-            .withPosition(4, 2)
-            .withSize(2, 1);
+            .withSize(2,3)
+            .withProperties(Map.of("Label position", "TOP","Number of columns", 3, "Number of rows", 3, "Show Glyph", true, "Glphy", "PENCIL"));
+
+
+        this.tab.add("PID", tuner)
+            .withWidget(BuiltInWidgets.kPIDController)
+            .withPosition(0, 1)
+            .withSize(1,3)
+            .withProperties(Map.of("Label position", "TOP", "Show Glyph", true, "Glphy", "PENCIL"));   
+
+        this.encoderFeedbackLayout = this.tab.getLayout("Feedback", BuiltInLayouts.kList)
+            .withPosition(4, 1)
+            .withSize(2,3)
+            .withProperties(Map.of("Label position", "TOP","Number of columns", 3, "Number of rows", 3, "Show Glyph", true, "Glphy", "HEARTBEAT"));
+            ;
 
         this.setShuffleboardCreated();
     }
@@ -105,6 +131,7 @@ public abstract class SparkMaxPIDTunerBase {
             .i(tuner.getI())
             .d(tuner.getD());
 
+        this.reference = tuner.getSetpoint();
         motor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
         StringBuilder sb = new StringBuilder();
         sb.append("P: " + configAccessor.getP() + " - ");
@@ -120,7 +147,7 @@ public abstract class SparkMaxPIDTunerBase {
     }
 
     public void startMotor() {
-        this.motor.getClosedLoopController().setReference(this.lastReference, controlType);
+        
     } 
 
     public void stopMotor() {
