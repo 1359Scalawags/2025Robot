@@ -150,8 +150,7 @@ public class ArmSubsystem extends SubsystemBase {
         .closedLoopRampRate(1.0)
         .smartCurrentLimit(70, 30, 120);
 
-      pulleyMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ArmSubsystem.Pulley.kMotorOffset)
+      pulleyMotorConfig.encoder
       .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
      
      
@@ -291,7 +290,7 @@ public class ArmSubsystem extends SubsystemBase {
       }
 
     @Override
-    public void periodic() { //TODO: will the 20ms affect the time it takes, make make sure the motors arnt moving fast when within the range of the limit switch?
+    public void periodic() {    //TODO: does getappliedoutput do what we think it does?
           //Limit switch  for pully
       if (pulleyMotor.getAppliedOutput() < 0) {
         if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
@@ -305,10 +304,14 @@ public class ArmSubsystem extends SubsystemBase {
         }
       } 
 
+    if (clawMotor.getAppliedOutput() > 0) {
       if (clawLimitSwitch.get() == true) {
+        clawMotor.set(0);
         clawMotor.getEncoder().setPosition(0);
         clawLimiter.reset(0);
       }
+    }
+
       
           //run motors
       if (RobotState.isTeleop() || RobotState.isAutonomous()){
