@@ -7,15 +7,12 @@ package frc.robot.commands.SwerveCommands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
-import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
-import swervelib.math.SwerveMath;
 
 /**
  * A more advanced Swerve Control System that has 4 buttons for which direction to face
@@ -123,7 +120,6 @@ public class AbsoluteRobotDrive extends Command
     
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
 
-    // TODO: Fix this 
     // translation = SwerveMath.limitVelocity(translation, swerve.getFieldVelocity(), swerve.getPose(),
     //                                        Constants.SwerveSubsystem.LOOP_TIME, Constants.SwerveSubsystem.ROBOT_MASS, List.of(Constants.SwerveSubsystem.CHASSIS),
     //                                        swerve.getSwerveDriveConfiguration());
@@ -152,7 +148,7 @@ public class AbsoluteRobotDrive extends Command
   @Override
   public boolean isFinished()
   {
-    return false;  //TODO: Does this need an end condition?
+    return false; 
   }
 
 

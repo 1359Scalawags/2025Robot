@@ -1,7 +1,6 @@
 package frc.robot.extensions;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.Constants;
 
 public class ArmPosition {
 

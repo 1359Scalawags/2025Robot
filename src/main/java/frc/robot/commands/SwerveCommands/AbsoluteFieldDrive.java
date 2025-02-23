@@ -95,8 +95,7 @@ public class AbsoluteFieldDrive extends Command {
 
     @Override
     public boolean isFinished() {
-        //TODO Auto-generated method stub
-        return true;   //TODO: Does this need an end condition? 
+        return true; 
     }
 
 }

@@ -184,7 +184,7 @@ public class RobotContainer {
             // - climber default movment command
             //}
             // then just make a button that flips that variable. talk to drive team about it.
-
+      //TODO: Map these buttons to make it intuitive.
     m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
     m_AssistantJoystick.button(7).onTrue(new LockedPosition(m_ClimberSubsystem));
