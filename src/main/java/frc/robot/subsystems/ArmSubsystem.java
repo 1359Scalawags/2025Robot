@@ -40,7 +40,8 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotor = new SimableSparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
     clawMotor = new SimableSparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
 
-    pulleyLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Pulley.kSlewRate);
+      //TODO: Change slewrate limiter constants from 0
+    pulleyLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Pulley.kSlewRate); 
     elbowLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Elbow.kSlewRate);
     wristLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Wrist.kSlewRate);
     clawLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Claw.kSlewRate);
@@ -50,11 +51,12 @@ public class ArmSubsystem extends SubsystemBase {
     configurePulleyMotor();
     configureClawMotor();
 
+      
     homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
     clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kClawLimitSwitch);
 
     elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.kMINGravityFF,
-        Constants.ArmSubsystem.Elbow.kGravityFF, 232);
+      Constants.ArmSubsystem.Elbow.kGravityFF, 232);
 
     Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
     Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
@@ -104,9 +106,8 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
 
     wristMotorConfig.closedLoop
-        .p(1.0f)
-        .i(0.0f)
-        .d(0.0)
+        .pid(0.003, 0.0000003, 0.003)//(0.006, 0.0000006, 0.006)
+        .iZone(2)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
     // apply configuration
@@ -128,9 +129,8 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Elbow.kConversionFactor);
 
     elbowMotorConfig.closedLoop
-        .p(1.0f)
-        .i(0.0f)
-        .d(0.0)
+        .pid(0.0125, 0.000015, 0.025)//(0.025, 0.00003, 0.05)
+        .iZone(2)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
     // apply configuration
@@ -151,10 +151,10 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
        
         pulleyMotorConfig.closedLoop //TODO: do we want a second slot for the upper part of the Pulley?
-        .pidf(0.045f, 0.00001f, 0.045, pulleyMotorFF(), ClosedLoopSlot.kSlot0)
+        .pid(0.0225f, 0.000005f, 0.0225, ClosedLoopSlot.kSlot0)//.pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot0)
         .iZone(2, ClosedLoopSlot.kSlot0);
 
-        // .pidf(0.045f, 0.00001f, 0.045, 0.6, ClosedLoopSlot.kSlot1)
+        // .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot1)
         // .iZone(2, ClosedLoopSlot.kSlot1);
 
     // apply configuration
@@ -176,9 +176,8 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Claw.kConversionFactor);
 
     clawMotorConfig.closedLoop
-        .p(1.0f)
-        .i(0.0f)
-        .d(0.0);
+        .pid(0, 0, 0)//(0.05, 0.0001, 0.03)
+        .iZone(1.5);
 
     // apply configuration
     clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -301,39 +300,40 @@ public class ArmSubsystem extends SubsystemBase {
     double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() + elbowMotor.getAbsoluteEncoder().getPosition();
     return wristAngle;
   }
-// moving fast when within the range of the limit switch?
-//TODO: does getappliedoutput do what we think it does?
+
+// TODO: moving slow when within the range of the limit switch?
 @Override
   public void periodic() {    
-      //Limit switch  for pully
-    if (pulleyMotor.getAppliedOutput() < 0) {
-      if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
+       //Limit switch  for pully
+    if (pulleyMotor.get() < 0) {
+      if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kPulleyLimitSwitchPressedState) {
         pulleyMotor.set(0); 
         pulleyMotor.getEncoder().setPosition(0);
         pulleyLimiter.reset(0);
+        pulleyMotor.setReferencePosition(pulleyLimiter, Constants.ArmSubsystem.Pulley.kLimitSwitchPosition); //TODO: do once check
+      }
+    }
 
-    if (clawMotor.getAppliedOutput() > 0) {
-      if (clawLimitSwitch.get() == true) {
+        //Claw limit switch
+    if (clawMotor.get() > 0) {
+      if (clawLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kClawLimitSwitchPressedState) {
         clawMotor.set(0);
         clawMotor.getEncoder().setPosition(0);
         clawLimiter.reset(0);
-        }
-      } 
+      }
     }
-  }
+
           //run motors
       if (RobotState.isTeleop() || RobotState.isAutonomous()){
         // This method will be called once per scheduler run
-        pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);   // - this is now in the limit switch if statment.
-        
-          // TODO: Add gravity assisted feedforward to elbow motor
         elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
         pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.055);
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
+        pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget); 
 
-      ARM_HEIGHT = getCalculatedHeight();
+        ARM_HEIGHT = getCalculatedHeight();
     }
   }
 }

@@ -122,6 +122,9 @@ public final class Constants {
     public static final double kStageOneFF = 0.055;
     public static final double kStageTwoFF = 0.06; //TODO: find the stage two FF
     public static final double kStageTwoPulleyPosition = 0; //TODO: find the switch over poinit
+    public static final boolean kPulleyLimitSwitchPressedState = true;
+    public static final boolean kClawLimitSwitchPressedState = true;
+    public static final double kLimitSwitchPosition = 0;
     }
 
     public static class Elbow {
@@ -157,7 +160,7 @@ public final class Constants {
 
     public static final double armGoToTolerance = 0;
     public static final int kHomeLimitSwitchID = 0;
-    public static final int kClawLimitSwitch = 0;
+    public static final int kClawLimitSwitch = 1;
   }
 
   public static class Vision { 

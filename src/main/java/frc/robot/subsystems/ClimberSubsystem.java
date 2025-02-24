@@ -222,7 +222,6 @@ public class ClimberSubsystem extends SubsystemBase{
 
     //
     public void latchCLimber(){
-      //TODO: Make sure you can't latch until position is correct
       setServoValue(Constants.ClimberSubsystem.LatchServo.latchedValue);
     }
 
