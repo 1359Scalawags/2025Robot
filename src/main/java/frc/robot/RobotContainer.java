@@ -89,8 +89,8 @@ public class RobotContainer {
   private void setDefaultCommands() {
     m_SwerveSubsystem.setDefaultCommand(
       new AbsoluteFieldDrive(m_SwerveSubsystem,
-      this::driverGetForward,
-      this::driverGetRight,
+      this::driverGetX,
+      this::driverGetY,
       this::driverGetZ,
       this::driverGetThrottle,
       m_SwerveSubsystem::getFeildCentric, 
@@ -113,11 +113,11 @@ public class RobotContainer {
     public double assistantGetZ() {
       return -m_AssistantJoystick.getZ();
     }
-    public double driverGetRight() {
-      return -m_DriverJoystick.getX();
+    public double driverGetX() {
+      return m_DriverJoystick.getX();
     }
-    public double driverGetForward() {
-      return -m_DriverJoystick.getY();
+    public double driverGetY() {
+      return m_DriverJoystick.getY();
     }
     public double driverGetZ() {
       return m_DriverJoystick.getZ();
