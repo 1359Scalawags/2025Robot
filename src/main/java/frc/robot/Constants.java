@@ -174,6 +174,11 @@ public final class Constants {
     }
   }
 
+  public static class Testing {
+    public static final double kSwerveTranslateSpeed = 0.3;
+    public static final double kSwerveRotateSpeed = 0.5;
+  }
+
 
 /*    
           ................................................................................          

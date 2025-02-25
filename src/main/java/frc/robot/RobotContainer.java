@@ -29,6 +29,8 @@ import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
 import frc.robot.commands.SwerveCommands.FieldCentricCommand;
 import frc.robot.commands.SwerveCommands.RobotCentricCommand;
 import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
+import frc.robot.commands.SwerveCommands.Testing.MoveCardinal;
+import frc.robot.commands.SwerveCommands.Testing.MoveCardinal.CardinalDirection;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
@@ -197,6 +199,11 @@ public class RobotContainer {
   m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
   m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
 
+  //XXX: These are for testing only. They should be commented after testing is completed.
+  m_DriverJoystick.button(12).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.N));
+  m_DriverJoystick.button(15).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.S));
+  m_DriverJoystick.button(16).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.E));
+  m_DriverJoystick.button(13).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.W));
   }
 
   public Command lockClimberSubsystemWhenDisabled() {
