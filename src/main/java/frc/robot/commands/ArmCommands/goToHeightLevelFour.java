@@ -6,7 +6,6 @@
 package frc.robot.commands.ArmCommands;
 
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -45,7 +44,7 @@ public class goToHeightLevelFour extends Command {
 
   // Returns true when the command should end.
 
-  //TODO : Tune tolerances
+  
   @Override
   public boolean isFinished() {
     if (m_subsystem.getArmPosition().isNear(Constants.ArmSubsystem.Positions.klevel4)) {

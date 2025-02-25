@@ -4,14 +4,10 @@
 
 package frc.robot;
 
-import org.dyn4j.exception.SameObjectException;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ClimberCommands.LockClimberSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -40,6 +36,8 @@ public class Robot extends TimedRobot {
       super.robotInit();
 
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+    //TODO: Enable this when arm is enabled
+    //CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
   }
 
   /**
@@ -77,6 +75,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    //XXX: Is this necessary here? If so, also include the arm?
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
@@ -93,6 +92,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    //XXX: Is this necessary here? If so, also include the arm?
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
@@ -104,6 +104,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    //TODO: Is this necessary here? If so, also include the arm?
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 
@@ -114,6 +115,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
+  //TODO: Is this necessary here? If so, also include the arm?
    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   }
 

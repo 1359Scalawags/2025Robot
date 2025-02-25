@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class RotateCCWCommand extends Command {
+public class DriveForwardCommand extends Command {
     private SwerveSubsystem swerve;
     private SwerveController controller;
 
@@ -24,7 +24,7 @@ public class RotateCCWCommand extends Command {
      * @param feildRelitive
      * @param isOpenLoop
      */
-    public RotateCCWCommand(SwerveSubsystem swerve) {
+    public DriveForwardCommand(SwerveSubsystem swerve) {
         this.swerve = swerve;
         this.controller = swerve.getSwerveController();
         addRequirements(swerve);
@@ -36,10 +36,10 @@ public class RotateCCWCommand extends Command {
     public void execute() {
       
         //Translation2d translation, double rotation, boolean fieldRelative
-       
+        // +X is forward, +Y is left
         swerve.drive(
-            new Translation2d(0.0, 0.0),
-            0.5,
+            new Translation2d(0.5, 0.0),
+            0.0,
             false);
 
        
@@ -47,6 +47,6 @@ public class RotateCCWCommand extends Command {
     }
     @Override
     public boolean isFinished() {
-        return false;   //TODO: Be sure to have an end condition?
+        return false;
     }
 }

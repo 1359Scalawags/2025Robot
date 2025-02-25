@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.derive;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -13,7 +11,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
@@ -69,19 +66,17 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public void initializeClimber() {
       if (isInitialized == false) {
-      climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
-      lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
-      unLatchCLimber();
+        climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
+        lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
+        unLatchCLimber();
 
-      positionLimiter.reset(getClimberPostion());
-      lockingPositionLimiter.reset(getLockingMotorPosition());
+        positionLimiter.reset(getClimberPostion());
+        lockingPositionLimiter.reset(getLockingMotorPosition());
 
-      positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
-      lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
+        positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
+        lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
 
-
-      isInitialized = true;
-      moveClimberCommandLock = false;
+        isInitialized = true;
       }
     }
 
@@ -114,16 +109,16 @@ public class ClimberSubsystem extends SubsystemBase{
         .smartCurrentLimit(70, 30, 120);
 
       positionMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ClimberSubsystem.PositionMotor.kEncoderOffset)
-      .positionConversionFactor(Constants.ClimberSubsystem.PositionMotor.kConversionFactor)
-      .inverted(true);
+        .zeroOffset(Constants.ClimberSubsystem.PositionMotor.kEncoderOffset)
+        .positionConversionFactor(Constants.ClimberSubsystem.PositionMotor.kConversionFactor)
+        .inverted(true);
        
       positionMotorConfig.closedLoop
-      .p(0.01f)
-      .i(0.0)
-      .d(0.0)
-      .iZone(0.001)
-      .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        .p(0.01f)
+        .i(0.0)
+        .d(0.0)
+        .iZone(0.001)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
       positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -132,31 +127,44 @@ public class ClimberSubsystem extends SubsystemBase{
     private void configureLockingBarMotor() {
       // create a new sparkmax config
       SparkMaxConfig lockingMotorConfig = new SparkMaxConfig();
-
+  
       lockingMotorConfig
         .idleMode(IdleMode.kBrake)
-        .inverted(false) // this is correct
+        .inverted(true)
         .openLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
         .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
-        .smartCurrentLimit(70, 30, 900);
-
+        .smartCurrentLimit(70, 30, 1000);
+        
+      lockingMotorConfig.softLimit
+        .reverseSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMinLimit)
+        .forwardSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit)
+        .forwardSoftLimitEnabled(true)
+        .reverseSoftLimitEnabled(true);
+  
       lockingMotorConfig.absoluteEncoder 
-        .inverted(false) // this is correct
+        .inverted(false)
         .zeroOffset(Constants.ClimberSubsystem.LockingBarMotor.kEncoderOffset)
-        .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
-
+        .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor)
+        .velocityConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
+  
       lockingMotorConfig.closedLoop
-        .p(0.1)
+        .p(0.01)
         .i(0.000001)
-        .d(0.0)
-        .iZone(0.01)
+        .d(0.007)
+        .iZone(5)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-        .positionWrappingEnabled(true);
-
+        .positionWrappingEnabled(false)
+        .positionWrappingInputRange(0,360);
+  
+      lockingMotorConfig.closedLoop.maxMotion
+        .maxVelocity(5)
+        .maxAcceleration(1)
+        .allowedClosedLoopError(0.01);
+  
       // apply configuration
       lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-
+  
     public void setBarAngle(double angle){
       lockingTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
     }
@@ -170,13 +178,9 @@ public class ClimberSubsystem extends SubsystemBase{
       double targetpostion = Constants.ClimberSubsystem.LockingBarMotor.kUnLockedPosition;
       setBarAngle(targetpostion);
     }
-      //used to set climber using the  buttons
-      //TODO: add clamps to specific functions.
+      //used to set climber using position buttons
     public void setClimberAngle(double angle) {
       climberTargetPosition = MathUtil.clamp(angle, Constants.ClimberSubsystem.PositionMotor.kMinAngle,  Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
-      // if (angle < Constants.ClimberSubsystem.PositionMotor.kMaxAngle && angle > Constants.ClimberSubsystem.PositionMotor.kMinAngle) {
-      //positionMotor.getClosedLoopController().setReference(angle, ControlType.kPosition);
-      // }
     } 
 
     public void extendClimber(){
@@ -188,22 +192,35 @@ public class ClimberSubsystem extends SubsystemBase{
       double targetpostion = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
       setClimberAngle(targetpostion);
     }
+      //Puts the climber in the position to be locked with the servo
+    public void climberLockingPosition() {
+      double targetpostion = Constants.ClimberSubsystem.PositionMotor.kLockingPosition;
+      setClimberAngle(targetpostion);
+    }
+      //moves the climber (with the servo) to lock the climber to prepare for the loss of power.
+    public void climberLockedPosition() {
+      double targetpostion = Constants.ClimberSubsystem.PositionMotor.kLockedPosition;
+      setClimberAngle(targetpostion);
+    }
 
         // operater controll of the climber 
     public void changeClimberPosition(double delta){
-      // positionMotor.getClosedLoopController().setReference(newPosition, ControlType.kPosition);
-      //MathUtil.clamp(newPosition, Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
       double newPosition = getClimberPostion() + delta;
       setClimberAngle(newPosition);
     }
     
-
+    //TODO: This should be private so that you can't bypass the intended methods below
     public void setServoValue(double newValue){
       newValue = MathUtil.clamp(newValue, Constants.ClimberSubsystem.LatchServo.minLimit, Constants.ClimberSubsystem.LatchServo.maxLimit);
       latchingServo.set(newValue);
       
     }
 
+    public double getServoValue() {
+      return latchingServo.get();
+    }
+
+    //
     public void latchCLimber(){
       setServoValue(Constants.ClimberSubsystem.LatchServo.latchedValue);
     }
@@ -213,11 +230,11 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
     public void moveCLimberCommandLock(){
-      moveClimberCommandLock = false;
+      moveClimberCommandLock = true;
     }
     
     public void moveCLimberCommandUnLock(){
-      moveClimberCommandLock = true;
+      moveClimberCommandLock = false;
     }
 
     public boolean isClimberCommandLocked() {
@@ -254,10 +271,10 @@ public class ClimberSubsystem extends SubsystemBase{
     //}
     
       if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
-        double immediateTargetAngle = positionLimiter.calculate(climberTargetPosition);
+        double immediateTargetAngle = MathUtil.clamp(positionLimiter.calculate(climberTargetPosition), Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
         positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
   
-        double lockingImmediateTargetAngle = lockingPositionLimiter.calculate(lockingTargetPosition);
+        double lockingImmediateTargetAngle = MathUtil.clamp(lockingPositionLimiter.calculate(lockingTargetPosition), Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
         lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
       }
   }     

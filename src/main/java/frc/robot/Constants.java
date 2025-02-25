@@ -4,11 +4,6 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.util.function.BooleanSupplier;
-
-import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
-
 import edu.wpi.first.apriltag.AprilTagFields;
 import frc.robot.extensions.ArmPosition;
 
@@ -58,7 +53,6 @@ public final class Constants {
      */
   }
 
-  // TODO: Create sub classes for each function of the Climber system
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
 
@@ -68,10 +62,11 @@ public final class Constants {
 
     public static class LatchServo {
       public static final int kServoID = 0;
-      public static final double maxLimit = 0;
+      public static final double maxLimit = 1;
       public static final double minLimit = 0;
       public static final double latchedValue = 0.8;
       public static final double unLatchedValue = 0.2;
+      public static final double kNaxActuateTime = 5.0; //max time to run the servo
       
     }
 
@@ -79,11 +74,11 @@ public final class Constants {
       public static final int kMotorID = 9;
       public static final double kEncoderOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMinLimit = 60;
+      public static final double kMinLimit = 72;
       public static final double kMaxLimit = 155;
-      public static final double kUnLockedPosition = 63.0;
-      public static final double kLockedPosition = 150.0;
-      public static final double kSlewRate = 15;
+      public static final double kUnLockedPosition = 72.0;
+      public static final double kLockedPosition = 155.0;
+      public static final double kSlewRate = 90;
     }
 
     public static class PositionMotor {
@@ -94,13 +89,14 @@ public final class Constants {
       public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 245.0; // 0.185*360;
       public static final double kHomeAngle = 160.0; //0.442*360;
+      public static final double kLockingPosition = 177.8;
+      public static final double kLockedPosition = 187.5;
 
       public static final double kMaxJoystickSpeed = 10;
       public static final double kSlewRate = 30.0;
     }
   }  
 
-  // TODO: Create sub classes for each function of the Arm system
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
 
@@ -117,12 +113,18 @@ public final class Constants {
     public static class Pulley{
       public static final int kMotorID = 17;
       public static final double kMotorOffset = 0;
-      public static final double kConversionFactor = 360;
+      public static final double kConversionFactor = 0.13402;
       public static final double kMaxLimit = 0;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
       public static final boolean kLimitSwitchPressedState = false;
       public static final double kHomingVelocity = 0;
+    public static final double kStageOneFF = 0.055;
+    public static final double kStageTwoFF = 0.06; //TODO: find the stage two FF
+    public static final double kStageTwoPulleyPosition = 0; //TODO: find the switch over poinit
+    public static final boolean kPulleyLimitSwitchPressedState = true;
+    public static final boolean kClawLimitSwitchPressedState = true;
+    public static final double kLimitSwitchPosition = 0;
     }
 
     public static class Elbow {
@@ -132,6 +134,8 @@ public final class Constants {
       public static final double kMaxLimit = 0;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
+      public static final double kGravityFF = 0;
+      public static final double kMINGravityFF = 0;
     }
 
     public static class Wrist {
@@ -150,10 +154,13 @@ public final class Constants {
       public static final double kMaxLimit = 0;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
+    public static final double kCloseClaw = 0;
+    public static final double kOpenClaw = 0;
     }
 
     public static final double armGoToTolerance = 0;
     public static final int kHomeLimitSwitchID = 0;
+    public static final int kClawLimitSwitch = 1;
   }
 
   public static class Vision { 
@@ -165,7 +172,10 @@ public final class Constants {
   public static class Operator {
 
     public static class DriverJoystick {
-      public static final int kPort = 0;
+    public static final int kPort = 0;
+    public static final int driveForwardButton = 12;
+    public static final int driveRightButton = 13;
+    public static final int rotateCCWButton = 14;
     }
 
     public static class AssistJoystick {
