@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ArmCommands.InitilizeArm;
 import frc.robot.commands.ArmCommands.closeClawCommand;
 import frc.robot.commands.ArmCommands.goToHeightHumanStation;
 import frc.robot.commands.ArmCommands.goToHeightLevelFour;
@@ -62,7 +63,8 @@ public class RobotContainer {
 
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Flipper"));
-   //private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+    // TODO: This needs to be enabled when ready. Also fix initializeArm() below and uncomment calls in Robot.java
+   private final ArmSubsystem m_ArmSubsystem = null; //= new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
    private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
@@ -223,6 +225,10 @@ public class RobotContainer {
 
   public Command intializeTheClimber() {
     return new InitilizeClimber(m_ClimberSubsystem);
+  }
+
+  public Command intializeTheArm() {
+    return new InitilizeArm(m_ArmSubsystem);
   }
 
   public Command disabledIntializedClimber() {
