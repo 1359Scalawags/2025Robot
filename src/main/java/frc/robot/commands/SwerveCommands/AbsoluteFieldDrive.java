@@ -69,7 +69,7 @@ public class AbsoluteFieldDrive extends Command {
             // if(feildRelitive.getAsBoolean()) {
                 //if field relative, just need to flip forward backward
                 swerve.drive(
-                    new Translation2d(-yVelocity, -xVelocity),
+                    new Translation2d(yVelocity, xVelocity),
                     angVelocity,
                     feildRelitive.getAsBoolean());
             // } else {
@@ -81,7 +81,7 @@ public class AbsoluteFieldDrive extends Command {
             // }
         } else {
             swerve.drive(
-                new Translation2d(xVelocity, yVelocity),
+                new Translation2d(-yVelocity, -xVelocity),
                 angVelocity,
                 feildRelitive.getAsBoolean());
         }
