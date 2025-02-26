@@ -1,9 +1,9 @@
 {
   "location": {
-    "front": -12,
-    "left": -12
+    "front": 12,
+    "left": 12
   },
-  "absoluteEncoderOffset": 38.7,
+  "absoluteEncoderOffset": 222,
   "drive": {
     "type": "falcon",
     "id": 2,
@@ -20,7 +20,7 @@
     "canbus": "CANivore"
   },
   "inverted": {
-    "drive": true,
+    "drive": false,
     "angle": true
   },
   "absoluteEncoderInverted": false

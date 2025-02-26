@@ -64,7 +64,6 @@ public class AbsoluteFieldDrive extends Command {
         double xVelocity = (modvX * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
         double yVelocity = (modvY * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
         double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * Constants.SwerveSubsystem.kAngleSpeedMultiplier * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
-        
         if(swerve.isReversed()) {
             // if(feildRelitive.getAsBoolean()) {
                 //if field relative, just need to flip forward backward
@@ -82,7 +81,7 @@ public class AbsoluteFieldDrive extends Command {
         } else {
             swerve.drive(
                 new Translation2d(xVelocity, yVelocity),
-                angVelocity,
+                -angVelocity,
                 feildRelitive.getAsBoolean());
         }
 

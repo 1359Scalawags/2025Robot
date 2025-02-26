@@ -58,10 +58,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  //TODO: we need to intialize the arm.
   // The robot's subsystems and commands are defined here
 
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
-    new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Flipper"));
+    new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Pearl"));
    //private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
@@ -184,19 +185,19 @@ public class RobotContainer {
             //}
             // then just make a button that flips that variable. talk to drive team about it.
       //TODO: Map these buttons to make it intuitive.
-    m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(7).onTrue(new LockedPosition(m_ClimberSubsystem));
-    m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(7).onTrue(new LockedPosition(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
-    m_AssistantJoystick.button(9).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(9).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
-    m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(6).onTrue(new LockedPosition(m_ClimberSubsystem));
-    m_AssistantJoystick.button(11).onTrue(new LockingPosition(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(6).onTrue(new LockedPosition(m_ClimberSubsystem));
+    // m_AssistantJoystick.button(11).onTrue(new LockingPosition(m_ClimberSubsystem));
 
 
     m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
