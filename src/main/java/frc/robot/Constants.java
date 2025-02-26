@@ -101,13 +101,13 @@ public final class Constants {
     //Can ID's for Arm are from 16 to 21
 
     public static class Positions {
-      public static final ArmPosition kHome = new ArmPosition(0,0,0);
-      public static final ArmPosition kHumanStation = new ArmPosition(0,0,0);
-      public static final ArmPosition kGround = new ArmPosition(0,0,0);
-      public static final ArmPosition kLevel1 = new ArmPosition(0,0,0);
-      public static final ArmPosition kLevel2 = new ArmPosition(0,0,0);
-      public static final ArmPosition klevel3 = new ArmPosition(0,0,0);
-      public static final ArmPosition klevel4 = new ArmPosition(0,0,0);
+      public static final ArmPosition kHome = new ArmPosition(1,200,45);
+      public static final ArmPosition kHumanStation = new ArmPosition(1,200,45);
+      public static final ArmPosition kGround = new ArmPosition(1,200,45);
+      public static final ArmPosition kLevel1 = new ArmPosition(1,200,45);
+      public static final ArmPosition kLevel2 = new ArmPosition(1,200,45);
+      public static final ArmPosition klevel3 = new ArmPosition(1,200,45);
+      public static final ArmPosition klevel4 = new ArmPosition(1,200,45);
     }
 
     public static class Pulley{
@@ -117,7 +117,7 @@ public final class Constants {
       public static final double kMaxLimit = 52;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
-      public static final double kHomingVelocity = 0;
+      public static final double kHomingVelocity = .1;
       public static final double kStageOneFF = 0.055;
       public static final double kStageTwoFF = 0.06; //TODO: find the stage two FF
       public static final double kStageTwoPulleyPosition = 25; 
@@ -157,6 +157,7 @@ public final class Constants {
       public static final double kOpenClaw = 0;
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
+      public static final double kHomingVelocity = 0.1;
     }
 
     public static final double armGoToTolerance = 0;

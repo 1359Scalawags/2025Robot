@@ -22,7 +22,7 @@ public class InitilizeArm extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.initializeArm(true);
+    m_subsystem.initializeArm();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
