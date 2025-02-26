@@ -69,7 +69,7 @@ public class RobotContainer {
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Pearl"));
     // TODO: This needs to be enabled when ready. Also fix initializeArm() below and uncomment calls in Robot.java
-   //private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
    private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);

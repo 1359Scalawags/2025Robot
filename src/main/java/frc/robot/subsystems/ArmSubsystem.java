@@ -52,8 +52,8 @@ public class ArmSubsystem extends SubsystemBase {
     configureClawMotor();
 
       
-    homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
-    clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kClawLimitSwitch);
+    homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.Pulley.kHomeLimitSwitchID);
+    clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.Claw.kLimitSwitchID);
 
     elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.kMINGravityFF,
       Constants.ArmSubsystem.Elbow.kGravityFF, 232);
