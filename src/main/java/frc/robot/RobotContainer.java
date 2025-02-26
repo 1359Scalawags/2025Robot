@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ArmCommands.InitilizeArm;
 import frc.robot.commands.ArmCommands.closeClawCommand;
 import frc.robot.commands.ArmCommands.goToHeightHumanStation;
 import frc.robot.commands.ArmCommands.goToHeightLevelFour;
@@ -33,6 +34,10 @@ import frc.robot.commands.SwerveCommands.FieldCentricCommand;
 import frc.robot.commands.SwerveCommands.RobotCentricCommand;
 import frc.robot.commands.SwerveCommands.RotateCCWCommand;
 import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
+import frc.robot.commands.SwerveCommands.Testing.MoveCardinal;
+import frc.robot.commands.SwerveCommands.Testing.MoveCardinal.CardinalDirection;
+import frc.robot.commands.SwerveCommands.Testing.Rotate;
+import frc.robot.commands.SwerveCommands.Testing.Rotate.RotateDirection;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 
@@ -62,7 +67,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here
 
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
-    new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Pearl"));
+    new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Flipper"));
+    // TODO: This needs to be enabled when ready. Also fix initializeArm() below and uncomment calls in Robot.java
    //private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
@@ -216,6 +222,14 @@ public class RobotContainer {
   //   }
   //}
 
+  //XXX: These are for testing only. They should be commented after testing is completed.
+  m_DriverJoystick.button(12).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.N));
+  m_DriverJoystick.button(15).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.S));
+  m_DriverJoystick.button(16).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.E));
+  m_DriverJoystick.button(13).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.W));
+  m_DriverJoystick.button(8).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.SE));
+  m_DriverJoystick.button(11).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CW));
+  m_DriverJoystick.button(5).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CCW));
   }
 
   public Command lockClimberSubsystemWhenDisabled() {
@@ -225,6 +239,11 @@ public class RobotContainer {
   public Command intializeTheClimber() {
     return new InitilizeClimber(m_ClimberSubsystem);
   }
+
+  //TODO: Uncomment when testing arm
+  // public Command intializeTheArm() {
+  //   return new InitilizeArm(m_ArmSubsystem);
+  // }
 
   public Command disabledIntializedClimber() {
     return new DeInitilizeClimber(m_ClimberSubsystem);
