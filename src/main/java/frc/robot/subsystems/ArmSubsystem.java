@@ -304,7 +304,8 @@ public class ArmSubsystem extends SubsystemBase {
 // TODO: moving slow when within the range of the limit switch?
 @Override
   public void periodic() {    
-       //Limit switch  for pully
+       //Limit switch  for pully?
+       /*
     if (pulleyMotor.get() < 0) {
       if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kPulleyLimitSwitchPressedState) {
         pulleyMotor.set(0); 
@@ -334,6 +335,8 @@ public class ArmSubsystem extends SubsystemBase {
         pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget); 
 
         ARM_HEIGHT = getCalculatedHeight();
+      
+       }
+        */
     }
-  }
 }
