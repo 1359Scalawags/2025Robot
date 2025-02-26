@@ -32,10 +32,10 @@ public class Robot extends TimedRobot {
     enableLiveWindowInTest(true);
     SmartDashboard.putData(CommandScheduler.getInstance());
 
-    UsbCamera camera = CameraServer.startAutomaticCapture();
-    camera.setResolution(640, 480);
-    //camera.setResolution(320, 240);
-    camera.setFPS(15);
+    // UsbCamera camera = CameraServer.startAutomaticCapture();
+    // camera.setResolution(640, 480);
+    // //camera.setResolution(320, 240);
+    // camera.setFPS(15);
   }
 
   @Override
@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
     //TODO: Enable this when arm is enabled
-    //CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
   }
 
   /**

@@ -114,7 +114,7 @@ public final class Constants {
       public static final int kMotorID = 17;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 0.13402;
-      public static final double kMaxLimit = 0;
+      public static final double kMaxLimit = 52;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
       public static final double kHomingVelocity = 0;
@@ -123,7 +123,7 @@ public final class Constants {
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kHomeLimitSwitchID = 0;
-      public static final double kLimitSwitchPosition = 0;
+      public static final double kLimitSwitchPosition = 1;
     }
 
     public static class Elbow {
@@ -134,7 +134,7 @@ public final class Constants {
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
       public static final double kGravityFF = 0;
-      public static final double kMINGravityFF = 0;
+      public static final double kMINGravityFF = 0.0025;
     }
 
     public static class Wrist {

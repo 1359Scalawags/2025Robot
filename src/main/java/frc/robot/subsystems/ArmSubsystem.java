@@ -305,9 +305,9 @@ public class ArmSubsystem extends SubsystemBase {
 @Override
   public void periodic() {    
        //Limit switch  for pully?
-       /*
+    if(initialized) {
     if (pulleyMotor.get() < 0) {
-      if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kPulleyLimitSwitchPressedState) {
+      if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
         pulleyMotor.set(0); 
         pulleyMotor.getEncoder().setPosition(0);
         pulleyLimiter.reset(0);
@@ -317,7 +317,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         //Claw limit switch
     if (clawMotor.get() > 0) {
-      if (clawLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kClawLimitSwitchPressedState) {
+      if (clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState) {
         clawMotor.set(0);
         clawMotor.getEncoder().setPosition(0);
         clawLimiter.reset(0);
@@ -325,10 +325,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
           //run motors
-      if (RobotState.isTeleop() || RobotState.isAutonomous()){
+      if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()){
         // This method will be called once per scheduler run
         elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
-        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.055);
+        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.055/2);
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
         wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
@@ -337,6 +337,6 @@ public class ArmSubsystem extends SubsystemBase {
         ARM_HEIGHT = getCalculatedHeight();
       
        }
-        */
+      }
     }
 }

@@ -240,10 +240,10 @@ public class RobotContainer {
     return new InitilizeClimber(m_ClimberSubsystem);
   }
 
-  //TODO: Uncomment when testing arm
-  // public Command intializeTheArm() {
-  //   return new InitilizeArm(m_ArmSubsystem);
-  // }
+ // TODO: Uncomment when testing arm
+  public Command intializeTheArm() {
+    return new InitilizeArm(m_ArmSubsystem);
+  }
 
   public Command disabledIntializedClimber() {
     return new DeInitilizeClimber(m_ClimberSubsystem);
