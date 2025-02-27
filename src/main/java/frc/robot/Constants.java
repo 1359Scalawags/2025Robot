@@ -88,7 +88,7 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 245.0; // 0.185*360;
-      public static final double kHomeAngle = 150.0; //0.442*360;
+      public static final double kHomeAngle = 145.0; //0.442*360;
       public static final double kLockingPosition = 177.8;
       public static final double kLockedPosition = 187.5;
 
