@@ -309,6 +309,24 @@ public class ArmSubsystem extends SubsystemBase {
     return wristAngle;
   }
 
+  // XXX:WRIST: Is this really needed?
+  // public double getRelativeWristAngle() {
+  //   double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
+  //   double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() - elbowDiff; 
+  //   return wristAngle;
+  // }
+
+  // public double getAbsoluteWristAngleMax() {
+  //   double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
+  //   return Constants.ArmSubsystem.Wrist.kMaxLimit + elbowDiff;
+  // }
+
+  // public double getAbsoluteWristAngleMin() {
+  //   double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
+  //   return Constants.ArmSubsystem.Wrist.kMinLimit + elbowDiff;
+  // }
+
+
   // TODO: moving slow when within the range of the limit switch?
   @Override
   public void periodic() {
@@ -347,7 +365,11 @@ public class ArmSubsystem extends SubsystemBase {
         pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget),
             ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.055 / 2);
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
-        wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
+
+        //XXX:WRIST: prevent wrist from going outside valid bounds
+        //double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax())
+        //wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
+        //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
         pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
 
