@@ -344,6 +344,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Limit switch for pully?
 
+    ARM_HEIGHT = getCalculatedHeight();
     double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
 
     if (pulleyMotor.get() < 0) {
