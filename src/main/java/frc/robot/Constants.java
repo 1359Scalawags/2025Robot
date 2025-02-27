@@ -95,6 +95,8 @@ public final class Constants {
       public static final double kMaxJoystickSpeed = 10;
       public static final double kSlewRate = 30.0;
     }
+
+    public static final double kIntializeDelay = 0.5;
   }  
 
   public static class ArmSubsystem {
@@ -161,6 +163,8 @@ public final class Constants {
       public static final int kLimitSwitchID = 1;
       public static final double kHomingVelocity = 300;
     }
+
+    public static final double kIntializeDelay = 0.5;
   }
 
   public static class Vision { 
