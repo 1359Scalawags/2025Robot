@@ -209,22 +209,22 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void goToPulleyMotorPosition(double pulleyMotorPosition) {
-    pulleyMotorPosition = MathUtil.clamp(pulleyMotorPosition, Constants.ArmSubsystem.Pulley.kMinLimit,
+    pulleyMotorTarget = MathUtil.clamp(pulleyMotorPosition, Constants.ArmSubsystem.Pulley.kMinLimit,
         Constants.ArmSubsystem.Pulley.kMaxLimit);
   }
 
   public void goToElbowMotorPosition(double elbowMotorPosition) {
-    elbowMotorPosition = MathUtil.clamp(elbowMotorPosition, Constants.ArmSubsystem.Elbow.kMinLimit,
+    elbowMotorTarget = MathUtil.clamp(elbowMotorPosition, Constants.ArmSubsystem.Elbow.kMinLimit,
         Constants.ArmSubsystem.Elbow.kMaxLimit);
   }
 
   public void goToWristMotorPosition(double wristMotorPosition) {
-    wristMotorPosition = MathUtil.clamp(wristMotorPosition, Constants.ArmSubsystem.Wrist.kMinLimit,
+    wristMotorTarget = MathUtil.clamp(wristMotorPosition, Constants.ArmSubsystem.Wrist.kMinLimit,
         Constants.ArmSubsystem.Wrist.kMaxLimit);
   }
 
   public void goToClawMotorPosition(double clawMotorPosition) {
-    clawMotorPosition = MathUtil.clamp(clawMotorPosition, Constants.ArmSubsystem.Claw.kMinLimit,
+    clawMotorTarget = MathUtil.clamp(clawMotorPosition, Constants.ArmSubsystem.Claw.kMinLimit,
         Constants.ArmSubsystem.Claw.kMaxLimit);
   }
 
