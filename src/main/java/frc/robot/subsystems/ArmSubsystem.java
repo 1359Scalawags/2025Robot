@@ -389,7 +389,7 @@ public class ArmSubsystem extends SubsystemBase {
       }
     } else {
       if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
-        wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
+       // wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
       }
     }
   }
