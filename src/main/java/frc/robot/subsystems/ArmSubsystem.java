@@ -339,6 +339,9 @@ public class ArmSubsystem extends SubsystemBase {
   // TODO: moving slow when within the range of the limit switch?
   @Override
   public void periodic() {
+
+    ARM_HEIGHT = getCalculatedHeight();
+
     // Limit switch for pully?
 
     double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
@@ -383,8 +386,8 @@ public class ArmSubsystem extends SubsystemBase {
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
         pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+        System.out.println("message AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH??");
 
-        ARM_HEIGHT = getCalculatedHeight();
 
       }
     } else {
