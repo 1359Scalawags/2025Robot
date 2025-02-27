@@ -371,10 +371,11 @@ public class ArmSubsystem extends SubsystemBase {
       // run motors
       if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
         // This method will be called once per scheduler run
-        elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
-            ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+        //elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
+            //ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+            
         pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget),
-            ControlType.kPosition, ClosedLoopSlot.kSlot0, 0.055 / 2);
+            ControlType.kPosition, ClosedLoopSlot.kSlot0, Constants.ArmSubsystem.Pulley.kStageOneFF / 2);
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
 
         //XXX:WRIST: prevent wrist from going outside valid bounds
