@@ -70,6 +70,12 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotorTarget = wristMotor.getEncoder().getPosition();
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
+    System.out.println("Reported Positions at Intialization: ");
+    System.out.println("  Pulley: " + pulleyMotorTarget);
+    System.out.println("  Elbow: " + elbowMotorTarget);
+    System.out.println("  Wrist: " + wristMotorTarget);
+    System.out.println("  Claw: " + clawMotorTarget);
+
     pulleyLimiter.reset(pulleyMotorTarget);
     elbowLimiter.reset(elbowMotorTarget);
     wristLimiter.reset(wristMotorTarget);

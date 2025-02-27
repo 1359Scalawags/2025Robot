@@ -70,8 +70,13 @@ public class ClimberSubsystem extends SubsystemBase{
         lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
         unLatchCLimber();
 
-        positionLimiter.reset(getClimberPostion());
-        lockingPositionLimiter.reset(getLockingMotorPosition());
+        double currentPosition = getClimberPostion();
+        double currentLockbar = getLockingMotorPosition();
+        positionLimiter.reset(currentPosition);
+        lockingPositionLimiter.reset(currentLockbar);
+        System.out.println("Reported Positions at Intialization: ");
+        System.out.println("  Climber Position: " + currentPosition);
+        System.out.println("  Lockbar Position: " + currentLockbar);
 
         positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
         lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
