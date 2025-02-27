@@ -58,7 +58,7 @@ public final class Constants {
 
       //Limits 
       //TODO; make sure these are right
-
+    public static final double kIntializeDelay = 0.5;
 
     public static class LatchServo {
       public static final int kServoID = 0;
@@ -96,11 +96,12 @@ public final class Constants {
       public static final double kSlewRate = 30.0;
     }
 
-    public static final double kIntializeDelay = 0.5;
+
   }  
 
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
+    public static final double kIntializeDelay = 0.5;
 
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,200,45);
@@ -167,7 +168,7 @@ public final class Constants {
       public static final double kHomingVelocity = 300;
     }
 
-    public static final double kIntializeDelay = 0.5;
+
   }
 
   public static class Vision { 
