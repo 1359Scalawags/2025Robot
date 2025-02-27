@@ -1,0 +1,19 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Leave Community (Blue)"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Move out of Community",
+  "choreoAuto": false
+}

@@ -132,7 +132,7 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 330;
       public static final double kMinLimit = 195;
-      public static final double kSlewRate = 0;
+      public static final double kSlewRate = 10;
       public static final double kGravityFF = 0;
       public static final double kMINGravityFF = 0.0025;
       public static final double kHorizontalAngle = 232.0;
