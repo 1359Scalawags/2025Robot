@@ -305,13 +305,14 @@ public class ArmSubsystem extends SubsystemBase {
 @Override
   public void periodic() {    
        //Limit switch  for pully?
-    if(initialized) {
+   
     if (pulleyMotor.get() < 0) {
       if(homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
         pulleyMotor.set(0); 
         pulleyMotor.getEncoder().setPosition(0);
         pulleyLimiter.reset(0);
-        pulleyMotor.setReferencePosition(pulleyLimiter, Constants.ArmSubsystem.Pulley.kLimitSwitchPosition); //TODO: do once check
+        pulleyMotor.setReferencePosition(pulleyLimiter, Constants.ArmSubsystem.Pulley.kLimitSwitchPosition); 
+        initialized = true; //TODO: do once check
       }
     }
 
@@ -325,6 +326,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
           //run motors
+    if(initialized) {
       if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()){
         // This method will be called once per scheduler run
         elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change

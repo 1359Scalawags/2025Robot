@@ -170,13 +170,14 @@ public class RobotContainer {
   // }
 
     //Bindin Arm Commands
-  // m_AssistantJoystick.button(0).onTrue(new closeClawCommand(m_ArmSubsystem));
-  // m_AssistantJoystick.button(0).onTrue(new openClawCommand(m_ArmSubsystem));
-  // m_AssistantJoystick.button(0).onTrue(new goToHeightHumanStation(m_ArmSubsystem));
-  // m_AssistantJoystick.button(0).onTrue(new goToHeightLevelFour(m_ArmSubsystem));
-  // m_AssistantJoystick.button(0).onTrue(new goToHeightLevelThree(m_ArmSubsystem));
-  // m_AssistantJoystick.button(0).onTrue(new goToHeightLevelTwo(m_ArmSubsystem));
-  // m_AssistantJoystick.button(0).onTrue(new goToHightGround(m_ArmSubsystem));
+  m_AssistantJoystick.button(1).onTrue(new closeClawCommand(m_ArmSubsystem));
+  m_AssistantJoystick.button(3).onTrue(new openClawCommand(m_ArmSubsystem));
+
+  m_AssistantJoystick.button(8).onTrue(new goToHeightHumanStation(m_ArmSubsystem));
+  m_AssistantJoystick.button(10).onTrue(new goToHeightLevelFour(m_ArmSubsystem));
+  m_AssistantJoystick.button(7).onTrue(new goToHeightLevelThree(m_ArmSubsystem));
+  m_AssistantJoystick.button(6).onTrue(new goToHeightLevelTwo(m_ArmSubsystem));
+  m_AssistantJoystick.button(9).onTrue(new goToHightGround(m_ArmSubsystem));
 
   //Binding Climber Commands
       //can we make this simpler (sequential command)?
@@ -191,19 +192,18 @@ public class RobotContainer {
             //}
             // then just make a button that flips that variable. talk to drive team about it.
       //TODO: Map these buttons to make it intuitive.
-    // m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
+    m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
-    // m_AssistantJoystick.button(7).onTrue(new LockedPosition(m_ClimberSubsystem));
-    // m_AssistantJoystick.button(8).onTrue(new RetractClimber(m_ClimberSubsystem));
+    m_AssistantJoystick.button(13).onTrue(new LockedPosition(m_ClimberSubsystem));
+    m_AssistantJoystick.button(14).onTrue(new RetractClimber(m_ClimberSubsystem));
 
-    // m_AssistantJoystick.button(6).onTrue(new LockClimberBar(m_ClimberSubsystem));
-    // m_AssistantJoystick.button(9).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
+    m_AssistantJoystick.button(12).onTrue(new LockClimberBar(m_ClimberSubsystem));
+    m_AssistantJoystick.button(15).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
 
-    // m_AssistantJoystick.button(5).onTrue(new LatchServo(m_ClimberSubsystem));
-    // m_AssistantJoystick.button(10).onTrue(new UnLatchServo(m_ClimberSubsystem));
+    m_AssistantJoystick.button(4).onTrue(new LatchServo(m_ClimberSubsystem));
+    m_AssistantJoystick.button(2).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
-    // m_AssistantJoystick.button(6).onTrue(new LockedPosition(m_ClimberSubsystem));
-    // m_AssistantJoystick.button(11).onTrue(new LockingPosition(m_ClimberSubsystem));
+    m_AssistantJoystick.button(2).onTrue(new LockingPosition(m_ClimberSubsystem));
 
 
     m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
