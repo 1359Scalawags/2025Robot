@@ -6,20 +6,18 @@ package frc.robot.commands.ArmCommands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
 public class HomeThePulley extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
-  private Timer waitTimer;
-  private boolean hasfinished = false;
-
+  //private Timer waitTimer;
 
   public HomeThePulley(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
-    waitTimer = new Timer();
+    //waitTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -27,17 +25,17 @@ public class HomeThePulley extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    waitTimer.reset();
-    waitTimer.start();
+    // waitTimer.reset();
+    // waitTimer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(waitTimer.get() > 1.0) {
+    // if(waitTimer.get() > 1.0) {
       double currentPosition = ArmSubsystem.getArmHeight();
-      m_subsystem.goToPulleyMotorPosition(currentPosition - 0.05);
-    }
+      m_subsystem.goToPulleyMotorPosition(currentPosition - Constants.ArmSubsystem.Pulley.kHomingPositionIncrement);
+    // }
 
   }
 
