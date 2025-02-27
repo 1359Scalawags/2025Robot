@@ -34,7 +34,7 @@ public class HomeThePulley extends Command {
   public void execute() {
     // if(waitTimer.get() > 1.0) {
       double currentPosition = ArmSubsystem.getArmHeight();
-      m_subsystem.goToPulleyMotorPosition(currentPosition - Constants.ArmSubsystem.Pulley.kHomingPositionIncrement);
+      m_subsystem.goToPulleyMotorPosition(currentPosition + Constants.ArmSubsystem.Pulley.kHomingPositionIncrement);
     // }
 
   }

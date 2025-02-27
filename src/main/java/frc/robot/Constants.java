@@ -125,6 +125,7 @@ public final class Constants {
       public static final int kHomeLimitSwitchID = 0;
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
+      public static final double kHomingPositionIncrement = -0.25;
     }
 
     public static class Elbow {
@@ -148,7 +149,7 @@ public final class Constants {
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
       public static final double kSlewRate = 10;
       public static final double kHorizontalAngle = 90; //XXX: This is just a guess...must fix
-    public static final double kTolerance = 2.0;
+      public static final double kTolerance = 2.0;
     }
 
     public static class Claw {
@@ -163,6 +164,7 @@ public final class Constants {
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
       public static final double kHomingVelocity = 300;
+      public static final double kHomingPositionIncrement = 0.1;
     }
   }
 
