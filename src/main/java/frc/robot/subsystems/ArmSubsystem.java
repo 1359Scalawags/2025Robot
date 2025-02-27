@@ -88,6 +88,7 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotor.setReferencePosition(wristLimiter, safeWritsTarget);
     clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
 
+    // !!Homing moved to separate commands
     // if (this.homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
     //   pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
     //   pulleyMotor.getEncoder().setPosition(0);
@@ -105,6 +106,8 @@ public class ArmSubsystem extends SubsystemBase {
     // } else {
     //   clawMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Claw.kHomingVelocity, ControlType.kVelocity);
     // }
+
+    // this is now true as soon as encoders and limiters are initialized
     initialized = true;
   }
 
@@ -117,7 +120,7 @@ public class ArmSubsystem extends SubsystemBase {
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
         .smartCurrentLimit(20, 20, 120);
-
+    
     wristMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
         .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
@@ -140,6 +143,13 @@ public class ArmSubsystem extends SubsystemBase {
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
         .smartCurrentLimit(20, 20, 120);
+   
+    //XXX: Should we use soft limits for the elbow? I've put a template here in case we decide to
+    // elbowMotorConfig.softLimit
+    //   .forwardSoftLimit(max)
+    //   .forwardSoftLimitEnabled(true)
+    //   .reverseSoftLimit(min)
+    //   .reverseSoftLimitEnabled(true);
 
     elbowMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Elbow.kMotorOffset)
@@ -229,7 +239,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public ArmPosition getArmPosition() {
-    return new ArmPosition(getArmHeight(), getElbowMotorPosition(), getWristMotorPosition());
+    return new ArmPosition(getPulleyHeight(), getElbowMotorPosition(), getWristMotorPosition());
   }
 
   // Sets arm height to the ground
@@ -288,7 +298,7 @@ public class ArmSubsystem extends SubsystemBase {
     goToWristMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.wrist);
   }
 
-  public static double getArmHeight() {
+  public static double getPulleyHeight() {
     return ARM_HEIGHT;
   }
 
@@ -309,7 +319,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double pulleyMotorFF() {
-    if (getArmHeight() <= Constants.ArmSubsystem.Pulley.kStageTwoPulleyPosition) {
+    if (getPulleyHeight() <= Constants.ArmSubsystem.Pulley.kStageTwoPulleyPosition) {
       return Constants.ArmSubsystem.Pulley.kStageOneFF;
     } else {
       return Constants.ArmSubsystem.Pulley.kStageTwoFF;
