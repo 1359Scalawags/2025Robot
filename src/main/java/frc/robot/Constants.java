@@ -133,8 +133,8 @@ public final class Constants {
       public static final double kMaxLimit = 330;
       public static final double kMinLimit = 195;
       public static final double kSlewRate = 10;
-      public static final double kGravityFF = 0;
-      public static final double kMINGravityFF = 0.0025;
+      public static final double kGravityFF = 0.0025;
+      public static final double kMINGravityFF = 0.00001;
       public static final double kHorizontalAngle = 232.0;
     }
 
@@ -152,17 +152,15 @@ public final class Constants {
       public static final int kMotorID = 18;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMaxLimit = 0;
+      public static final double kMaxLimit = 0; //good
       public static final double kMinLimit = -17.38;
       public static final double kSlewRate = 10;
-      public static final double kCloseClaw = 0;
-      public static final double kOpenClaw = 0;
+      public static final double kCloseClaw = 0;//good
+      public static final double kOpenClaw = -17.38;//good
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
       public static final double kHomingVelocity = 0.1;
     }
-
-    public static final double armGoToTolerance = 0;
   }
 
   public static class Vision { 
