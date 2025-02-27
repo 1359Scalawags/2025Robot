@@ -53,7 +53,7 @@ public class SendableCANSparkMax extends SparkMax implements Sendable {
     }
 
     public void setReferencePosition(SlewRateLimiter limiter, double position){
-        this.closedLoopController.setReference(limiter.calculate(position), ControlType.kPosition);
+        this.getClosedLoopController().setReference(limiter.calculate(position), ControlType.kPosition);
     }
 
     
