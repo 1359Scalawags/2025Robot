@@ -334,6 +334,8 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
     // Limit switch for pully?
 
+    double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+
     if (pulleyMotor.get() < 0) {
       if (homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
         pulleyMotor.set(0);
@@ -369,14 +371,17 @@ public class ArmSubsystem extends SubsystemBase {
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
 
         //XXX:WRIST: prevent wrist from going outside valid bounds
-        //double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax())
-        //wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
+        wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
         pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
 
         ARM_HEIGHT = getCalculatedHeight();
 
+      }
+    } else {
+      if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
+        wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
       }
     }
   }
