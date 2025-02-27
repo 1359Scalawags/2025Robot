@@ -101,13 +101,13 @@ public final class Constants {
     //Can ID's for Arm are from 16 to 21
 
     public static class Positions {
-      public static final ArmPosition kHome = new ArmPosition(0,0,0);
-      public static final ArmPosition kHumanStation = new ArmPosition(0,0,0);
-      public static final ArmPosition kGround = new ArmPosition(0,0,0);
-      public static final ArmPosition kLevel1 = new ArmPosition(0,0,0);
-      public static final ArmPosition kLevel2 = new ArmPosition(0,0,0);
-      public static final ArmPosition klevel3 = new ArmPosition(0,0,0);
-      public static final ArmPosition klevel4 = new ArmPosition(0,0,0);
+      public static final ArmPosition kHome = new ArmPosition(1,200,45);
+      public static final ArmPosition kHumanStation = new ArmPosition(1,200,45);
+      public static final ArmPosition kGround = new ArmPosition(1,200,45);
+      public static final ArmPosition kLevel1 = new ArmPosition(1,200,45);
+      public static final ArmPosition kLevel2 = new ArmPosition(1,200,45);
+      public static final ArmPosition klevel3 = new ArmPosition(1,200,45);
+      public static final ArmPosition klevel4 = new ArmPosition(1,200,45);
     }
 
     public static class Pulley{
@@ -117,7 +117,7 @@ public final class Constants {
       public static final double kMaxLimit = 52;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 0;
-      public static final double kHomingVelocity = 0;
+      public static final double kHomingVelocity = .1;
       public static final double kStageOneFF = 0.055;
       public static final double kStageTwoFF = 0.06; //TODO: find the stage two FF
       public static final double kStageTwoPulleyPosition = 25; 
@@ -135,15 +135,17 @@ public final class Constants {
       public static final double kSlewRate = 0;
       public static final double kGravityFF = 0;
       public static final double kMINGravityFF = 0.0025;
+      public static final double kHorizontalAngle = 232.0;
     }
 
     public static class Wrist {
       public static final int kMotorID = 16;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMaxLimit = 0;
-      public static final double kMinLimit = 0;
+      public static final double kMaxLimit = 0; // measure when elbow is horizontal
+      public static final double kMinLimit = 0; // measure when elbow is horizontal
       public static final double kSlewRate = 0;
+      public static final double kHorizontalAngle = 90; //XXX: This is just a guess...must fix
     }
 
     public static class Claw {
@@ -157,6 +159,7 @@ public final class Constants {
       public static final double kOpenClaw = 0;
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
+      public static final double kHomingVelocity = 0.1;
     }
 
     public static final double armGoToTolerance = 0;
