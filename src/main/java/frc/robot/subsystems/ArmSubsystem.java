@@ -341,6 +341,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
     // Limit switch for pully?
 
+    ARM_HEIGHT = getCalculatedHeight();
     double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
 
     if (pulleyMotor.get() < 0) {
@@ -383,9 +384,6 @@ public class ArmSubsystem extends SubsystemBase {
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
         pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
-
-        ARM_HEIGHT = getCalculatedHeight();
-
       }
     } else {
       if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {

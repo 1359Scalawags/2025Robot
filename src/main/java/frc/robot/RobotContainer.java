@@ -8,6 +8,7 @@ import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ArmCommands.InitilizeArm;
+import frc.robot.commands.ArmCommands.MovePulleyWithJoystick;
 import frc.robot.commands.ArmCommands.closeClawCommand;
 import frc.robot.commands.ArmCommands.goToHeightHumanStation;
 import frc.robot.commands.ArmCommands.goToHeightLevelFour;
@@ -105,7 +106,12 @@ public class RobotContainer {
     m_ClimberSubsystem.setDefaultCommand(
       new MoveClimber(m_ClimberSubsystem, 
       this::assistantGetY));
+
+    m_ArmSubsystem.setDefaultCommand(new MovePulleyWithJoystick(m_ArmSubsystem, this::assistantGetY));
+
       }
+
+      
 
       //TODO: Are deadbands implemented for joysticks?
       // Configure remote movements
@@ -230,6 +236,7 @@ public class RobotContainer {
   m_DriverJoystick.button(8).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.SE));
   m_DriverJoystick.button(11).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CW));
   m_DriverJoystick.button(5).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CCW));
+
   }
 
   public Command lockClimberSubsystemWhenDisabled() {
