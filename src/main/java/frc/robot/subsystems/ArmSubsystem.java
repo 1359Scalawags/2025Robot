@@ -146,7 +146,7 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Elbow.kConversionFactor);
 
     elbowMotorConfig.closedLoop
-        .pid(0.0125, 0.000015, 0.025)// (0.025, 0.00003, 0.05)
+        .pid(0.0125/2, 0.000015, 0.025)// (0.025, 0.00003, 0.05)
         .iZone(2)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
@@ -162,7 +162,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(70, 30, 120);
+        .smartCurrentLimit(20, 20, 120);
 
     pulleyMotorConfig.encoder
         .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
