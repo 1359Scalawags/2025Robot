@@ -28,12 +28,12 @@ public class closeClawCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_subsystem.closeClaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.closeClaw();
 }
 
   // Called once the command ends or is interrupted.

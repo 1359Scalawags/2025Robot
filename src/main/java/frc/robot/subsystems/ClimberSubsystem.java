@@ -65,7 +65,6 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
     public void initializeClimber() {
-      if (isInitialized == false) {
         climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
         lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
         unLatchCLimber();
@@ -82,7 +81,6 @@ public class ClimberSubsystem extends SubsystemBase{
         lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
 
         isInitialized = true;
-      }
     }
 
         //Run in robots disabled init.
