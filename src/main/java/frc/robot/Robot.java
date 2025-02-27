@@ -45,6 +45,9 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
     //TODO: Enable this when arm is enabled
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.homeTheClaw());
+    CommandScheduler.getInstance().schedule(m_robotContainer.homeThePulley());
+
   }
 
   /**

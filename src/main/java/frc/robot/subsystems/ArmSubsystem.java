@@ -88,24 +88,24 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotor.setReferencePosition(wristLimiter, safeWritsTarget);
     clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
 
-    if (this.homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
-      pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
-      pulleyMotor.getEncoder().setPosition(0);
-      pulleyLimiter.reset(0);
-      pulleyInitialized = true;
-    } else {
-      pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomingVelocity, ControlType.kVelocity);
-    }
+    // if (this.homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
+    //   pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
+    //   pulleyMotor.getEncoder().setPosition(0);
+    //   pulleyLimiter.reset(0);
+    //   pulleyInitialized = true;
+    // } else {
+    //   pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomingVelocity, ControlType.kVelocity);
+    // }
 
-    if(this.clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState) {
-       clawMotorTarget = Constants.ArmSubsystem.Claw.kCloseClaw;
-       clawMotor.getEncoder().setPosition(0);
-       clawLimiter.reset(0);
-       clawInitialized = true;
-    } else {
-      clawMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Claw.kHomingVelocity, ControlType.kVelocity);
-    }
-
+    // if(this.clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState) {
+    //    clawMotorTarget = Constants.ArmSubsystem.Claw.kCloseClaw;
+    //    clawMotor.getEncoder().setPosition(0);
+    //    clawLimiter.reset(0);
+    //    clawInitialized = true;
+    // } else {
+    //   clawMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Claw.kHomingVelocity, ControlType.kVelocity);
+    // }
+    initialized = true;
   }
 
   private void configureWristMotor() {
@@ -296,6 +296,18 @@ public class ArmSubsystem extends SubsystemBase {
     return elbowMotor.getAbsoluteEncoder().getPosition();
   }
 
+  public double getClawMotorPosition() {
+    return clawMotor.getEncoder().getPosition();
+  }
+
+  public boolean isClawAtHome() {
+    return clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState;
+  }
+
+  public boolean isPulleyAtHome() {
+    return homeLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState;
+  }
+
   public double pulleyMotorFF() {
     if (getArmHeight() <= Constants.ArmSubsystem.Pulley.kStageTwoPulleyPosition) {
       return Constants.ArmSubsystem.Pulley.kStageOneFF;
@@ -367,13 +379,12 @@ public class ArmSubsystem extends SubsystemBase {
         clawInitialized = true;
       }
     }
-    if(pulleyInitialized && clawInitialized) {
-      initialized = true;
-    }
+
 
     if (initialized) {
       // run motors
-      if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
+      // if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
+      if (RobotState.isEnabled()) {
         // This method will be called once per scheduler run
         //elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
             //ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change

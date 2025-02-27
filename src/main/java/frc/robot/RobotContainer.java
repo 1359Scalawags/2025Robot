@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ArmCommands.HomeTheClaw;
+import frc.robot.commands.ArmCommands.HomeThePulley;
 import frc.robot.commands.ArmCommands.InitilizeArm;
 import frc.robot.commands.ArmCommands.MovePulleyWithJoystick;
 import frc.robot.commands.ArmCommands.closeClawCommand;
@@ -251,6 +253,16 @@ public class RobotContainer {
   public Command intializeTheArm() {
     return new InitilizeArm(m_ArmSubsystem);
   }
+
+  public Command homeTheClaw() {
+    return new HomeTheClaw(m_ArmSubsystem);
+  }
+
+  public Command homeThePulley() {
+    return new HomeThePulley(m_ArmSubsystem);
+  }
+
+
 
   public Command disabledIntializedClimber() {
     return new DeInitilizeClimber(m_ClimberSubsystem);
