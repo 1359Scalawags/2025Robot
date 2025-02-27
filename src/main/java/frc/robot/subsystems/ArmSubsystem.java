@@ -168,8 +168,8 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
 
     pulleyMotorConfig.closedLoop // TODO: do we want a second slot for the upper part of the Pulley?
-        .pid(0.0225f, 0.000005f, 0.0225, ClosedLoopSlot.kSlot0)// .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot0)
-        .iZone(2, ClosedLoopSlot.kSlot0);
+        .pid(0.0225f, 0.000005f, 0.0225)// .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot0)
+        .iZone(2);
 
     // .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot1)
     // .iZone(2, ClosedLoopSlot.kSlot1);
@@ -374,8 +374,8 @@ public class ArmSubsystem extends SubsystemBase {
         //elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
             //ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
             
-        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget),
-            ControlType.kPosition, ClosedLoopSlot.kSlot0, Constants.ArmSubsystem.Pulley.kStageOneFF / 2);
+        //pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget),
+            //ControlType.kPosition, ClosedLoopSlot.kSlot0, Constants.ArmSubsystem.Pulley.kStageOneFF / 2);
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
 
         //XXX:WRIST: prevent wrist from going outside valid bounds
