@@ -76,7 +76,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
     elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
-    wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
+
+    double safeWritsTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+    wristMotor.setReferencePosition(wristLimiter, safeWritsTarget);
     clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
 
     if (this.homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
@@ -316,15 +318,15 @@ public class ArmSubsystem extends SubsystemBase {
   //   return wristAngle;
   // }
 
-  // public double getAbsoluteWristAngleMax() {
-  //   double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
-  //   return Constants.ArmSubsystem.Wrist.kMaxLimit + elbowDiff;
-  // }
+  public double getAbsoluteWristAngleMax() {
+    double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
+    return Constants.ArmSubsystem.Wrist.kMaxLimit + elbowDiff;
+  }
 
-  // public double getAbsoluteWristAngleMin() {
-  //   double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
-  //   return Constants.ArmSubsystem.Wrist.kMinLimit + elbowDiff;
-  // }
+  public double getAbsoluteWristAngleMin() {
+    double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
+    return Constants.ArmSubsystem.Wrist.kMinLimit + elbowDiff;
+  }
 
 
   // TODO: moving slow when within the range of the limit switch?

@@ -84,11 +84,11 @@ public final class Constants {
     public static class PositionMotor {
       public static final int kMotorID = 10;
       public static final double kMaxAngle = 275.0;//0.037*360;
-      public static final double kMinAngle = 150.0;//0.457*360;
+      public static final double kMinAngle = 143.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 245.0; // 0.185*360;
-      public static final double kHomeAngle = 160.0; //0.442*360;
+      public static final double kHomeAngle = 150.0; //0.442*360;
       public static final double kLockingPosition = 177.8;
       public static final double kLockedPosition = 187.5;
 
@@ -116,7 +116,7 @@ public final class Constants {
       public static final double kConversionFactor = 0.13402;
       public static final double kMaxLimit = 52;
       public static final double kMinLimit = 0;
-      public static final double kSlewRate = 0;
+      public static final double kSlewRate = 5;
       public static final double kHomingVelocity = .1;
       public static final double kStageOneFF = 0.055;
       public static final double kStageTwoFF = 0.06; //TODO: find the stage two FF
@@ -144,7 +144,7 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 0; // measure when elbow is horizontal
       public static final double kMinLimit = 0; // measure when elbow is horizontal
-      public static final double kSlewRate = 0;
+      public static final double kSlewRate = 10;
       public static final double kHorizontalAngle = 90; //XXX: This is just a guess...must fix
     }
 
@@ -154,7 +154,7 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 0;
       public static final double kMinLimit = 0;
-      public static final double kSlewRate = 0;
+      public static final double kSlewRate = 10;
       public static final double kCloseClaw = 0;
       public static final double kOpenClaw = 0;
       public static final boolean kLimitSwitchPressedState = false;
