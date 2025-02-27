@@ -58,7 +58,7 @@ public final class Constants {
 
       //Limits 
       //TODO; make sure these are right
-
+    public static final double kIntializeDelay = 0.5;
 
     public static class LatchServo {
       public static final int kServoID = 0;
@@ -96,11 +96,12 @@ public final class Constants {
       public static final double kSlewRate = 30.0;
     }
 
-    public static final double kIntializeDelay = 0.5;
+
   }  
 
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
+    public static final double kIntializeDelay = 0.5;
 
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,200,45);
@@ -126,6 +127,7 @@ public final class Constants {
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kHomeLimitSwitchID = 0;
       public static final double kLimitSwitchPosition = 1;
+      public static final double kTolerance = 0.5;
     }
 
     public static class Elbow {
@@ -138,6 +140,7 @@ public final class Constants {
       public static final double kGravityFF = 0.0025;
       public static final double kMINGravityFF = 0.00001;
       public static final double kHorizontalAngle = 232.0;
+      public static final double kTolerance = 1.0;
     }
 
     public static class Wrist {
@@ -148,6 +151,7 @@ public final class Constants {
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
       public static final double kSlewRate = 10;
       public static final double kHorizontalAngle = 90; //XXX: This is just a guess...must fix
+    public static final double kTolerance = 2.0;
     }
 
     public static class Claw {
@@ -164,7 +168,7 @@ public final class Constants {
       public static final double kHomingVelocity = 300;
     }
 
-    public static final double kIntializeDelay = 0.5;
+
   }
 
   public static class Vision { 

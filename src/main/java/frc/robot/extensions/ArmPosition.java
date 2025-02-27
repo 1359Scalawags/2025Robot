@@ -1,6 +1,7 @@
 package frc.robot.extensions;
 
 import edu.wpi.first.math.MathUtil;
+import frc.robot.Constants;
 
 public class ArmPosition {
 
@@ -15,14 +16,13 @@ public class ArmPosition {
     }
         //TODO: tune these tolerances?
     public boolean isNear(ArmPosition position){
-        if(MathUtil.isNear(this.pulley, position.pulley, 5) && 
-            MathUtil.isNear(this.pulley, position.pulley, 5)&&
-            MathUtil.isNear(this.pulley, position.pulley, 5)){
+        if(MathUtil.isNear(this.pulley, position.pulley, Constants.ArmSubsystem.Pulley.kTolerance) && 
+            MathUtil.isNear(this.elbow, position.elbow, Constants.ArmSubsystem.Elbow.kTolerance)&&
+            MathUtil.isNear(this.wrist, position.wrist, Constants.ArmSubsystem.Wrist.kTolerance)){
             return true;
         } else {
             return false;
         }
-
     }
 
 
