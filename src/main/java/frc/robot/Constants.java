@@ -130,8 +130,8 @@ public final class Constants {
       public static final int kMotorID = 19;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMaxLimit = 0;
-      public static final double kMinLimit = 0;
+      public static final double kMaxLimit = 330;
+      public static final double kMinLimit = 195;
       public static final double kSlewRate = 0;
       public static final double kGravityFF = 0;
       public static final double kMINGravityFF = 0.0025;
@@ -142,8 +142,8 @@ public final class Constants {
       public static final int kMotorID = 16;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMaxLimit = 0; // measure when elbow is horizontal
-      public static final double kMinLimit = 0; // measure when elbow is horizontal
+      public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
+      public static final double kMinLimit = 147.0; // measure when elbow is horizontal
       public static final double kSlewRate = 10;
       public static final double kHorizontalAngle = 90; //XXX: This is just a guess...must fix
     }
@@ -153,7 +153,7 @@ public final class Constants {
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 0;
-      public static final double kMinLimit = 0;
+      public static final double kMinLimit = -17.38;
       public static final double kSlewRate = 10;
       public static final double kCloseClaw = 0;
       public static final double kOpenClaw = 0;
