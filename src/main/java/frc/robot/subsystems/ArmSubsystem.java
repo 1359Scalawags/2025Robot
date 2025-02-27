@@ -66,8 +66,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void initializeArm() {
     pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
-    elbowMotorTarget = elbowMotor.getEncoder().getPosition();
-    wristMotorTarget = wristMotor.getEncoder().getPosition();
+    elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
+    wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
     System.out.println("Reported Positions at Intialization: ");
@@ -293,7 +293,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getElbowMotorPosition() {
-    return elbowMotor.getEncoder().getPosition();
+    return elbowMotor.getAbsoluteEncoder().getPosition();
   }
 
   public double pulleyMotorFF() {
@@ -305,7 +305,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getWristMotorPosition() {
-    return wristMotor.getEncoder().getPosition();
+    return wristMotor.getAbsoluteEncoder().getPosition();
   }
 
   public double getCalculatedHeight() {
