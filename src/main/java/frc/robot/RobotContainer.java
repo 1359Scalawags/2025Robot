@@ -249,18 +249,22 @@ public class RobotContainer {
     return new InitilizeClimber(m_ClimberSubsystem);
   }
 
- // TODO: Uncomment when testing arm
+
   public Command intializeTheArm() {
-    return new InitilizeArm(m_ArmSubsystem);
+    Command initializeArm = new InitilizeArm(m_ArmSubsystem);
+    Command homeClaw = new HomeTheClaw(m_ArmSubsystem);
+    Command homePulley = new HomeThePulley(m_ArmSubsystem);
+
+    return initializeArm.andThen(homeClaw.alongWith(homePulley));
   }
 
-  public Command homeTheClaw() {
-    return new HomeTheClaw(m_ArmSubsystem);
-  }
+  // public Command homeTheClaw() {
+  //   return new HomeTheClaw(m_ArmSubsystem);
+  // }
 
-  public Command homeThePulley() {
-    return new HomeThePulley(m_ArmSubsystem);
-  }
+  // public Command homeThePulley() {
+  //   return new HomeThePulley(m_ArmSubsystem);
+  // }
 
 
 
