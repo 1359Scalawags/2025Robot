@@ -116,7 +116,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(70, 30, 120);
+        .smartCurrentLimit(20, 20, 120);
 
     wristMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
@@ -139,7 +139,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(70, 30, 120);
+        .smartCurrentLimit(20, 20, 120);
 
     elbowMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Elbow.kMotorOffset)
@@ -186,7 +186,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(70, 30, 120);
+        .smartCurrentLimit(20, 20, 120);
 
     clawMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Claw.kMotorOffset)
