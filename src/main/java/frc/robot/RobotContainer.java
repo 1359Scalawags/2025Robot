@@ -109,9 +109,10 @@ public class RobotContainer {
       new MoveClimber(m_ClimberSubsystem, 
       this::assistantGetY));
 
-    m_ArmSubsystem.setDefaultCommand(new MovePulleyWithJoystick(m_ArmSubsystem, this::assistantGetY));
+      // This is only for testing the pulley motor directly. It will interact badly with the climber when it is unlocked
+      // m_ArmSubsystem.setDefaultCommand(new MovePulleyWithJoystick(m_ArmSubsystem, this::assistantGetY));
 
-      }
+    }
 
       
 
