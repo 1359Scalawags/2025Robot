@@ -61,6 +61,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
     Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
+    Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
   }
 
   public void initializeArm() {
