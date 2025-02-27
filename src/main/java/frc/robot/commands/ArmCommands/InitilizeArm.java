@@ -4,17 +4,22 @@
 
 package frc.robot.commands.ArmCommands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
 public class InitilizeArm extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
+  private Timer waitTimer;
+  private boolean hasfinished = false;
 
 
   public InitilizeArm(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
+    waitTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -22,16 +27,23 @@ public class InitilizeArm extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.initializeArm();
+    waitTimer.reset();
+    waitTimer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(waitTimer.get() > Constants.ArmSubsystem.kIntializeDelay) {
+      m_subsystem.initializeArm();   
+      hasfinished = true;   
+    }
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return hasfinished;
   }
 }

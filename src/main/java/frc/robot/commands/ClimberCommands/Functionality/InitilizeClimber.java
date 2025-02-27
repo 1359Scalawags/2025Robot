@@ -18,6 +18,7 @@ public class InitilizeClimber extends Command {
 
   public InitilizeClimber(ClimberSubsystem subsystem) {
     m_subsystem = subsystem;
+    waitTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
