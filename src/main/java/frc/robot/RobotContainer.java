@@ -265,7 +265,7 @@ public class RobotContainer {
     Command homeClaw = new HomeTheClaw(m_ArmSubsystem);
     Command homePulley = new HomeThePulley(m_ArmSubsystem);
 
-    return initializeArm.andThen(homeClaw.alongWith(homePulley));
+    return initializeArm.andThen(homeClaw.andThen(homePulley));
   }
 
   // public Command homeTheClaw() {
