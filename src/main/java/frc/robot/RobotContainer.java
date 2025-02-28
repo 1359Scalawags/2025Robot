@@ -206,22 +206,23 @@ public class RobotContainer {
       //TODO: Map these buttons to make it intuitive.
     m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(13).onTrue(new LockedPosition(m_ClimberSubsystem));
-    m_AssistantJoystick.button(14).onTrue(new RetractClimber(m_ClimberSubsystem));
+    
+    //m_AssistantJoystick.button(14).onTrue(new RetractClimber(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(12).onTrue(new LockClimberBar(m_ClimberSubsystem));
-    m_AssistantJoystick.button(15).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
+    m_AssistantJoystick.button(15).onTrue(new LockClimberBar(m_ClimberSubsystem));
+    m_AssistantJoystick.button(4).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(4).onTrue(new LatchServo(m_ClimberSubsystem));
-    m_AssistantJoystick.button(2).onTrue(new UnLatchServo(m_ClimberSubsystem));
+    m_AssistantJoystick.button(12).onTrue(new LatchServo(m_ClimberSubsystem));
+    m_AssistantJoystick.button(14).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(2).onTrue(new LockingPosition(m_ClimberSubsystem));
+    m_AssistantJoystick.button(13).onTrue(new LockingPosition(m_ClimberSubsystem));
+    m_AssistantJoystick.button(11).onTrue(new LockedPosition(m_ClimberSubsystem));
 
-  //TODO: Make a sequential command to lock the arm motor.
+  // //TODO: Make a sequential command to lock the arm motor.
 
-    // m_AssistantJoystick.button(0).onTrue(Commands.sequence(new LockingPosition(m_ClimberSubsystem), 
-    //   new LatchServo(m_ClimberSubsystem),
-    //   new LockedPosition(m_ClimberSubsystem)));
+  //   m_AssistantJoystick.button().onTrue(Commands.sequence(new LockingPosition(m_ClimberSubsystem),
+  //     new LatchServo(m_ClimberSubsystem),
+  //     new LockedPosition(m_ClimberSubsystem)));
 
 
     m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
