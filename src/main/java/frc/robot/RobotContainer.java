@@ -54,6 +54,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -213,6 +214,12 @@ public class RobotContainer {
     m_AssistantJoystick.button(2).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
     m_AssistantJoystick.button(2).onTrue(new LockingPosition(m_ClimberSubsystem));
+
+  //TODO: Make a sequential command to lock the arm motor.
+
+    // m_AssistantJoystick.button(0).onTrue(Commands.sequence(new LockingPosition(m_ClimberSubsystem), 
+    //   new LatchServo(m_ClimberSubsystem),
+    //   new LockedPosition(m_ClimberSubsystem)));
 
 
     m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
