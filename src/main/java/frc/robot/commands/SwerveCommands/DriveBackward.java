@@ -38,7 +38,7 @@ public class DriveBackward extends Command {
         //Translation2d translation, double rotation, boolean fieldRelative
         // +X is forward, +Y is left
         swerve.drive(
-            new Translation2d(-0.5, 0.0),
+            new Translation2d(-1.0, 0.0),
             0.0,
             false);
 
