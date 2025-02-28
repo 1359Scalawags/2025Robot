@@ -33,6 +33,7 @@ public class ArmSubsystem extends SubsystemBase {
   private boolean clawInitialized = false;
   private boolean pulleyInitialized = false;
   private boolean initialized = false;
+  private boolean wristError = true;
 
   private GravityAssistedFeedForward elbowFF;
 
@@ -68,6 +69,12 @@ public class ArmSubsystem extends SubsystemBase {
     pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
     elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
     wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
+    if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
+      wristError = true;
+      System.out.println("------WRIST ERROR---------");
+    } else {
+      wristError = false;
+    }
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
     System.out.println("Reported Positions at Intialization: ");
@@ -84,12 +91,12 @@ public class ArmSubsystem extends SubsystemBase {
     wristLimiter.reset(wristMotorTarget);
     clawLimiter.reset(clawMotorTarget);
 
-    pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
-    elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
+    // pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+    // elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
 
-    double safeWritsTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
-    wristMotor.setReferencePosition(wristLimiter, safeWritsTarget);
-    clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
+    // double safeWritsTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+    // wristMotor.setReferencePosition(wristLimiter, safeWritsTarget);
+    // clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
 
     // !!Homing moved to separate commands
     // if (this.homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
@@ -366,10 +373,6 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
 
     ARM_HEIGHT = getCalculatedHeight();
-
-    // Limit switch for pully?
-
-    ARM_HEIGHT = getCalculatedHeight();
    
 
     if (pulleyMotor.get() < 0) {
@@ -409,7 +412,11 @@ public class ArmSubsystem extends SubsystemBase {
         elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
 
         //XXX:WRIST: prevent wrist from going outside valid bounds
-        wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
+
+        if (wristError == false) {
+          wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
+        }
+        
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
         //pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);

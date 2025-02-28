@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.LimelightHelpers;
@@ -13,12 +17,27 @@ public class VisionSubsystem extends SubsystemBase {
 
     double txnc = LimelightHelpers.getTXNC(Constants.Vision.klimelightOne);  // Horizontal offset from principal pixel/point to target in degrees
     double tync = LimelightHelpers.getTYNC(Constants.Vision.klimelightOne);  // Vertical  offset from principal pixel/point to target in degrees
+    // HttpCamera Limelight2 = new HttpCamera("Climber Camera", "http://10.13.59.15:5800", HttpCameraKind.kMJPGStreamer);
+    // HttpCamera Limelight3G = new HttpCamera("Arm Camera", "", HttpCameraKind.kMJPGStreamer);
+
 
     public VisionSubsystem() {
+        // CameraServer.addCamera
+        // CameraServer.putVideo(Limelight2);
+        // CameraServer.getInstance().addCamera(Limelight2);
+        // Shuffleboard.getTab("Camera").add(Limelight2);
+        // CameraServer.startAutomaticCapture(Limelight2);
+        // Shuffleboard.getTab("Camera").add(Limelight2);
+        // try {
+        //     Shuffleboard.getTab("Camera").add(Limelight2);
+        // } catch (Exception ex) {
+        //     System.out.println("Camera failed to initialize.");
+        // }
 
     }
 
     public void periodic() {
+
         // This method will be called once per scheduler run
 
 
