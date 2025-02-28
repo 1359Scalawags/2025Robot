@@ -98,7 +98,7 @@ public final class Constants {
 
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
-    public static final double kIntializeDelay = 0.5;
+    public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,200,215);
@@ -125,7 +125,7 @@ public final class Constants {
       public static final int kHomeLimitSwitchID = 0;
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
-      public static final double kHomingPositionIncrement = -0.25 * 0.020; // homing loop time is 20ms
+      public static final double kHomingPositionIncrement = -1.0 * 0.020; // homing loop time is 20ms
     }
 
     public static class Elbow {

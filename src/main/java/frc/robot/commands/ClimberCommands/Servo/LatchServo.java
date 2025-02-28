@@ -14,6 +14,7 @@ public class LatchServo extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
   private Timer safetyTimer;
+  private boolean hasFinished = false;
 
   /**
    * Creates a new ExampleCommand.
@@ -33,17 +34,17 @@ public class LatchServo extends Command {
     safetyTimer.reset();
     safetyTimer.start();
     
-    if (MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kLockedPosition, m_subsystem.getClimberPostion(), 3)) {
-      m_subsystem.latchCLimber();    
-    } else {
-      System.out.println("--------  Climber Not in latch position --------");
-    }
+
       
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kLockingPosition, m_subsystem.getClimberPostion(), 5)) {
+      m_subsystem.latchCLimber();   
+      hasFinished = true; 
+    }
 
   }
 
@@ -54,17 +55,11 @@ public class LatchServo extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
     // stop a stuck servo to avoid burnout
     if(safetyTimer.get() > Constants.ClimberSubsystem.LatchServo.kNaxActuateTime) {
       m_subsystem.setServoValue(m_subsystem.getServoValue());
       return true;
-    }
-      //TODO: does getServoValue return anything?
-    if(MathUtil.isNear(Constants.ClimberSubsystem.LatchServo.latchedValue, m_subsystem.getServoValue(), 5)){
-      return true; 
-    } else {
-      return false;
-    }
+    } 
+    return hasFinished;
   }
 }

@@ -71,10 +71,13 @@ public class ArmSubsystem extends SubsystemBase {
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
     System.out.println("Reported Positions at Intialization: ");
-    System.out.println("  Pulley: " + pulleyMotorTarget);
-    System.out.println("  Elbow: " + elbowMotorTarget);
+    // System.out.println("  Pulley: " + pulleyMotorTarget);
+    // System.out.println("  Elbow: " + elbowMotorTarget);
     System.out.println("  Wrist: " + wristMotorTarget);
     System.out.println("  Claw: " + clawMotorTarget);
+    System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
+    System.out.println("  calculated writst min: " + getAbsoluteWristAngleMin());
+
 
     pulleyLimiter.reset(pulleyMotorTarget);
     elbowLimiter.reset(elbowMotorTarget);
@@ -126,7 +129,7 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
 
     wristMotorConfig.closedLoop
-        .pid(0.003, 0.0000003, 0.003)// (0.006, 0.0000006, 0.006)
+        .pid(0.003, 0.0000003/2, 0.003)// (0.006, 0.0000006, 0.006)
         .iZone(2)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
@@ -229,8 +232,8 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void goToWristMotorPosition(double wristMotorPosition) {
-    wristMotorTarget = MathUtil.clamp(wristMotorPosition, Constants.ArmSubsystem.Wrist.kMinLimit,
-        Constants.ArmSubsystem.Wrist.kMaxLimit);
+    wristMotorTarget = MathUtil.clamp(wristMotorPosition, getAbsoluteWristAngleMin(),
+    getAbsoluteWristAngleMax());
   }
 
   public void goToClawMotorPosition(double clawMotorPosition) {
@@ -367,7 +370,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Limit switch for pully?
 
     ARM_HEIGHT = getCalculatedHeight();
-    double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+   
 
     if (pulleyMotor.get() < 0) {
       if (homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
@@ -391,6 +394,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
 
+    double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+
     if (initialized) {
       // run motors
       // if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
@@ -407,8 +412,11 @@ public class ArmSubsystem extends SubsystemBase {
         wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
-        pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
-        System.out.println("message AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH??");
+        //pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
+
+        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition);
+        
+        //System.out.println("message AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH??");
 
 
       }

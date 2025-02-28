@@ -44,6 +44,7 @@ public class HomeThePulley extends Command {
   public boolean isFinished() {
     if(m_subsystem.isPulleyAtHome()) {
       return true;
+      
     }
     return false;
   }
