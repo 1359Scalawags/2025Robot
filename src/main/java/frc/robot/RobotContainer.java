@@ -87,6 +87,10 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();
     pipelineChooser = new SendableChooser<Command>();
 
+    autoChooser.addOption("Leave Commuinity(Blue)", getAutonomousCommand("Leave Communtiy (Blue)"));
+    autoChooser.addOption("Leave Commuinity(Red)", getAutonomousCommand("Leave Community (red)"));
+    autoChooser.addOption("Leave Commuinity(Center)", getAutonomousCommand("Leave Community(Center)"));
+
     SmartDashboard.putData("Pipeline Chooser", pipelineChooser);
     SmartDashboard.putData("Auto Chooser ", autoChooser);
 
@@ -142,19 +146,17 @@ public class RobotContainer {
     }
 
 
-
-
       //Which one of these did i use?
-//   public Command getAutonomousCommandForChooser() {
-//     return m_SwereveSubsystem.getAutonomousCommand(autoChooser.getSelected().getName());
-//   }
+  public Command getAutonomousCommandForChooser() {
+    return m_SwerveSubsystem.getAutonomousCommand(autoChooser.getSelected().getName());
+  }
 
-// // Do i need .getName()?
+// Do i need .getName()?
 
-//     public Command getAutonomousCommand(String exampleAuto){
-//     //return m_SwerveSubsystem.getAutonomousCommand(autoChooser.getSelected().getName());
-//     return m_SwereveSubsystem.getAutonomousCommand(exampleAuto);
-//   }
+    public Command getAutonomousCommand(String exampleAuto){
+    //return m_SwerveSubsystem.getAutonomousCommand(autoChooser.getSelected().getName());
+    return m_SwerveSubsystem.getAutonomousCommand(exampleAuto);
+  }
 
 
   /**
