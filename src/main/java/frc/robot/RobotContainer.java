@@ -265,6 +265,7 @@ public class RobotContainer {
   }
 
   public Command intializeTheClimber() {
+    //TODO: should this command run when disabled?
     return new InitilizeClimber(m_ClimberSubsystem);
   }
 
