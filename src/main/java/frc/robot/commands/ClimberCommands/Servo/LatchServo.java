@@ -41,10 +41,13 @@ public class LatchServo extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kLockingPosition, m_subsystem.getClimberPostion(), 5)) {
-      m_subsystem.latchCLimber();   
-      hasFinished = true; 
+    if(m_subsystem.isClimberCommandLocked() == false) {
+      if (MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kLockingPosition, m_subsystem.getClimberPostion(), 5)) {
+        m_subsystem.latchCLimber();   
+        hasFinished = true; 
+      }      
     }
+
 
   }
 
@@ -55,6 +58,9 @@ public class LatchServo extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(m_subsystem.isClimberCommandLocked() == true) {
+      return true;
+    }
     // stop a stuck servo to avoid burnout
     if(safetyTimer.get() > Constants.ClimberSubsystem.LatchServo.kNaxActuateTime) {
       m_subsystem.setServoValue(m_subsystem.getServoValue());

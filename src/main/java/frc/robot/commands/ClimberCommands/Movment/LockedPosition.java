@@ -28,7 +28,10 @@ public class LockedPosition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.climberLockedPosition();
+    if(m_subsystem.isClimberCommandLocked() == false) {
+      m_subsystem.climberLockedPosition();
+    }
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,6 +47,9 @@ public class LockedPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() { //TODO: maybe tune the tolerance.
+    if(m_subsystem.isClimberCommandLocked() == true) {
+      return true;
+    }
     if(MathUtil.isNear(Constants.ClimberSubsystem.PositionMotor.kLockedPosition, m_subsystem.getClimberPostion(), 2)){
     return true; 
     } else {
