@@ -245,10 +245,6 @@ public class ClimberSubsystem extends SubsystemBase{
       return moveClimberCommandLock;
     }
 
-    public boolean isClimberLocked() {
-      return moveClimberCommandLock;
-    }
-
     public boolean unlockClimberSubsystem() {
       moveClimberCommandLock = false;
       return moveClimberCommandLock;

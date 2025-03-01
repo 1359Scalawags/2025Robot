@@ -55,6 +55,8 @@ public class AbsoluteFieldDrive extends Command {
     public void execute() {
         double modvX = vX.getAsDouble();
         double modvY = vY.getAsDouble();
+
+
         if(Math.abs(vX.getAsDouble()) < Constants.SwerveSubsystem.kTeleopDeadzone && Math.abs(vY.getAsDouble()) < Constants.SwerveSubsystem.kTeleopDeadzone) {
             modvX = 0;
             modvY = 0;
@@ -64,6 +66,13 @@ public class AbsoluteFieldDrive extends Command {
         double xVelocity = (modvX * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
         double yVelocity = (modvY * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
         double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * Constants.SwerveSubsystem.kAngleSpeedMultiplier * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
+
+        // TODO: slow the speed down if the arm is up in the air
+        // for example:
+        // xVelocity = xVelocity * ArmSubsystem.getSwerveSpeedMultipler()
+        // or something explicitly defined like this
+        // xVelocity = xVelocity * (100 - ArmSystem.getPulleyHeight()) / 100)
+
         if(swerve.isReversed()) {
             // if(feildRelitive.getAsBoolean()) {
                 //if field relative, just need to flip forward backward
