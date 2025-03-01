@@ -59,6 +59,7 @@ public class ClimberSubsystem extends SubsystemBase{
       Shuffleboard.getTab("climber").add("Latching Servo", latchingServo); 
       Shuffleboard.getTab("climber").add("Locking Bar", lockingBarMotor);
       Shuffleboard.getTab("climber").add("Position Motor Position",positionMotor.getEncoder().getPosition());
+      Shuffleboard.getTab("climber").add("Applied output", positionMotor.getAppliedOutput());
 
       debugTimer = new Timer();
       debugTimer.start();
@@ -117,9 +118,9 @@ public class ClimberSubsystem extends SubsystemBase{
         .inverted(true);
        
       positionMotorConfig.closedLoop
-        .p(0.05/2)
-        .i(0.000000005)
-        .d(0.1/2)
+        .p(0.05)
+        .i(0.0000001)
+        .d(0.1)
         .iZone(30)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 

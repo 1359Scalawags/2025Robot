@@ -92,7 +92,7 @@ public final class Constants {
       public static final double kLockingPosition = 177.8;
       public static final double kLockedPosition = 187.5;
       public static final double kMaxJoystickSpeed = 10;
-      public static final double kSlewRate = 30.0;
+      public static final double kSlewRate = 45.0;
     }
   }  
 

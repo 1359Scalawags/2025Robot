@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
     //TODO: Enable this when arm is enabled
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
+    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
 
 
@@ -69,8 +69,8 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    // CommandScheduler.getInstance().schedule(m_robotContainer.lockClimberSubsystemWhenDisabled());
-    // CommandScheduler.getInstance().schedule(m_robotContainer.disabledIntializedClimber());
+    CommandScheduler.getInstance().schedule(m_robotContainer.lockClimberSubsystemWhenDisabled());
+    CommandScheduler.getInstance().schedule(m_robotContainer.disabledIntializedClimber());
   }
 
   @Override
@@ -86,8 +86,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
     //XXX: Is this necessary here? If so, also include the arm?
-    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
   }
 
@@ -105,9 +105,9 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     //XXX: Is this necessary here? If so, also include the arm?
-    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
+    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 
   /** This function is called periodically during operator control. */
@@ -119,9 +119,9 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     //TODO: Is this necessary here? If so, also include the arm?
-    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
+    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 
   /** This function is called periodically during test mode. */
@@ -132,9 +132,9 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationInit() {
   //TODO: Is this necessary here? If so, also include the arm?
-  //  CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+   CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
   //  CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
-  CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
+  // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 
   /** This function is called periodically whilst in simulation. */
