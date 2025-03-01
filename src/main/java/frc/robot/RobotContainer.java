@@ -25,6 +25,7 @@ import frc.robot.commands.ClimberCommands.Functionality.LockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.Functionality.UnlockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.Movment.LockedPosition;
 import frc.robot.commands.ClimberCommands.Movment.LockingPosition;
+import frc.robot.commands.ClimberCommands.Movment.DeployClimber;
 import frc.robot.commands.ClimberCommands.Movment.LockClimberBar;
 import frc.robot.commands.ClimberCommands.Movment.MoveClimber;
 import frc.robot.commands.ClimberCommands.Movment.RetractClimber;
@@ -222,6 +223,8 @@ public class RobotContainer {
 
     m_AssistantJoystick.button(13).onTrue(new LockingPosition(m_ClimberSubsystem));
     m_AssistantJoystick.button(11).onTrue(new LockedPosition(m_ClimberSubsystem));
+
+    m_AssistantJoystick.button(3).onTrue(new DeployClimber(m_ClimberSubsystem));
 
   // //TODO: Make a sequential command to lock the arm motor.
 
