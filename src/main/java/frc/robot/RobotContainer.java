@@ -78,7 +78,7 @@ public class RobotContainer {
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Pearl"));
     // TODO: This needs to be enabled when ready. Also fix initializeArm() below and uncomment calls in Robot.java
-  //  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   //  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
@@ -188,14 +188,14 @@ public class RobotContainer {
   // }
 
     //Bindin Arm Commands
-  // m_AssistantJoystick.button(1).onTrue(new closeClawCommand(m_ArmSubsystem));
-  // m_AssistantJoystick.button(3).onTrue(new openClawCommand(m_ArmSubsystem));
+  m_AssistantJoystick.button(1).onTrue(new closeClawCommand(m_ArmSubsystem));
+  m_AssistantJoystick.button(3).onTrue(new openClawCommand(m_ArmSubsystem));
 
-  // m_AssistantJoystick.button(8).onTrue(new goToHeightHumanStation(m_ArmSubsystem));
-  // m_AssistantJoystick.button(10).onTrue(new goToHeightLevelFour(m_ArmSubsystem));
-  // m_AssistantJoystick.button(7).onTrue(new goToHeightLevelThree(m_ArmSubsystem));
-  // m_AssistantJoystick.button(6).onTrue(new goToHeightLevelTwo(m_ArmSubsystem));
-  // m_AssistantJoystick.button(9).onTrue(new goToHightGround(m_ArmSubsystem));
+  m_AssistantJoystick.button(8).onTrue(new goToHeightHumanStation(m_ArmSubsystem));
+  m_AssistantJoystick.button(10).onTrue(new goToHeightLevelFour(m_ArmSubsystem));
+  m_AssistantJoystick.button(7).onTrue(new goToHeightLevelThree(m_ArmSubsystem));
+  m_AssistantJoystick.button(6).onTrue(new goToHeightLevelTwo(m_ArmSubsystem));
+  m_AssistantJoystick.button(9).onTrue(new goToHightGround(m_ArmSubsystem));
 
   //Binding Climber Commands
       //can we make this simpler (sequential command)?
@@ -269,16 +269,16 @@ public class RobotContainer {
   }
 
 
-  // public Command intializeTheArm() {
-  //   Command initializeArm = new InitilizeArm(m_ArmSubsystem);
-  //   Command homeClaw = new HomeTheClaw(m_ArmSubsystem);
-  //   Command homePulley = new HomeThePulley(m_ArmSubsystem);
+  public Command intializeTheArm() {
+    Command initializeArm = new InitilizeArm(m_ArmSubsystem);
+    Command homeClaw = new HomeTheClaw(m_ArmSubsystem);
+    Command homePulley = new HomeThePulley(m_ArmSubsystem);
 
   //   return homePulley;
 
-   // return Commands.sequence(initializeArm, homePulley,homeClaw );
+   return Commands.sequence(initializeArm, homePulley,homeClaw );
     // return initializeArm.Commands.sequence(homeClaw.andThen(homePulley));
-  // }
+  }
 
   // public Command intializeJustTheArm() {
   //   return new InitilizeArm(m_ArmSubsystem);

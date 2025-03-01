@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
     //XXX: Is this necessary here? If so, also include the arm?
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
-    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
   }
 
   /** This function is called periodically during autonomous. */
@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
     }
     //XXX: Is this necessary here? If so, also include the arm?
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
-    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 
@@ -120,7 +120,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     //TODO: Is this necessary here? If so, also include the arm?
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
-    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 
@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
   public void simulationInit() {
   //TODO: Is this necessary here? If so, also include the arm?
    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
-  //  CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+   CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
   // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 
