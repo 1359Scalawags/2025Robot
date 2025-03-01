@@ -210,7 +210,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     clawMotorConfig.closedLoop
-        .pid(0.05/2, 0.0001/2, 0.03/2)// (0.05, 0.0001, 0.03)
+        .pid(0.05, 0.0001, 0.03)// (0.05, 0.0001, 0.03)
         .iZone(1.5);
 
     // apply configuration
