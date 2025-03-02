@@ -54,6 +54,10 @@ public abstract class SparkMaxPIDTunerBase {
         updateTimer.reset();
         updateTimer.start();
 
+        if(!this.isShuffleboardCreated()) {
+            setupShuffleboard();            
+        }
+
     }
 
     protected ControlType getControlType() {
@@ -114,7 +118,6 @@ public abstract class SparkMaxPIDTunerBase {
             .withPosition(4, 1)
             .withSize(2,3)
             .withProperties(Map.of("Label position", "TOP","Number of columns", 3, "Number of rows", 3, "Show Glyph", true, "Glphy", "HEARTBEAT"));
-            ;
 
         this.setShuffleboardCreated();
     }
