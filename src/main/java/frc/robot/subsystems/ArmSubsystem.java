@@ -12,7 +12,9 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SimableSparkMax;
+import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
 import frc.robot.extensions.SparkMaxPIDTunerPosition;
 
 
@@ -23,6 +25,8 @@ public class ArmSubsystem extends SubsystemBase {
     private DigitalInput homeLimitSwitch;
 
     private SparkMaxPIDTunerPosition pulleyTuner, elbowTuner, wristTuner, clawTuner;
+
+    private GravityAssistedFeedForward elbowFeedForward;
 
 
     public ArmSubsystem() {
@@ -36,10 +40,16 @@ public class ArmSubsystem extends SubsystemBase {
       configurePulleyMotor();
       configureClawMotor();
 
+      elbowFeedForward = new GravityAssistedFeedForward(0.1, 232);
       pulleyTuner = new SparkMaxPIDTunerPosition("A: Pulley", pulleyMotor, ControlType.kPosition);
-      elbowTuner = new SparkMaxPIDTunerPosition("A: Elbow", elbowMotor, ControlType.kPosition);
+      elbowTuner = new SparkMaxPIDTunerArmPosition("A: Elbow", elbowMotor, ControlType.kPosition, elbowFeedForward);
       wristTuner = new SparkMaxPIDTunerPosition("A: Wrist", wristMotor, ControlType.kPosition);
       clawTuner = new SparkMaxPIDTunerPosition("A: Claw", clawMotor, ControlType.kPosition);
+
+      pulleyTuner.buildShuffleboard();
+      elbowTuner.buildShuffleboard();
+      wristTuner.buildShuffleboard();
+      clawTuner.buildShuffleboard();
 
       homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
 

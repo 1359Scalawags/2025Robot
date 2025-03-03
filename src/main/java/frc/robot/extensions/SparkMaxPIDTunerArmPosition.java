@@ -16,18 +16,15 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition {
     public SparkMaxPIDTunerArmPosition(String name, SparkMax motor, ControlType controlType, GravityAssistedFeedForward gravityFFController) {
         super(name,motor,controlType);
 
+        this.shuffleboardSetupRoutines.add(this::setupShuffleboard);
+
         this.ffController = gravityFFController;
         this.gravFF0 = ffController.getGravityFF();
         this.minFF0 = ffController.getMinimumFF();
-
-        //setup items specific to this inherited class
-        if(!super.isShuffleboardCreated()) {
-            setupShuffleboard();            
-        }
+         
     }
 
-    protected void setupShuffleboard() {
-        super.setupShuffleboard();
+    private boolean setupShuffleboard() {
         // setup gravity assist interface in Shuffleboard
         this.minimumFFEntry = super.getValueTuningLayout().add("Minimum FF", this.ffController.getMinimumFF())
             .withWidget(BuiltInWidgets.kTextView)
@@ -39,7 +36,8 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition {
             .withPosition(1,1)
             .withSize(1,1)
             .getEntry();  
-        super.setShuffleboardCreated();
+
+        return true;
     }
 
     @Override
@@ -51,7 +49,7 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition {
         }
         StringBuilder sb = new StringBuilder();
         sb.append("Gravity FF: " + gravityFFEntry.getDouble(0) + " - ");
-        sb.append("Minimum FF: " + minimumFFEntry.getDouble(0) + " - ");
+        sb.append("Minimum FF: " + minimumFFEntry.getDouble(0));
         System.out.println(sb.toString());
     }
 

@@ -3,13 +3,16 @@ package frc.robot.extensions;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -34,13 +37,15 @@ public abstract class SparkMaxPIDTunerBase {
     private double p0, i0, d0;
     private double reference; 
     protected Timer updateTimer;
-    private boolean shuffleboardCreated;
+    protected ArrayList<BooleanSupplier> shuffleboardSetupRoutines;
+    private boolean isInitialized = false;
 
     public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
     public SparkMaxPIDTunerBase(String name, SparkMax motor) {
+        this.shuffleboardSetupRoutines = new ArrayList<BooleanSupplier>();
+        this.shuffleboardSetupRoutines.add(this::setupShuffleboard);
         this.name = name;
-        this.shuffleboardCreated = false;
         this.motor = motor;
         this.configAccessor = motor.configAccessor.closedLoop;
         this.controlType = ControlType.kDutyCycle;
@@ -54,10 +59,17 @@ public abstract class SparkMaxPIDTunerBase {
         updateTimer.reset();
         updateTimer.start();
 
-        if(!this.isShuffleboardCreated()) {
-            setupShuffleboard();            
-        }
+    }
 
+    public void buildShuffleboard() {
+        for(BooleanSupplier function : shuffleboardSetupRoutines) {
+            function.getAsBoolean();
+        }
+        this.isInitialized = true;
+    }
+
+    protected boolean isInitialized() {
+        return this.isInitialized;
     }
 
     protected ControlType getControlType() {
@@ -72,15 +84,7 @@ public abstract class SparkMaxPIDTunerBase {
         return this.reference;
     }
 
-    protected boolean isShuffleboardCreated() {
-        return this.shuffleboardCreated;
-    }
-
-    protected void setShuffleboardCreated() {
-        this.shuffleboardCreated = true;
-    }
-
-    protected void setupShuffleboard() {
+    private boolean setupShuffleboard() {
         // setup interface in Shuffleboard
         this.tab = Shuffleboard.getTab(this.name + " Tuner");
  
@@ -119,7 +123,7 @@ public abstract class SparkMaxPIDTunerBase {
             .withSize(2,3)
             .withProperties(Map.of("Label position", "TOP","Number of columns", 3, "Number of rows", 3, "Show Glyph", true, "Glphy", "HEARTBEAT"));
 
-        this.setShuffleboardCreated();
+        return true;
     }
 
     public void updateEncoderValues() {
@@ -139,7 +143,7 @@ public abstract class SparkMaxPIDTunerBase {
         StringBuilder sb = new StringBuilder();
         sb.append("P: " + configAccessor.getP() + " - ");
         sb.append("I: " + configAccessor.getI() + " - ");
-        sb.append("D: " + configAccessor.getD() + " - ");
+        sb.append("D: " + configAccessor.getD());
         System.out.println(sb.toString());
 
     }

@@ -27,6 +27,7 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
 
     public SparkMaxPIDTunerPosition(String name, SparkMax motor, ControlType controlType) {
         super(name, motor);
+        this.shuffleboardSetupRoutines.add(this::setupShuffleboard);
 
         if(controlType != ControlType.kPosition && controlType != ControlType.kMAXMotionPositionControl) {
             throw new InvalidParameterException("Must be a position control type.");
@@ -36,9 +37,12 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         this.arbitraryFF0 = 0;
 
         if(this.configAccessor.getFeedbackSensor() == FeedbackSensor.kAbsoluteEncoder) {
-            positionEncoderSupplier = motor.getAbsoluteEncoder()::getPosition;
+            this.positionEncoderSupplier = motor.getAbsoluteEncoder()::getPosition;
         } else {
-            positionEncoderSupplier = motor.getEncoder()::getPosition;
+            this.positionEncoderSupplier = motor.getEncoder()::getPosition;
+        }
+        if(this.positionEncoderSupplier == null) {
+            throw new NullPointerException("Position encoder supplier is not instantiated.");
         }
 
         this.setControlType(controlType);
@@ -49,19 +53,14 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         } else {
             controlType = ControlType.kPosition;
         }
-        
-        // setup items specific to this inherited class
-        if(!super.isShuffleboardCreated()) {
-            setupShuffleboard();            
-        }
+
     }
 
     protected double getArbitraryFF() {
         return arbitraryFFEntry.getDouble(0);
     }
 
-    protected void setupShuffleboard() {
-        super.setupShuffleboard();
+    private boolean setupShuffleboard() {
         // NOTE: base shuffleboard interface already configured in constructor
         // setup interface in Shuffleboard
         if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
@@ -87,16 +86,20 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
             .withPosition(0,0)
             .withSize(1,1)
             .getEntry();  
-        super.setShuffleboardCreated();
+
+        return true;
     }
 
     @Override
     public void updateEncoderValues() {
-        super.updateEncoderValues(); // also update encoder values in base class
-        if(updateTimer.get() > UPDATE_INTERVAL_SECONDS) {
-            this.actualPositionEntry.setDouble(positionEncoderSupplier.getAsDouble());
-            updateTimer.reset();      
+        if(this.isInitialized()) {
+            super.updateEncoderValues(); // also update encoder values in base class
+            if(updateTimer.get() > UPDATE_INTERVAL_SECONDS) {
+                this.actualPositionEntry.setDouble(positionEncoderSupplier.getAsDouble());
+                updateTimer.reset();      
+            }            
         }
+
     }
 
     @Override
@@ -115,7 +118,7 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
             sb.append("MAX Velocity: " + velocityEntry.getDouble(0.1) + " - ");
             sb.append("MAX Acceleration: " + accelerationEntry.getDouble(0.1) + " - ");
         }
-        sb.append("Arbitrary FF: " + arbitraryFFEntry.getDouble(0) + " - ");
+        sb.append("Arbitrary FF: " + arbitraryFFEntry.getDouble(0));
         System.out.println(sb.toString());
     }
 
