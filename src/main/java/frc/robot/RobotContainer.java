@@ -189,8 +189,8 @@ public class RobotContainer {
   // }
 
     //Bindin Arm Commands
-  m_AssistantJoystick.button(1).onTrue(new closeClawCommand(m_ArmSubsystem));
-  m_AssistantJoystick.button(3).onTrue(new openClawCommand(m_ArmSubsystem));
+  m_AssistantJoystick.button(1).onFalse(new closeClawCommand(m_ArmSubsystem));
+  m_AssistantJoystick.button(1).onTrue(new openClawCommand(m_ArmSubsystem));
 
   m_AssistantJoystick.button(8).onTrue(new goToHeightHumanStation(m_ArmSubsystem));
   m_AssistantJoystick.button(10).onTrue(new goToHeightLevelFour(m_ArmSubsystem));

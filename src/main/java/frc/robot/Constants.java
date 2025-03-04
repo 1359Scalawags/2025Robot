@@ -153,6 +153,7 @@ public final class Constants {
     }
 
     public static class Claw {
+      // posotive motor value closes claw, negative opens
       public static final int kMotorID = 18;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
@@ -164,7 +165,7 @@ public final class Constants {
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
       //public static final double kHomingVelocity = 300;
-      public static final double kHomingPositionIncrement = 0.1 * 0.020; // homing loop time is 20ms
+      public static final double kHomingPositionIncrement = 1.0 * 0.020; // homing loop time is 20ms
     }
   }
 

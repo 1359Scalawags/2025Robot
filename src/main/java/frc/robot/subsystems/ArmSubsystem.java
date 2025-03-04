@@ -136,7 +136,7 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
 
     wristMotorConfig.closedLoop
-        .pid(0.003, 0.0000003/2, 0.003)// (0.006, 0.0000006, 0.006)
+        .pid(0.006, 0.0000006, 0.006)// (0.006, 0.0000006, 0.006)
         .iZone(2)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
@@ -188,7 +188,7 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
 
     pulleyMotorConfig.closedLoop // TODO: do we want a second slot for the upper part of the Pulley?
-        .pid(0.0225f, 0.000005f, 0.0225)// .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot0)
+        .pid(0.045f, 0.00001f, 0.045)
         .iZone(2);
 
     // .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot1)
@@ -211,7 +211,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     clawMotorConfig.closedLoop
         .pid(0.05, 0.0001, 0.03)// (0.05, 0.0001, 0.03)
-        .iZone(1.5);
+        .iZone(2);
 
     // apply configuration
     clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

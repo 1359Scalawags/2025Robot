@@ -120,7 +120,7 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotorConfig.closedLoop
         .p(0.05)
         .i(0.0000001)
-        .d(0.1)
+        .d(0.08)
         .iZone(30)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
