@@ -10,14 +10,14 @@ import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class HomeThePulley extends Command {
+public class ZeroClaw extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
   //private Timer waitTimer;
 
-  public HomeThePulley(ArmSubsystem subsystem) {
+  public ZeroClaw(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
-    //waitTimer = new Timer();
+    // waitTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -33,18 +33,16 @@ public class HomeThePulley extends Command {
   @Override
   public void execute() {
     // if(waitTimer.get() > 1.0) {
-      double currentPosition = ArmSubsystem.getPulleyHeight();
-      m_subsystem.goToPulleyMotorPosition(currentPosition + Constants.ArmSubsystem.Pulley.kHomingPositionIncrement);
+      double currentPosition = m_subsystem.getClawMotorPosition();
+      m_subsystem.goToClawMotorPosition(currentPosition + Constants.ArmSubsystem.Claw.kHomingPositionIncrement);      
     // }
-
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_subsystem.isPulleyAtHome()) {
+    if(m_subsystem.isClawAtHome()) {
       return true;
-      
     }
     return false;
   }

@@ -8,11 +8,12 @@ import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ArmCommands.HomeTheClaw;
-import frc.robot.commands.ArmCommands.HomeThePulley;
+import frc.robot.commands.ArmCommands.ZeroClaw;
+import frc.robot.commands.ArmCommands.ZeroPulley;
 import frc.robot.commands.ArmCommands.InitilizeArm;
 import frc.robot.commands.ArmCommands.MovePulleyWithJoystick;
 import frc.robot.commands.ArmCommands.closeClawCommand;
+import frc.robot.commands.ArmCommands.goToHeightHome;
 import frc.robot.commands.ArmCommands.goToHeightHumanStation;
 import frc.robot.commands.ArmCommands.goToHeightLevelFour;
 import frc.robot.commands.ArmCommands.goToHeightLevelThree;
@@ -274,12 +275,13 @@ public class RobotContainer {
 
   public Command intializeTheArm() {
     Command initializeArm = new InitilizeArm(m_ArmSubsystem);
-    Command homeClaw = new HomeTheClaw(m_ArmSubsystem);
-    Command homePulley = new HomeThePulley(m_ArmSubsystem);
+    Command zeroClaw = new ZeroClaw(m_ArmSubsystem);
+    Command zeroPulley = new ZeroPulley(m_ArmSubsystem);
+    Command homeArm = new goToHeightHome(m_ArmSubsystem);
 
   //   return homePulley;
 
-   return Commands.sequence(initializeArm, homePulley,homeClaw );
+   return Commands.sequence(initializeArm, zeroPulley,zeroClaw,homeArm );
     // return initializeArm.Commands.sequence(homeClaw.andThen(homePulley));
   }
 

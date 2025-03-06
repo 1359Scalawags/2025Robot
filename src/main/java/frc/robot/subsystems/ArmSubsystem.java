@@ -275,6 +275,16 @@ public class ArmSubsystem extends SubsystemBase {
 
   }
 
+  public void goToHeightHome() {
+    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kHome.pulley);
+
+  }
+
+  public void goToArmHome() {
+    goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kHome.elbow);
+    goToWristMotorPosition(Constants.ArmSubsystem.Positions.kHome.wrist);
+  }
+
   // Sets arm position to the Ground
   public void goToArmGround() {
     goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kGround.elbow);
