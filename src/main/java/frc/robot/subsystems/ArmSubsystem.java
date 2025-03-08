@@ -65,12 +65,17 @@ public class ArmSubsystem extends SubsystemBase {
     Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
     Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
     Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
+    Shuffleboard.getTab("Arm").add("Pulley Motor", pulleyMotor);
+    Shuffleboard.getTab("Arm").add("Wrist Motor", wristMotor);
+    Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
+    Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
   }
 
   public void initializeArm() {
 
     pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
     wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
+
 
     if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
       wristError = true;
