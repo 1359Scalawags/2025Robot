@@ -118,8 +118,8 @@ public final class Constants {
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 5;
       //public static final double kHomingVelocity = -2;
-      public static final double kStageOneFF = 0.225;
-      public static final double kStageTwoFF = 0.3; //TODO: find the stage two FF
+      public static final double kStageOneFF = 0.15;
+      public static final double kStageTwoFF = 0.2; //TODO: find the stage two FF
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kHomeLimitSwitchID = 0;
