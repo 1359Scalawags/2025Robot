@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -24,7 +25,8 @@ import frc.robot.extensions.SimableSparkMax;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  private SimableSparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
+  //private SimableSparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
+  private SparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
   private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;
   private double pulleyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
   private static double ARM_HEIGHT;
@@ -41,10 +43,15 @@ public class ArmSubsystem extends SubsystemBase {
   private GravityAssistedFeedForward elbowFF;
 
   public ArmSubsystem() {
-    pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
-    elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);
-    wristMotor = new SimableSparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
-    clawMotor = new SimableSparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
+    // pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
+    // elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);
+    // wristMotor = new SimableSparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
+    // clawMotor = new SimableSparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
+
+    pulleyMotor = new SparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
+    elbowMotor = new SparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);
+    wristMotor = new SparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
+    clawMotor = new SparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
 
     // TODO: Change slewrate limiter constants from 0
     pulleyLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Pulley.kSlewRate);
@@ -420,7 +427,8 @@ public class ArmSubsystem extends SubsystemBase {
         pulleyMotor.set(0);
         pulleyMotor.getEncoder().setPosition(0);
         pulleyLimiter.reset(0);
-        pulleyMotor.setReferencePosition(pulleyLimiter, Constants.ArmSubsystem.Positions.kHome.pulley); // TODO: do                                                                                                     // once
+        //pulleyMotor.setReferencePosition(pulleyLimiter, Constants.ArmSubsystem.Positions.kHome.pulley); // TODO: do                                                                                                     // once
+        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley), ControlType.kPosition);
         pulleyInitialized = true;                                                                                                 // check
       }
     }
@@ -431,7 +439,8 @@ public class ArmSubsystem extends SubsystemBase {
         clawMotor.set(0);
         clawMotor.getEncoder().setPosition(0);
         clawLimiter.reset(0);
-        clawMotor.setReferencePosition(clawLimiter, Constants.ArmSubsystem.Claw.kCloseClaw);
+        //clawMotor.setReferencePosition(clawLimiter, Constants.ArmSubsystem.Claw.kCloseClaw);
+        clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(Constants.ArmSubsystem.Claw.kCloseClaw), ControlType.kPosition);
         clawInitialized = true;
       }
     }
@@ -452,7 +461,7 @@ public class ArmSubsystem extends SubsystemBase {
         //XXX:WRIST: prevent wrist from going outside valid bounds
 
         if (wristError == false) {
-          wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
+          wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition);
         }
 
         if (elbowError == false) {
@@ -461,7 +470,7 @@ public class ArmSubsystem extends SubsystemBase {
         }
         
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
-        clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
+        clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
         //pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
 
         pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());

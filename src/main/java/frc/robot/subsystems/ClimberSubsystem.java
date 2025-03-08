@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -21,8 +22,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase{
-  private SimableSparkMax lockingBarMotor;  
-  private SimableSparkMax positionMotor;
+  // private SimableSparkMax lockingBarMotor;  
+  // private SimableSparkMax positionMotor;
+  private SparkMax lockingBarMotor;  
+  private SparkMax positionMotor;
 
   private AbsoluteEncoder lockingBarEncoder;
   private AbsoluteEncoder positionEncoder;
@@ -43,8 +46,11 @@ public class ClimberSubsystem extends SubsystemBase{
   private boolean isInitialized = false;
 
     public ClimberSubsystem() {
+      // lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless, "LockingBarMotor");
+      // positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
       lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless, "LockingBarMotor");
       positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
+
       latchingServo = new Servo(Constants.ClimberSubsystem.LatchServo.kServoID);
       lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
