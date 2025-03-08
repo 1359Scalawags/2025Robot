@@ -91,12 +91,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser(); //This will populate all the autos in the project.
     pipelineChooser = new SendableChooser<Command>();
-
-    autoChooser.addOption("Leave Commuinity(Blue)", getAutonomousCommand("Leave Communtiy (Blue)"));
-    autoChooser.addOption("Leave Commuinity(Red)", getAutonomousCommand("Leave Community (red)"));
-    autoChooser.addOption("Leave Commuinity(Center)", getAutonomousCommand("Leave Community(Center)"));
 
     SmartDashboard.putData("Pipeline Chooser", pipelineChooser);
     SmartDashboard.putData("Auto Chooser ", autoChooser);
@@ -152,18 +148,11 @@ public class RobotContainer {
       return m_DriverJoystick.getThrottle();
     }
 
-
-      //Which one of these did i use?
-  public Command getAutonomousCommandForChooser() {
-    return m_SwerveSubsystem.getAutonomousCommand(autoChooser.getSelected().getName());
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
   }
 
-// Do i need .getName()?
 
-    public Command getAutonomousCommand(String exampleAuto){
-    //return m_SwerveSubsystem.getAutonomousCommand(autoChooser.getSelected().getName());
-    return m_SwerveSubsystem.getAutonomousCommand(exampleAuto);
-  }
 
 
   /**
@@ -307,9 +296,4 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    //return Autos.exampleAuto(m_exampleSubsystem);
-    return new DriveBackward(m_SwerveSubsystem);
-  }
 }
