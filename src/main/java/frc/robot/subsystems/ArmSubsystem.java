@@ -70,13 +70,13 @@ public class ArmSubsystem extends SubsystemBase {
     elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.kMINGravityFF,
         Constants.ArmSubsystem.Elbow.kGravityFF, 232);
 
-    Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
-    Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
-    Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
-    Shuffleboard.getTab("Arm").add("Pulley Motor", pulleyMotor);
-    Shuffleboard.getTab("Arm").add("Wrist Motor", wristMotor);
-    Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
-    Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
+    // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
+    // Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
+    // Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
+    // Shuffleboard.getTab("Arm").add("Pulley Motor", pulleyMotor);
+    // Shuffleboard.getTab("Arm").add("Wrist Motor", wristMotor);
+    // Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
+    // Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
     //Shuffleboard.getTab("Arm").add("Elbow Absolute", elbowMotor.getAbsoluteEncoder());
     //Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
   }
