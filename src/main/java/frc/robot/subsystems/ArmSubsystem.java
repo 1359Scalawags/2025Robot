@@ -337,6 +337,16 @@ public class ArmSubsystem extends SubsystemBase {
     return ARM_HEIGHT;
   }
 
+  public static double getSpeedMultiplier() {
+    if(ARM_HEIGHT >= 40) {
+      return 0.25;
+    } else if(ARM_HEIGHT < 10) {
+      return 1.0;
+    } else {
+      return -0.025*ARM_HEIGHT + 1.25;
+    }
+  }
+
   public double getElbowMotorPosition() {
     return elbowMotor.getAbsoluteEncoder().getPosition();
   }
