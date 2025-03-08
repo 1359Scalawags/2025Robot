@@ -13,6 +13,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -86,6 +87,7 @@ public class ArmSubsystem extends SubsystemBase {
     if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
       wristError = true;
       System.out.println("------WRIST ERROR---------");
+      DriverStation.reportError("------WRIST ERROR---------", false);
     } else {
       wristError = false;
     }
@@ -93,6 +95,7 @@ public class ArmSubsystem extends SubsystemBase {
     if (MathUtil.isNear(elbowMotorTarget, 0, 2)) {
       elbowError = true;
       System.out.println("------ELBOW ERROR---------");
+      DriverStation.reportError("------ELBOW ERROR---------", false);
     } else {
       wristError = false;
     }
