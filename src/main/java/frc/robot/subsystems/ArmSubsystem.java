@@ -84,10 +84,8 @@ public class ArmSubsystem extends SubsystemBase {
   public void initializeArm() {
 
     pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
-    //wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
-    wristMotorTarget = Constants.ArmSubsystem.Positions.kHome.wrist;
-    //elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
-    elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;
+    wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
+    elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
 
@@ -97,6 +95,7 @@ public class ArmSubsystem extends SubsystemBase {
       DriverStation.reportError("------WRIST ERROR---------", false);
     } else {
       wristError = false;
+      wristMotorTarget = Constants.ArmSubsystem.Positions.kHome.wrist;    
     }
 
     if (MathUtil.isNear(elbowMotorTarget, 0, 2)) {
@@ -105,6 +104,7 @@ public class ArmSubsystem extends SubsystemBase {
       DriverStation.reportError("------ELBOW ERROR---------", false);
     } else {
       wristError = false;
+      elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;      
     }
 
     System.out.println("--------------Reported Positions at Intialization: --------------");
