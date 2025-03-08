@@ -75,6 +75,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
     wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
+    elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
+    clawMotorTarget = clawMotor.getEncoder().getPosition();
 
 
     if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
@@ -83,7 +85,6 @@ public class ArmSubsystem extends SubsystemBase {
     } else {
       wristError = false;
     }
-    clawMotorTarget = clawMotor.getEncoder().getPosition();
 
     if (MathUtil.isNear(elbowMotorTarget, 0, 2)) {
       elbowError = true;
@@ -91,11 +92,10 @@ public class ArmSubsystem extends SubsystemBase {
     } else {
       wristError = false;
     }
-    elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
 
-    System.out.println("Reported Positions at Intialization: ");
-    // System.out.println("  Pulley: " + pulleyMotorTarget);
-    // System.out.println("  Elbow: " + elbowMotorTarget);
+    System.out.println("--------------Reported Positions at Intialization: --------------");
+    System.out.println("  Pulley: " + pulleyMotorTarget);
+    System.out.println("  Elbow: " + elbowMotorTarget);
     System.out.println("  Wrist: " + wristMotorTarget);
     System.out.println("  Claw: " + clawMotorTarget);
     System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
