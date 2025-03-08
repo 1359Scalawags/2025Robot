@@ -169,8 +169,8 @@ public final class Constants {
   }
 
   public static class Vision { 
-    public static final String klimelightOne = "limelight2+";
-    public static final String klimelightTwo = "limelight3G";
+    public static final String klimelightOne = "limelight-climber";
+    public static final String klimelightTwo = "limelight-arm";
   }
 
 
