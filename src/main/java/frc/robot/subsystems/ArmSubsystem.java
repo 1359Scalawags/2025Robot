@@ -76,8 +76,10 @@ public class ArmSubsystem extends SubsystemBase {
   public void initializeArm() {
 
     pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
-    wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
-    elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
+    //wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
+    wristMotorTarget = Constants.ArmSubsystem.Positions.kHome.wrist;
+    //elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
+    elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
 
