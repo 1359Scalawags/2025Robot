@@ -103,7 +103,7 @@ public final class Constants {
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,200,215);
       public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
-      public static final ArmPosition kGround = new ArmPosition(8,220,215);
+      public static final ArmPosition kGround = new ArmPosition(8,250,215);
       public static final ArmPosition kLevel1 = new ArmPosition(12,200,215);
       public static final ArmPosition kLevel2 = new ArmPosition(16,240,215);
       public static final ArmPosition klevel3 = new ArmPosition(20,200,215);
@@ -159,7 +159,7 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 0; //good
       public static final double kMinLimit = -17.38;
-      public static final double kSlewRate = 10;
+      public static final double kSlewRate = 20;
       public static final double kCloseClaw = 0;//good
       public static final double kOpenClaw = -17.38;//good
       public static final boolean kLimitSwitchPressedState = false;
