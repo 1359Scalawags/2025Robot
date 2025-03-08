@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class InitilizeArm extends Command {
+public class InitilizeArmEncoders extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
   private Timer waitTimer;
   private boolean hasfinished = false;
 
 
-  public InitilizeArm(ArmSubsystem subsystem) {
+  public InitilizeArmEncoders(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
     waitTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.

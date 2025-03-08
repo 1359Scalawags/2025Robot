@@ -10,7 +10,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ArmCommands.ZeroClaw;
 import frc.robot.commands.ArmCommands.ZeroPulley;
-import frc.robot.commands.ArmCommands.InitilizeArm;
+import frc.robot.commands.ArmCommands.InitilizeArmEncoders;
 import frc.robot.commands.ArmCommands.MovePulleyWithJoystick;
 import frc.robot.commands.ArmCommands.closeClawCommand;
 import frc.robot.commands.ArmCommands.goToHeightHome;
@@ -274,7 +274,7 @@ public class RobotContainer {
 
 
   public Command intializeTheArm() {
-    Command initializeArm = new InitilizeArm(m_ArmSubsystem);
+    Command initializeArm = new InitilizeArmEncoders(m_ArmSubsystem);
     Command zeroClaw = new ZeroClaw(m_ArmSubsystem);
     Command zeroPulley = new ZeroPulley(m_ArmSubsystem);
     Command homeArm = new goToHeightHome(m_ArmSubsystem);
