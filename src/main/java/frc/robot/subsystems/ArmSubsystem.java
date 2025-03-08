@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -152,7 +153,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 120);
+        .smartCurrentLimit(20, 20, 480);
    
     //XXX: Should we use soft limits for the elbow? I've put a template here in case we decide to
     // elbowMotorConfig.softLimit
@@ -166,7 +167,7 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Elbow.kConversionFactor);
 
     elbowMotorConfig.closedLoop
-        .pid(0.0125/2, 0.000015, 0.025)// (0.025, 0.00003, 0.05)
+        .pid(0,0,0)//.pid(0.025, 0.00001, 0.07)
         .iZone(2)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
@@ -182,14 +183,14 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 120);
+        .smartCurrentLimit(20, 20, 1000);
 
     pulleyMotorConfig.encoder
         .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
 
     pulleyMotorConfig.closedLoop // TODO: do we want a second slot for the upper part of the Pulley?
-        .pid(0.045f, 0.00001f, 0.045)
-        .iZone(2);
+        .pid(0,0,0) //.pid(0.07f, 0.00003f, 0.07f)
+        .iZone(5);
 
     // .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot1)
     // .iZone(2, ClosedLoopSlot.kSlot1);
@@ -411,12 +412,12 @@ public class ArmSubsystem extends SubsystemBase {
       // if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
       if (RobotState.isEnabled()) {
         // This method will be called once per scheduler run
-        //elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
-            //ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+        elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
+            ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
             
         //pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget),
             //ControlType.kPosition, ClosedLoopSlot.kSlot0, Constants.ArmSubsystem.Pulley.kStageOneFF / 2);
-        elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
+        // elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
 
         //XXX:WRIST: prevent wrist from going outside valid bounds
 
@@ -428,7 +429,7 @@ public class ArmSubsystem extends SubsystemBase {
         clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
         //pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
 
-        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition);
+        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
         
         //System.out.println("message AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH??");
 

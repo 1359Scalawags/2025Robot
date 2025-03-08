@@ -103,9 +103,9 @@ public final class Constants {
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,200,215);
       public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
-      public static final ArmPosition kGround = new ArmPosition(8,200,215);
+      public static final ArmPosition kGround = new ArmPosition(8,220,215);
       public static final ArmPosition kLevel1 = new ArmPosition(12,200,215);
-      public static final ArmPosition kLevel2 = new ArmPosition(16,200,215);
+      public static final ArmPosition kLevel2 = new ArmPosition(16,240,215);
       public static final ArmPosition klevel3 = new ArmPosition(20,200,215);
       public static final ArmPosition klevel4 = new ArmPosition(24,200,216);
     }
@@ -118,14 +118,14 @@ public final class Constants {
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 5;
       //public static final double kHomingVelocity = -2;
-      public static final double kStageOneFF = 0.055;
+      public static final double kStageOneFF = 0.05;
       public static final double kStageTwoFF = 0.06; //TODO: find the stage two FF
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kHomeLimitSwitchID = 0;
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
-      public static final double kHomingPositionIncrement = -1.0 * 0.020; // homing loop time is 20ms
+      public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
     }
 
     public static class Elbow {
@@ -134,8 +134,8 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 330;
       public static final double kMinLimit = 195;
-      public static final double kSlewRate = 10;
-      public static final double kGravityFF = 0.0025;
+      public static final double kSlewRate = 45;
+      public static final double kGravityFF = 0.007;
       public static final double kMINGravityFF = 0.00001;
       public static final double kHorizontalAngle = 232.0;
       public static final double kTolerance = 1.0;
