@@ -103,11 +103,11 @@ public final class Constants {
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,200,215);
       public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
-      public static final ArmPosition kGround = new ArmPosition(8,250,215);
-      public static final ArmPosition kLevel1 = new ArmPosition(12,200,215);
-      public static final ArmPosition kLevel2 = new ArmPosition(16,240,215);
-      public static final ArmPosition klevel3 = new ArmPosition(20,200,215);
-      public static final ArmPosition klevel4 = new ArmPosition(24,200,216);
+      public static final ArmPosition kGround = new ArmPosition(1,197,148);//correct
+      public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
+      public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293);//correct
+      public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293);//correct
+      public static final ArmPosition klevel4 = new ArmPosition(52,315,260);//correct
     }
 
     public static class Pulley{
