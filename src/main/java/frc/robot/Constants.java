@@ -118,8 +118,8 @@ public final class Constants {
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 5;
       //public static final double kHomingVelocity = -2;
-      public static final double kStageOneFF = 0.05;
-      public static final double kStageTwoFF = 0.06; //TODO: find the stage two FF
+      public static final double kStageOneFF = 0.225;
+      public static final double kStageTwoFF = 0.3; //TODO: find the stage two FF
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kHomeLimitSwitchID = 0;
@@ -135,7 +135,7 @@ public final class Constants {
       public static final double kMaxLimit = 330;
       public static final double kMinLimit = 195;
       public static final double kSlewRate = 45;
-      public static final double kGravityFF = 0.007;
+      public static final double kGravityFF = 0.335;
       public static final double kMINGravityFF = 0.00001;
       public static final double kHorizontalAngle = 232.0;
       public static final double kTolerance = 1.0;
