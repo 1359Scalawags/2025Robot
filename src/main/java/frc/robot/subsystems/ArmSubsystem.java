@@ -34,6 +34,7 @@ public class ArmSubsystem extends SubsystemBase {
   private boolean clawInitialized = false;
   private boolean pulleyInitialized = false;
   private boolean initialized = false;
+  private boolean elbowError = true;
   private boolean wristError = true;
 
   private GravityAssistedFeedForward elbowFF;
@@ -67,9 +68,10 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void initializeArm() {
+
     pulleyMotorTarget = pulleyMotor.getEncoder().getPosition();
-    elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
     wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
+
     if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
       wristError = true;
       System.out.println("------WRIST ERROR---------");
@@ -77,6 +79,14 @@ public class ArmSubsystem extends SubsystemBase {
       wristError = false;
     }
     clawMotorTarget = clawMotor.getEncoder().getPosition();
+
+    if (MathUtil.isNear(elbowMotorTarget, 0, 2)) {
+      elbowError = true;
+      System.out.println("------ELBOW ERROR---------");
+    } else {
+      wristError = false;
+    }
+    elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
 
     System.out.println("Reported Positions at Intialization: ");
     // System.out.println("  Pulley: " + pulleyMotorTarget);
@@ -412,9 +422,7 @@ public class ArmSubsystem extends SubsystemBase {
       // if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
       if (RobotState.isEnabled()) {
         // This method will be called once per scheduler run
-        elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
-            ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
-            
+       
         //pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(elbowMotorTarget),
             //ControlType.kPosition, ClosedLoopSlot.kSlot0, Constants.ArmSubsystem.Pulley.kStageOneFF / 2);
         // elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
@@ -423,6 +431,11 @@ public class ArmSubsystem extends SubsystemBase {
 
         if (wristError == false) {
           wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
+        }
+
+        if (elbowError == false) {
+          elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
+          ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
         }
         
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
