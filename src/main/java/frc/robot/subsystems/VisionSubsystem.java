@@ -24,60 +24,103 @@ public class VisionSubsystem extends SubsystemBase {
     public VisionSubsystem() {
 
     }
+        //NOTE: the reason for all the if statments is to make sure the camera is only reading pose 
+             //when there is a tag present and it is accurate (I think), im not  
 
+        //this function grabs a pose estimate from the camera.
     public PoseEstimate getEstimatedGlobalPose(String armcamera) {
-        if (LimelightHelpers.getTV(armCamera)) {
-            hasTarget = true;
+        if (LimelightHelpers.getTV(armCamera)) { //if the LLis reading a target
+            hasTarget = true; //LL has a target
             PoseEstimate estimatedCameraPose = LimelightHelpers.getBotPoseEstimate_wpiBlue(armCamera);
 
-            SmartDashboard.putBoolean("limelightTV", LimelightHelpers.getTV(armCamera));
-            SmartDashboard.putNumber("limelightX", estimatedCameraPose.pose.getX());
-            SmartDashboard.putNumber("limelightY", estimatedCameraPose.pose.getY());
-            return estimatedCameraPose;
+            SmartDashboard.putBoolean("limelightTV", LimelightHelpers.getTV(armCamera)); //shows there is a target reading 
+            SmartDashboard.putNumber("limelightX", estimatedCameraPose.pose.getX()); //distance left-right from target
+            SmartDashboard.putNumber("limelightY", estimatedCameraPose.pose.getY()); //distance front-back from target
+            return estimatedCameraPose; // returns a pose estimate
         }
         SmartDashboard.putBoolean("limelightTV", LimelightHelpers.getTV(armCamera));
         SmartDashboard.putNumber("limelightX", new PoseEstimate().pose.getX());
         SmartDashboard.putNumber("limelightY", new PoseEstimate().pose.getY());
-        return new PoseEstimate(); // IDK abt ths
+        return new PoseEstimate(); // IDK abt ths (should return a pose estimate, not sure if its needed)
     }
 
+        //this function updates the pose estimate, using the readings from the camera.
     public void updatePoseEstimator(SwerveDrive swerve) {
-        PoseEstimate poseEst = getEstimatedGlobalPose("limelight-left");
-        if (poseEst != null) {
-            swerve.addVisionMeasurement(poseEst.pose, poseEst.timestampSeconds);
+        PoseEstimate poseEstimate = getEstimatedGlobalPose(armCamera);
+        if (poseEstimate != null) {
+            swerve.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds); 
+                //adds the vision mesurments to robots pose, .pose is the limelights pose2d, .timestampseconds is (whats is it?). These are both gotten from the LL helpsers.
         }
     }
 
-    // public void updatePosesEstimatorMT2(SwerveDrive swerve) {
+        //Uses MT1 (2LL's)
+    public void updatePosesEstimator(SwerveDrive swerve) {
+        double maxTA = 0.4; //this it so you only take the LL mesurment when its a certain portion of the image that will give a accurate reading.
+        String camera = null;
+        String[] limelights = { "limelight-left", "limelight-right" }; //TODO: how does this work? and where should we replace them with our limelights?
+        for (String limelight : limelights) {
+            if (LimelightHelpers.getTV(limelight) && LimelightHelpers.getTA(limelight) > maxTA) {
+                maxTA = LimelightHelpers.getTA(limelight);
+                camera = limelight;
+            }
+        }
+        if (camera != null) {
+            PoseEstimate poseEst = getEstimatedGlobalPose(camera);
+            swerve.addVisionMeasurement(poseEst.pose, poseEst.timestampSeconds);
+            SmartDashboard.putBoolean("limelightTV", true);
+            hasTarget = true;
+        } else {
+            hasTarget = false;
+            SmartDashboard.putBoolean("limelightTV", false);
+        }
+    }
 
-    //     double maxta = 0;
-    //     String camera = null;
-    //     PoseEstimate mt2PoseEstimate = new PoseEstimate();
-    //     String[] limelights = { "limelight-left", "limelight-right" }; // , "limelight-rear"
-    //     for (String limelight : limelights) {
-    //         LimelightHelpers.SetRobotOrientation(limelight, swerve.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    //         LimelightHelpers.PoseEstimate megaTag2Pose = LimelightHelpers
-    //                 .getBotPoseEstimate_wpiBlue_MegaTag2(limelight);
+        //Uses MT2 (1LL)
+    public void updatePosesEstimatorMT2(SwerveDrive swerve) {
+        double maxta = 0;
+        String camera = null;
+        PoseEstimate mt2 = new PoseEstimate();
+        String[] limelights = { "limelight-left", "limelight-right" }; // TODO: how does this work? and where should
+                                                                       // we replace them with our limelights?
+        for (String limelight : limelights) {
+            LimelightHelpers.SetRobotOrientation(limelight, swerve.getPose().getRotation().getDegrees(), 0, 0, 0, 0,
+                    0);
+            LimelightHelpers.PoseEstimate megaTag2Pose = LimelightHelpers
+                    .getBotPoseEstimate_wpiBlue_MegaTag2(limelight);
 
-    //         if (megaTag2Pose.tagCount > 0) {
-    //             // we have a tag!
-    //             // if the TA is larger than the other camera
-    //             if (LimelightHelpers.getTA(limelight) > maxta) {
-    //                 maxta = LimelightHelpers.getTA(limelight);
-    //                 mt2PoseEstimate = megaTag2Pose;
-    //                 camera = limelight;
-    //             }
+            if (megaTag2Pose.tagCount > 0) {
+                // we have a tag!
+                // if the TA is larger than the other camera
+                if (LimelightHelpers.getTA(limelight) > maxta) {
+                    maxta = LimelightHelpers.getTA(limelight);
+                    mt2 = megaTag2Pose;
+                    camera = limelight;
+                }
+            }
+        }
+        if (camera != null) {
+            swerve.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+            SmartDashboard.putBoolean("limelightTV", true);
+        } else {
+            SmartDashboard.putBoolean("limelightTV", false);
+        }
+    }
 
-    //         }
-
-    //     }
-    //     if (camera != null) {
-    //         swerve.addVisionMeasurement(mt2PoseEstimate.pose, mt2PoseEstimate.timestampSeconds);
-    //         SmartDashboard.putBoolean("limelightTV", true);
-    //     } else {
-    //         SmartDashboard.putBoolean("limelightTV", false);
-    //     }
-    // }
+    public PoseEstimate[] getEstimatedGlobalPose(String[] limelights) {
+        PoseEstimate[] poseEsts = new PoseEstimate[limelights.length];
+        int num = 0;
+        for (String limelight : limelights) {
+            if (LimelightHelpers.getTV(limelight)) {
+                PoseEstimate poseEst = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelight);
+                poseEsts[num] = poseEst;
+            } else {
+                poseEsts[num] = null;
+            }
+            num++;
+        }
+        return poseEsts;
+        // IDK abt ths, (I think the reason for their uncertainty is because they don't know wethere you should return a vision mesurment if they arnt seeing a tag)
+    }
 
     public void periodic() {
 
