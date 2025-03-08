@@ -274,14 +274,14 @@ public class RobotContainer {
 
 
   public Command intializeTheArm() {
-    Command initializeArm = new InitilizeArmEncoders(m_ArmSubsystem);
+    Command initializeArmEncoders = new InitilizeArmEncoders(m_ArmSubsystem);
     Command zeroClaw = new ZeroClaw(m_ArmSubsystem);
     Command zeroPulley = new ZeroPulley(m_ArmSubsystem);
-    Command homeArm = new goToHeightHome(m_ArmSubsystem);
+    Command homePulley = new goToHeightHome(m_ArmSubsystem);
 
   //   return homePulley;
 
-   return Commands.sequence(initializeArm, zeroPulley,zeroClaw,homeArm );
+   return Commands.sequence(initializeArmEncoders, zeroPulley, zeroClaw, homePulley );
     // return initializeArm.Commands.sequence(homeClaw.andThen(homePulley));
   }
 
