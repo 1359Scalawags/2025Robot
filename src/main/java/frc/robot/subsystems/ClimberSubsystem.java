@@ -48,8 +48,8 @@ public class ClimberSubsystem extends SubsystemBase{
     public ClimberSubsystem() {
       // lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless, "LockingBarMotor");
       // positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
-      lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless, "LockingBarMotor");
-      positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
+      lockingBarMotor = new SparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless);
+      positionMotor = new SparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless);
 
       latchingServo = new Servo(Constants.ClimberSubsystem.LatchServo.kServoID);
       lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
