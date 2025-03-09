@@ -65,7 +65,7 @@ public class AbsoluteFieldDrive extends Command {
         // TODO: implement deadband for X and Y?
         double xVelocity = (modvX * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
         double yVelocity = (modvY * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
-        double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * Constants.SwerveSubsystem.kAngleSpeedMultiplier * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
+        double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
 
         // TODO: slow the speed down if the arm is up in the air
         // for example:
