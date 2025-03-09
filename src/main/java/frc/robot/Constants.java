@@ -64,7 +64,7 @@ public final class Constants {
       public static final int kServoID = 0;
       public static final double maxLimit = 1;
       public static final double minLimit = 0;
-      public static final double latchedValue = 0.8;
+      public static final double latchedValue = 0.7;
       public static final double unLatchedValue = 0.2;
       public static final double kNaxActuateTime = 5.0; //max time to run the servo
       
@@ -75,22 +75,22 @@ public final class Constants {
       public static final double kEncoderOffset = 0;
       public static final double kConversionFactor = 360;
       public static final double kMinLimit = 72;
-      public static final double kMaxLimit = 155;
-      public static final double kUnLockedPosition = 72.0;
+      public static final double kMaxLimit = 162;
+      public static final double kUnLockedPosition = 76.0;
       public static final double kLockedPosition = 155.0;
       public static final double kSlewRate = 90;
     }
 
     public static class PositionMotor {
       public static final int kMotorID = 10;
-      public static final double kMaxAngle = 275.0;//0.037*360;
-      public static final double kMinAngle = 143.0;//0.457*360;
+      public static final double kMaxAngle = 155.0;//0.037*360;
+      public static final double kMinAngle = 40.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
-      public static final double kDeployedAngle = 245.0; // 0.185*360;
-      public static final double kHomeAngle = 150.0; //0.442*360;
-      public static final double kLockingPosition = 170.0;
-      public static final double kLockedPosition = 177.5;
+      public static final double kDeployedAngle = 126.0; // 0.185*360;
+      public static final double kHomeAngle = 45.0; //0.442*360;
+      public static final double kLockingPosition = 65.5;
+      public static final double kLockedPosition = 76.7;
       public static final double kMaxJoystickSpeed = 10;
       public static final double kSlewRate = 45.0;
     }
