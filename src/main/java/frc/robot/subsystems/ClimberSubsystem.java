@@ -153,8 +153,8 @@ public class ClimberSubsystem extends SubsystemBase{
   
       lockingMotorConfig.closedLoop
         .p(0.01/2)
-        .i(0.000001/2)
-        .d(0.007/2)
+        .i(0)//0.000001/2
+        .d(0.01)//0.007/2
         .iZone(5)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         .positionWrappingEnabled(false)
