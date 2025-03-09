@@ -124,10 +124,11 @@ public class ClimberSubsystem extends SubsystemBase{
         .inverted(true);
        
       positionMotorConfig.closedLoop
-        .p(0.05)
-        .i(0.0000001)
-        .d(0.08)
-        .iZone(30)
+      // 0.05, 0.0000001, 0.08
+        .p(Constants.ClimberSubsystem.PositionMotor.PIDF.kP)
+        .i(Constants.ClimberSubsystem.PositionMotor.PIDF.kI)
+        .d(Constants.ClimberSubsystem.PositionMotor.PIDF.kD)
+        .iZone(Constants.ClimberSubsystem.PositionMotor.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
@@ -158,10 +159,10 @@ public class ClimberSubsystem extends SubsystemBase{
         .velocityConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
   
       lockingMotorConfig.closedLoop
-        .p(0.01)
-        .i(0.000001)
-        .d(0.007)
-        .iZone(5)
+        .p(Constants.ClimberSubsystem.LockingBarMotor.PIDF.kP)
+        .i(Constants.ClimberSubsystem.LockingBarMotor.PIDF.kI)
+        .d(Constants.ClimberSubsystem.LockingBarMotor.PIDF.kD)
+        .iZone(Constants.ClimberSubsystem.LockingBarMotor.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         .positionWrappingEnabled(false)
         .positionWrappingInputRange(0,360);
