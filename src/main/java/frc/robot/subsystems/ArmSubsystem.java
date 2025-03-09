@@ -68,8 +68,8 @@ public class ArmSubsystem extends SubsystemBase {
     homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.Pulley.kHomeLimitSwitchID);
     clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.Claw.kLimitSwitchID);
 
-    elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.kMINGravityFF,
-        Constants.ArmSubsystem.Elbow.kGravityFF, Constants.ArmSubsystem.Elbow.kHorizontalAngle);
+    elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.PIDF.kMINGravityFF,
+        Constants.ArmSubsystem.Elbow.PIDF.kGravityFF, Constants.ArmSubsystem.Elbow.kHorizontalAngle);
     
     wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
         Constants.ArmSubsystem.Wrist.PIDF.kMinFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
