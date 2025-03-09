@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
-import frc.robot.extensions.SimableSparkMax;
 
 public class ArmSubsystem extends SubsystemBase {
 

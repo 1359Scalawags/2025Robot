@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.extensions.SimableSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -48,8 +47,8 @@ public class ClimberSubsystem extends SubsystemBase{
     public ClimberSubsystem() {
       // lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless, "LockingBarMotor");
       // positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
-      lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless, "LockingBarMotor");
-      positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
+      lockingBarMotor = new SparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless);
+      positionMotor = new SparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless);
 
       latchingServo = new Servo(Constants.ClimberSubsystem.LatchServo.kServoID);
       lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
