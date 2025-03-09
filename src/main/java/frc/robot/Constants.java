@@ -101,13 +101,21 @@ public final class Constants {
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
-      public static final ArmPosition kHome = new ArmPosition(1,200,215);
-      public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
-      public static final ArmPosition kGround = new ArmPosition(1,197,148);//correct
-      public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
-      public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293);//correct
-      public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293);//correct
-      public static final ArmPosition klevel4 = new ArmPosition(52,315,260);//correct
+      // public static final ArmPosition kHome = new ArmPosition(1,200,215);
+      // public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
+      // public static final ArmPosition kGround = new ArmPosition(1,197,148);//correct
+      // public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
+      // public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293);//correct
+      // public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293);//correct
+      // public static final ArmPosition klevel4 = new ArmPosition(52,315,260);//correct
+
+      public static final ArmPosition kHome = new ArmPosition(0,232,200);
+      public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
+      public static final ArmPosition kGround = new ArmPosition(0,232,220);//correct
+      public static final ArmPosition kLevel1 = new ArmPosition(0,232,232);//correct
+      public static final ArmPosition kLevel2 = new ArmPosition(0,232,240);//correct
+      public static final ArmPosition klevel3 = new ArmPosition(0,232,250);//correct
+      public static final ArmPosition klevel4 = new ArmPosition(0,232,260);//correct
     }
 
     public static class Pulley{
@@ -166,11 +174,11 @@ public final class Constants {
       public static final double kTolerance = 2.0;
     public static class PIDF{
       // (0.006, 0.0000006, 0.006)
-      public static final double kP = 0.006;
-      public static final double kI = 0.0000006;
-      public static final double kD = 0.006;
+      public static final double kP = 0; //0.006;
+      public static final double kI = 0; //0.0000006;
+      public static final double kD = 0; //0.006;
       public static final double kIZone = 0;
-      public static final double kGravityFF = 0;
+      public static final double kGravityFF = 0.05;
       public static final double kMinGravityFF = 0;
       }
     }
