@@ -253,8 +253,10 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     clawMotorConfig.closedLoop
-        .pid(0.05, 0.0001, 0.03)// (0.05, 0.0001, 0.03)
-        .iZone(2);
+        .pid(Constants.ArmSubsystem.Claw.PIDF.kP,
+             Constants.ArmSubsystem.Claw.PIDF.kI,
+             Constants.ArmSubsystem.Claw.PIDF.kD)
+        .iZone(Constants.ArmSubsystem.Claw.PIDF.kIZone);
 
     // apply configuration
     clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
