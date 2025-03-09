@@ -118,14 +118,21 @@ public final class Constants {
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 5;
       //public static final double kHomingVelocity = -2;
-      public static final double kStageOneFF = 0.15;
-      public static final double kStageTwoFF = 0.2; //TODO: find the stage two FF
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kHomeLimitSwitchID = 0;
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
+    public static class PIDF{
+       //0.07f, 0.00003f, 0.07f
+      public static final double kP = 0.07;
+      public static final double kI = 0.00003;
+      public static final double kD = 0.07;
+      public static final double kIZone = 5;
+      public static final double kStageOneFF = 0.15;
+      public static final double kStageTwoFF = 0.2;
+      }
     }
 
     public static class Elbow {
@@ -182,6 +189,14 @@ public final class Constants {
       public static final int kLimitSwitchID = 1;
       //public static final double kHomingVelocity = 300;
       public static final double kHomingPositionIncrement = 1.0 * 0.020; // homing loop time is 20ms
+      
+    public static class PIDF{
+          //0.05, 0.0001, 0.03
+      public static final double kP = 0.05;
+      public static final double kI = 0.0001;
+      public static final double kD = 0.03;
+      public static final double kIZone = 2;
+      }
     }
   }
 

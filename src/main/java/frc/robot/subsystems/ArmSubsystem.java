@@ -229,8 +229,10 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
 
     pulleyMotorConfig.closedLoop // TODO: do we want a second slot for the upper part of the Pulley?
-        .pid(0.07f, 0.00003f, 0.07f)
-        .iZone(5);
+        .pid(Constants.ArmSubsystem.Pulley.PIDF.kP,
+             Constants.ArmSubsystem.Pulley.PIDF.kI,
+             Constants.ArmSubsystem.Pulley.PIDF.kD)
+        .iZone(Constants.ArmSubsystem.Pulley.PIDF.kIZone);
 
     // .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot1)
     // .iZone(2, ClosedLoopSlot.kSlot1);
@@ -251,8 +253,10 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     clawMotorConfig.closedLoop
-        .pid(0.05, 0.0001, 0.03)// (0.05, 0.0001, 0.03)
-        .iZone(2);
+        .pid(Constants.ArmSubsystem.Claw.PIDF.kP,
+             Constants.ArmSubsystem.Claw.PIDF.kI,
+             Constants.ArmSubsystem.Claw.PIDF.kD)
+        .iZone(Constants.ArmSubsystem.Claw.PIDF.kIZone);
 
     // apply configuration
     clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -388,9 +392,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   public double pulleyMotorFF() {
     if (getPulleyHeight() <= Constants.ArmSubsystem.Pulley.kStageTwoPulleyPosition) {
-      return Constants.ArmSubsystem.Pulley.kStageOneFF;
+      return Constants.ArmSubsystem.Pulley.PIDF.kStageOneFF;
     } else {
-      return Constants.ArmSubsystem.Pulley.kStageTwoFF;
+      return Constants.ArmSubsystem.Pulley.PIDF.kStageTwoFF;
     }
   }
 
