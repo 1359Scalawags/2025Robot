@@ -224,8 +224,10 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
 
     pulleyMotorConfig.closedLoop // TODO: do we want a second slot for the upper part of the Pulley?
-        .pid(0.07f, 0.00003f, 0.07f)
-        .iZone(5);
+        .pid(Constants.ArmSubsystem.Pulley.PIDF.kP,
+             Constants.ArmSubsystem.Pulley.PIDF.kI,
+             Constants.ArmSubsystem.Pulley.PIDF.kD)
+        .iZone(Constants.ArmSubsystem.Pulley.PIDF.kIZone);
 
     // .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot1)
     // .iZone(2, ClosedLoopSlot.kSlot1);
@@ -383,9 +385,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   public double pulleyMotorFF() {
     if (getPulleyHeight() <= Constants.ArmSubsystem.Pulley.kStageTwoPulleyPosition) {
-      return Constants.ArmSubsystem.Pulley.kStageOneFF;
+      return Constants.ArmSubsystem.Pulley.PIDF.kStageOneFF;
     } else {
-      return Constants.ArmSubsystem.Pulley.kStageTwoFF;
+      return Constants.ArmSubsystem.Pulley.PIDF.kStageTwoFF;
     }
   }
 
