@@ -135,10 +135,17 @@ public final class Constants {
       public static final double kMaxLimit = 330;
       public static final double kMinLimit = 195;
       public static final double kSlewRate = 45;
-      public static final double kGravityFF = 0.335;
-      public static final double kMINGravityFF = 0.00001;
       public static final double kHorizontalAngle = 232.0;
       public static final double kTolerance = 1.0;
+    public static class PIDF{
+          //0.025, 0.00001, 0.07
+        public static final double kP = 0.025;
+        public static final double kI = 0.00001;
+        public static final double kD = 0.07;
+        public static final double kIZone = 2;
+        public static final double kGravityFF = 0.335;
+        public static final double kMINGravityFF = 0.00001;
+        }
     }
 
     public static class Wrist {
@@ -150,6 +157,15 @@ public final class Constants {
       public static final double kSlewRate = 10;
       public static final double kHorizontalAngle =232.0; //XXX: This is just a guess...must fix
       public static final double kTolerance = 2.0;
+    public static class PIDF{
+      // (0.006, 0.0000006, 0.006)
+      public static final double kP = 0.006;
+      public static final double kI = 0.0000006;
+      public static final double kD = 0.006;
+      public static final double kIZone = 0;
+      public static final double kGravityFF = 0;
+      public static final double kMinGravityFF = 0;
+      }
     }
 
     public static class Claw {

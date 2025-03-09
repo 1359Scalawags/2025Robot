@@ -72,8 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ArmSubsystem.Elbow.PIDF.kGravityFF, Constants.ArmSubsystem.Elbow.kHorizontalAngle);
     
     wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
-        Constants.ArmSubsystem.Wrist.PIDF.kMinFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
-
+        Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
 
 
     // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
@@ -172,8 +171,11 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
 
     wristMotorConfig.closedLoop
-        .pid(0.006, 0.0000006, 0.006)// (0.006, 0.0000006, 0.006)
-        .iZone(2)
+        .pid(Constants.ArmSubsystem.Wrist.PIDF.kP,
+             Constants.ArmSubsystem.Wrist.PIDF.kI,
+             Constants.ArmSubsystem.Wrist.PIDF.kD)
+
+        .iZone(Constants.ArmSubsystem.Wrist.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
     // apply configuration
@@ -202,8 +204,11 @@ public class ArmSubsystem extends SubsystemBase {
         .positionConversionFactor(Constants.ArmSubsystem.Elbow.kConversionFactor);
 
     elbowMotorConfig.closedLoop
-        .pid(0.025, 0.00001, 0.07)
-        .iZone(2)
+        .pid(Constants.ArmSubsystem.Elbow.PIDF.kP,
+             Constants.ArmSubsystem.Elbow.PIDF.kI,
+             Constants.ArmSubsystem.Elbow.PIDF.kD)
+
+        .iZone(Constants.ArmSubsystem.Elbow.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
     // apply configuration
