@@ -41,6 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
   private boolean wristError = true;
 
   private GravityAssistedFeedForward elbowFF;
+  private GravityAssistedFeedForward wristFF;
 
   public ArmSubsystem() {
     // pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
@@ -68,7 +69,11 @@ public class ArmSubsystem extends SubsystemBase {
     clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.Claw.kLimitSwitchID);
 
     elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.PIDF.kMINGravityFF,
-        Constants.ArmSubsystem.Elbow.PIDF.kGravityFF, 232);
+        Constants.ArmSubsystem.Elbow.PIDF.kGravityFF, Constants.ArmSubsystem.Elbow.kHorizontalAngle);
+    
+    wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
+        Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
+
 
     // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
     // Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
@@ -399,18 +404,29 @@ public class ArmSubsystem extends SubsystemBase {
     return pulleyMotor.getEncoder().getPosition();
   }
 
-  // TODO: figure out way to make this work
-  public double getRelativeWristAngle() {
-    double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() + elbowMotor.getAbsoluteEncoder().getPosition();
-    return wristAngle;
-  }
+  // public double getRelativeWristAngle() {
+  //   double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() + elbowMotor.getAbsoluteEncoder().getPosition();
+  //   return wristAngle;
+  // }
 
-  // XXX:WRIST: Is this really needed?
+  //public double getRelativeWristAngle() {
+  //double wristStandard = getElbowPosition - Constant;
+  //double elbowStandard = getWristPosition - Constant;
+  //double relativeWristAngle = wristStandard + ElbowStandar;
+  //return relativeWristAngle
+  // //}
+
   // public double getRelativeWristAngle() {
   //   double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
   //   double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() - elbowDiff; 
   //   return wristAngle;
   // }
+
+    //XXX: Why does this work?
+  public double getRelativeWristAngle() {
+    double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() - Constants.ArmSubsystem.Wrist.kHorizontalAngle;
+    return wristAngle;
+  }
 
   public double getAbsoluteWristAngleMax() {
     double elbowDiff = getElbowMotorPosition() - Constants.ArmSubsystem.Elbow.kHorizontalAngle;
@@ -469,7 +485,7 @@ public class ArmSubsystem extends SubsystemBase {
         //XXX:WRIST: prevent wrist from going outside valid bounds
 
         if (wristError == false) {
-          wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition);
+          wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getRelativeWristAngle()));
         }
 
         if (elbowError == false) {

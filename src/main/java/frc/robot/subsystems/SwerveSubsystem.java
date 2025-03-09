@@ -506,10 +506,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public void drive(Translation2d translation, double rotation, boolean fieldRelative)
   {
     // slows the movment of the robot as the pulley increases
-    Translation2d translationModified = translation.times(ArmSubsystem.getSpeedMultiplier());
+    Translation2d translationMod = translation.times(ArmSubsystem.getSpeedMultiplier());
+    double rotationMod =  ((rotation * Constants.SwerveSubsystem.kAngleSpeedMultiplier) * (ArmSubsystem.getSpeedMultiplier() * 1/2));
     //XXX: do we need to limit the velocity of the rotation 
-    swerveDrive.drive(translationModified,
-                      rotation,
+    swerveDrive.drive(translationMod,
+                      rotationMod,
                       fieldRelative,
                       false); // Open loop is disabled since it shouldn't be used most of the time.
   }

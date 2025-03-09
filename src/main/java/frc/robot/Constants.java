@@ -28,7 +28,7 @@ public final class Constants {
     public static final Object CHASSIS = null;
     public static final double TURN_CONSTANT = 0;
     public static final double kTeleopDeadzone = 0.1;
-    public static final double kAngleSpeedMultiplier = 1;
+    public static final double kAngleSpeedMultiplier = 3/4;
 
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
@@ -162,7 +162,7 @@ public final class Constants {
       public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
       public static final double kSlewRate = 10;
-      public static final double kHorizontalAngle = 90; //XXX: This is just a guess...must fix
+      public static final double kHorizontalAngle =232.0; //XXX: This is just a guess...must fix
       public static final double kTolerance = 2.0;
     public static class PIDF{
       // (0.006, 0.0000006, 0.006)
@@ -171,6 +171,7 @@ public final class Constants {
       public static final double kD = 0.006;
       public static final double kIZone = 0;
       public static final double kGravityFF = 0;
+      public static final double kMinGravityFF = 0;
       }
     }
 
