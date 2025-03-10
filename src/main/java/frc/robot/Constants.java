@@ -148,12 +148,12 @@ public final class Constants {
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
     public static class PIDF{
        //0.07f, 0.00003f, 0.07f
-      public static final double kP = 0.07;
-      public static final double kI = 0.00003;
-      public static final double kD = 0.07;
-      public static final double kIZone = 5;
-      public static final double kStageOneFF = 0.15;
-      public static final double kStageTwoFF = 0.2;
+      public static final double kP = 0;//0.07
+      public static final double kI = 0;//0.00003
+      public static final double kD = 0;//0.07;
+      public static final double kIZone = 0;//5;
+      public static final double kStageOneFF = 0;//0.15;
+      public static final double kStageTwoFF = 0;//0.2;
       }
     }
 
@@ -169,8 +169,8 @@ public final class Constants {
     public static class PIDF{
           //0.025, 0.00001, 0.07
         public static final double kP = 0.025;
-        public static final double kI = 0.00001;
-        public static final double kD = 0.07;
+        public static final double kI = 0.00001/4;
+        public static final double kD = 0.1;
         public static final double kIZone = 2;
         public static final double kGravityFF = 0.335;
         public static final double kMINGravityFF = 0.00001;
@@ -192,7 +192,7 @@ public final class Constants {
       public static final double kI = 0; //0.0000006;
       public static final double kD = 0; //0.006;
       public static final double kIZone = 2;
-      public static final double kGravityFF = 0.05;
+      public static final double kGravityFF = 0.5;
       public static final double kMinGravityFF = 0;
       }
     }

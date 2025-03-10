@@ -108,17 +108,18 @@ public class ArmSubsystem extends SubsystemBase {
       System.out.println("------ELBOW ERROR---------");
       DriverStation.reportError("------ELBOW ERROR---------", false);
     } else {
-      wristError = false;
+      elbowError = false;
       elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;      
     }
 
     System.out.println("--------------Reported Positions at Intialization: --------------");
-    System.out.println("  Pulley: " + pulleyMotorTarget);
-    System.out.println("  Elbow: " + elbowMotorTarget);
-    System.out.println("  Wrist: " + wristMotorTarget);
-    System.out.println("  Claw: " + clawMotorTarget);
+    System.out.println("  Pulley: " + getPulleyHeight());
+    System.out.println("  Elbow: " + getElbowMotorPosition());
+    System.out.println("  Wrist: " + getWristMotorPosition());
+    System.out.println("  Claw: " + getClawMotorPosition());
     System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
     System.out.println("  calculated writst min: " + getAbsoluteWristAngleMin());
+    
 
 
     pulleyLimiter.reset(pulleyMotorTarget);
@@ -440,11 +441,11 @@ public class ArmSubsystem extends SubsystemBase {
     return Constants.ArmSubsystem.Wrist.kMinLimit + elbowDiff;
   }
 
-
+  int counter = 0;
   // TODO: moving slow when within the range of the limit switch?
   @Override
   public void periodic() {
-
+    counter++;
     ARM_HEIGHT = getCalculatedHeight();
    
 
@@ -488,6 +489,10 @@ public class ArmSubsystem extends SubsystemBase {
 
         if (wristError == false) {
           wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getRelativeWristAngle()));
+          if(counter > 25) {
+            counter=0;
+            System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
+          }
         }
 
         if (elbowError == false) {
