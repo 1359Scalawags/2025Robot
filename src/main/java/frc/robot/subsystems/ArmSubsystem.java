@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
+import frc.robot.extensions.SparkMaxPIDTuner;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -40,6 +41,8 @@ public class ArmSubsystem extends SubsystemBase {
   private boolean wristError = true;
 
   private GravityAssistedFeedForward elbowFF;
+
+  private SparkMaxPIDTuner elbowTuner;
 
   public ArmSubsystem() {
     // pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
@@ -78,6 +81,9 @@ public class ArmSubsystem extends SubsystemBase {
     // Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
     //Shuffleboard.getTab("Arm").add("Elbow Absolute", elbowMotor.getAbsoluteEncoder());
     //Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
+
+    elbowTuner = new SparkMaxPIDTuner(0.1, 0.0001, 0.05, 5, 0, 0.015);
+    Shuffleboard.getTab("Arm Tuner").add("Elbow Tuner", elbowTuner);
   }
 
   public void initializeArm() {
