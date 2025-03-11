@@ -74,16 +74,6 @@ public class ArmSubsystem extends SubsystemBase {
     wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
         Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
 
-
-    // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
-    // Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
-    // Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
-    // Shuffleboard.getTab("Arm").add("Pulley Motor", pulleyMotor);
-    // Shuffleboard.getTab("Arm").add("Wrist Motor", wristMotor);
-    // Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
-    // Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
-    //Shuffleboard.getTab("Arm").add("Elbow Absolute", elbowMotor.getAbsoluteEncoder());
-    //Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
   }
 
   public void initializeArm() {
@@ -93,41 +83,11 @@ public class ArmSubsystem extends SubsystemBase {
     elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
-
-    if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
-      wristError = true;
-      System.out.println("------WRIST ERROR---------");
-      DriverStation.reportError("------WRIST ERROR---------", false);
-    } else {
-      wristError = false;
-      wristMotorTarget = Constants.ArmSubsystem.Positions.kHome.wrist;    
-    }
-
-    if (MathUtil.isNear(elbowMotorTarget, 0, 2)) {
-      elbowError = true;
-      System.out.println("------ELBOW ERROR---------");
-      DriverStation.reportError("------ELBOW ERROR---------", false);
-    } else {
-      elbowError = false;
-      elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;      
-    }
-
-    System.out.println("--------------Reported Positions at Intialization: --------------");
-    System.out.println("  Pulley: " + getPulleyHeight());
-    System.out.println("  Elbow: " + getElbowMotorPosition());
-    System.out.println("  Wrist: " + getWristMotorPosition());
-    System.out.println("  Claw: " + getClawMotorPosition());
-    System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
-    System.out.println("  calculated writst min: " + getAbsoluteWristAngleMin());
-    
-
-
     pulleyLimiter.reset(pulleyMotorTarget);
     elbowLimiter.reset(elbowMotorTarget);
     wristLimiter.reset(wristMotorTarget);
     clawLimiter.reset(clawMotorTarget);
 
- 
     initialized = true;
   }
 
@@ -153,7 +113,6 @@ public class ArmSubsystem extends SubsystemBase {
         .iZone(Constants.ArmSubsystem.Wrist.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
-    // apply configuration
     wristMotor.configure(wristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -166,13 +125,6 @@ public class ArmSubsystem extends SubsystemBase {
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
         .smartCurrentLimit(20, 20, 480);
-   
-    //XXX: Should we use soft limits for the elbow? I've put a template here in case we decide to
-    // elbowMotorConfig.softLimit
-    //   .forwardSoftLimit(max)
-    //   .forwardSoftLimitEnabled(true)
-    //   .reverseSoftLimit(min)
-    //   .reverseSoftLimitEnabled(true);
 
     elbowMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Elbow.kMotorOffset)
@@ -186,7 +138,6 @@ public class ArmSubsystem extends SubsystemBase {
         .iZone(Constants.ArmSubsystem.Elbow.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
-    // apply configuration
     elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -209,10 +160,6 @@ public class ArmSubsystem extends SubsystemBase {
              Constants.ArmSubsystem.Pulley.PIDF.kD)
         .iZone(Constants.ArmSubsystem.Pulley.PIDF.kIZone);
 
-    // .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot1)
-    // .iZone(2, ClosedLoopSlot.kSlot1);
-
-    // apply configuration
     pulleyMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
