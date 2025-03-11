@@ -10,76 +10,39 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
-<<<<<<< HEAD
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-=======
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SimableSparkMax;
-import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
-import frc.robot.extensions.SparkMaxPIDTunerPosition;
 
 public class ArmSubsystem extends SubsystemBase {
 
-<<<<<<< HEAD
-    private SimableSparkMax pulleyMotor,elbowMotor, wristMotor, clawMotor;
-=======
   //private SimableSparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
   private SparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
   private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;
   private double pulleyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
   private static double ARM_HEIGHT;
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 
   private DigitalInput homeLimitSwitch;
   private DigitalInput clawLimitSwitch;
 
-<<<<<<< HEAD
-    private SparkMaxPIDTunerPosition pulleyTuner, elbowTuner, wristTuner, clawTuner;
-
-    private GravityAssistedFeedForward elbowFeedForward;
-
-=======
   private boolean clawInitialized = false;
   private boolean pulleyInitialized = false;
   private boolean initialized = false;
   private boolean elbowError = true;
   private boolean wristError = true;
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 
   private GravityAssistedFeedForward elbowFF;
   private GravityAssistedFeedForward wristFF;
 
-<<<<<<< HEAD
-      configureWristMotor();
-      configureElbowMotor();
-      configurePulleyMotor();
-      configureClawMotor();
-
-      elbowFeedForward = new GravityAssistedFeedForward(0.1, 232);
-      pulleyTuner = new SparkMaxPIDTunerPosition("A: Pulley", pulleyMotor, ControlType.kPosition);
-      elbowTuner = new SparkMaxPIDTunerArmPosition("A: Elbow", elbowMotor, ControlType.kPosition, elbowFeedForward);
-      wristTuner = new SparkMaxPIDTunerPosition("A: Wrist", wristMotor, ControlType.kPosition);
-      clawTuner = new SparkMaxPIDTunerPosition("A: Claw", clawMotor, ControlType.kPosition);
-
-      pulleyTuner.buildShuffleboard();
-      elbowTuner.buildShuffleboard();
-      wristTuner.buildShuffleboard();
-      clawTuner.buildShuffleboard();
-
-      homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.kHomeLimitSwitchID);
-
-=======
   public ArmSubsystem() {
     // pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
     // elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);
@@ -147,7 +110,6 @@ public class ArmSubsystem extends SubsystemBase {
     } else {
       elbowError = false;
       elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;      
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
     }
 
     System.out.println("--------------Reported Positions at Intialization: --------------");
@@ -165,33 +127,7 @@ public class ArmSubsystem extends SubsystemBase {
     wristLimiter.reset(wristMotorTarget);
     clawLimiter.reset(clawMotorTarget);
 
-    // pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
-    // elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
-
-    // double safeWritsTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
-    // wristMotor.setReferencePosition(wristLimiter, safeWritsTarget);
-    // clawMotor.setReferencePosition(clawLimiter, clawMotorTarget);
-
-    // !!Homing moved to separate commands
-    // if (this.homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
-    //   pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
-    //   pulleyMotor.getEncoder().setPosition(0);
-    //   pulleyLimiter.reset(0);
-    //   pulleyInitialized = true;
-    // } else {
-    //   pulleyMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Pulley.kHomingVelocity, ControlType.kVelocity);
-    // }
-
-    // if(this.clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState) {
-    //    clawMotorTarget = Constants.ArmSubsystem.Claw.kCloseClaw;
-    //    clawMotor.getEncoder().setPosition(0);
-    //    clawLimiter.reset(0);
-    //    clawInitialized = true;
-    // } else {
-    //   clawMotor.getClosedLoopController().setReference(Constants.ArmSubsystem.Claw.kHomingVelocity, ControlType.kVelocity);
-    // }
-
-    // this is now true as soon as encoders and limiters are initialized
+ 
     initialized = true;
   }
 
@@ -209,23 +145,10 @@ public class ArmSubsystem extends SubsystemBase {
         .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
         .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
 
-<<<<<<< HEAD
-      wristMotorConfig.absoluteEncoder
-      .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
-      .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
-     
-     
-      wristMotorConfig.closedLoop
-      .p(1.0f)
-      .i(0.0f)
-      .d(0.0)
-      .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-=======
     wristMotorConfig.closedLoop
         .pid(Constants.ArmSubsystem.Wrist.PIDF.kP,
              Constants.ArmSubsystem.Wrist.PIDF.kI,
              Constants.ArmSubsystem.Wrist.PIDF.kD)
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 
         .iZone(Constants.ArmSubsystem.Wrist.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
@@ -254,20 +177,6 @@ public class ArmSubsystem extends SubsystemBase {
     elbowMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Elbow.kMotorOffset)
         .positionConversionFactor(Constants.ArmSubsystem.Elbow.kConversionFactor);
-<<<<<<< HEAD
-       
-       
-        elbowMotorConfig.closedLoop
-        .p(1.0f)
-        .i(0.0f)
-        .d(0.0)
-        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-  
-        // apply configuration
-        elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      }
-=======
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 
     elbowMotorConfig.closedLoop
         .pid(Constants.ArmSubsystem.Elbow.PIDF.kP,
@@ -444,50 +353,14 @@ public class ArmSubsystem extends SubsystemBase {
     return elbowMotor.getAbsoluteEncoder().getPosition();
   }
 
-<<<<<<< HEAD
-    private void configureClawMotor() {
-      SparkMaxConfig clawMotorConfig = new SparkMaxConfig();
-  
-        clawMotorConfig
-          .idleMode(IdleMode.kBrake)
-          .inverted(false)
-          .openLoopRampRate(1.0)
-          .closedLoopRampRate(1.0)
-          .smartCurrentLimit(70, 30, 120);
-  
-        clawMotorConfig.absoluteEncoder
-        .zeroOffset(Constants.ArmSubsystem.Claw.kMotorOffset)
-        .positionConversionFactor(Constants.ArmSubsystem.Claw.kConversionFactor);
-       
-       
-        clawMotorConfig.closedLoop
-        .p(1.0f)
-        .i(0.0f)
-        .d(0.0)
-        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-  
-        // apply configuration
-        clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-      }
-=======
   public double getClawMotorPosition() {
     return clawMotor.getEncoder().getPosition();
   }
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 
   public boolean isClawAtHome() {
     return clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState;
   }
 
-<<<<<<< HEAD
-    @Override
-    public void periodic() {
-      pulleyTuner.updateEncoderValues();
-      elbowTuner.updateEncoderValues();
-      wristTuner.updateEncoderValues();
-      clawTuner.updateEncoderValues();
-     
-=======
   public boolean isPulleyAtHome() {
     return homeLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState;
   }
@@ -559,7 +432,6 @@ public class ArmSubsystem extends SubsystemBase {
         pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley), ControlType.kPosition);
         pulleyInitialized = true;                                                                                                 // check
       }
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
     }
 
     // Claw limit switch

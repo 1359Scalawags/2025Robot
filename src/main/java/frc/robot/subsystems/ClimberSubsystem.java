@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
-<<<<<<< HEAD
-=======
 import com.revrobotics.AbsoluteEncoder;
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -11,18 +8,16 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-<<<<<<< HEAD
-=======
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.RobotState;
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.extensions.SimableSparkMax;
-import frc.robot.extensions.SparkMaxPIDTunerPosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -32,28 +27,24 @@ public class ClimberSubsystem extends SubsystemBase{
   private SparkMax lockingBarMotor;  
   private SparkMax positionMotor;
 
+  private AbsoluteEncoder lockingBarEncoder;
+  private AbsoluteEncoder positionEncoder;
+
   private Servo latchingServo;
 
-  private SparkMaxPIDTunerPosition lockBarTuner;
-  private SparkMaxPIDTunerPosition positionMotorTuner;
+  private double lockingTargetPosition;
+  private double climberTargetPosition;
 
+  private SlewRateLimiter positionLimiter;
+  private SlewRateLimiter lockingPositionLimiter;
 
-  public ClimberSubsystem() {
-    lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless, "LockingBarMotor");
-    positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
-    latchingServo = new Servo(Constants.ClimberSubsystem.LatchServo.kServoID);
+    //TODO: make this make sense to the drivers when it is in the dashboard
+  private boolean moveClimberCommandLock = true;
 
-    configureLockingBarMotor();
-    configurePositionMotor();
-    
-    lockBarTuner = new SparkMaxPIDTunerPosition("C: Lock Bar", lockingBarMotor, ControlType.kPosition);
-    //lockBarTuner = new SparkMaxPIDTuner("C: Lock Bar", lockingBarMotor, ControlType.kMAXMotionPositionControl);
-    positionMotorTuner = new SparkMaxPIDTunerPosition("C: Position", positionMotor, ControlType.kPosition);
+  private Timer debugTimer;
 
-  }
+  private boolean isInitialized = false;
 
-<<<<<<< HEAD
-=======
     public ClimberSubsystem() {
       // lockingBarMotor = new SimableSparkMax(Constants.ClimberSubsystem.LockingBarMotor.kMotorID, MotorType.kBrushless, "LockingBarMotor");
       // positionMotor = new SimableSparkMax(Constants.ClimberSubsystem.PositionMotor.kMotorID, MotorType.kBrushless, "postionMotor");
@@ -63,76 +54,23 @@ public class ClimberSubsystem extends SubsystemBase{
       latchingServo = new Servo(Constants.ClimberSubsystem.LatchServo.kServoID);
       lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
       positionEncoder = positionMotor.getAbsoluteEncoder();
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 
-  private void configurePositionMotor(){
-    // create a new sparkmax config
-    SparkMaxConfig positionMotorConfig = new SparkMaxConfig();
+      positionLimiter = new SlewRateLimiter(Constants.ClimberSubsystem.PositionMotor.kSlewRate);
+      lockingPositionLimiter = new SlewRateLimiter(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate);
 
-    positionMotorConfig
-      .idleMode(IdleMode.kCoast)
-      .inverted(false)
-      .openLoopRampRate(Constants.ClimberSubsystem.PositionMotor.kSlewRate)
-      .closedLoopRampRate(Constants.ClimberSubsystem.PositionMotor.kSlewRate)
-      .smartCurrentLimit(70, 30, 120);
-
-    positionMotorConfig.absoluteEncoder
-    .zeroOffset(Constants.ClimberSubsystem.PositionMotor.kEncoderOffset)
-    .positionConversionFactor(Constants.ClimberSubsystem.PositionMotor.kConversionFactor)
-    .inverted(true);
+      configureLockingBarMotor();
+      configurePositionMotor();
       
-<<<<<<< HEAD
-    positionMotorConfig.closedLoop
-    .p(0.01f)
-    .i(0.0)
-    .d(0.0)
-    .iZone(0.001)
-    .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-=======
       Shuffleboard.getTab("climber").add("Position Motor", positionMotor);
       Shuffleboard.getTab("climber").add("Latching Servo", latchingServo); 
       Shuffleboard.getTab("climber").add("Locking Bar", lockingBarMotor);
       Shuffleboard.getTab("climber").add("Position Motor Position",positionMotor.getEncoder().getPosition());
       Shuffleboard.getTab("climber").add("Applied output", positionMotor.getAppliedOutput());
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 
-    // apply configuration
-    positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
+      debugTimer = new Timer();
+      debugTimer.start();
+    }
 
-<<<<<<< HEAD
-  private void configureLockingBarMotor() {
-    // create a new sparkmax config
-    SparkMaxConfig lockingMotorConfig = new SparkMaxConfig();
-
-    lockingMotorConfig
-      .idleMode(IdleMode.kBrake)
-      .inverted(true)
-      .openLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
-      .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
-      .smartCurrentLimit(70, 30, 1000);
-      
-    lockingMotorConfig.softLimit
-      .reverseSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMinLimit)
-      .forwardSoftLimit(Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit)
-      .forwardSoftLimitEnabled(true)
-      .reverseSoftLimitEnabled(true);
-
-    lockingMotorConfig.absoluteEncoder 
-      .inverted(false)
-      .zeroOffset(Constants.ClimberSubsystem.LockingBarMotor.kEncoderOffset)
-      .positionConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor)
-      .velocityConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
-
-    lockingMotorConfig.closedLoop
-      .p(0.005)
-      .i(0.0)
-      .d(0.0)
-      .iZone(5)
-      .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-      .positionWrappingEnabled(false)
-      .positionWrappingInputRange(0,360);
-=======
     public void initializeClimber() {
         climberTargetPosition = Constants.ClimberSubsystem.PositionMotor.kHomeAngle;
         lockingTargetPosition = Constants.ClimberSubsystem.LockingBarMotor.kMinLimit;
@@ -192,24 +130,11 @@ public class ClimberSubsystem extends SubsystemBase{
         .d(Constants.ClimberSubsystem.PositionMotor.PIDF.kD)
         .iZone(Constants.ClimberSubsystem.PositionMotor.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 
-    lockingMotorConfig.closedLoop.maxMotion
-      .maxVelocity(5)
-      .maxAcceleration(1)
-      .allowedClosedLoopError(0.01);
+      // apply configuration
+      positionMotor.configure(positionMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
 
-<<<<<<< HEAD
-    // apply configuration
-    lockingBarMotor.configure(lockingMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-
-  @Override
-  public void periodic() {
-    lockBarTuner.updateEncoderValues();
-    positionMotorTuner.updateEncoderValues();
-=======
     private void configureLockingBarMotor() {
       // create a new sparkmax config
       SparkMaxConfig lockingMotorConfig = new SparkMaxConfig();
@@ -363,6 +288,5 @@ public class ClimberSubsystem extends SubsystemBase{
         double lockingImmediateTargetAngle = MathUtil.clamp(lockingPositionLimiter.calculate(lockingTargetPosition), Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
         lockingBarMotor.getClosedLoopController().setReference(lockingImmediateTargetAngle, ControlType.kPosition);
       }
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
   }     
 }

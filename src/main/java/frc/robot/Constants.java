@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-<<<<<<< HEAD
-=======
 import edu.wpi.first.apriltag.AprilTagFields;
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
 import frc.robot.extensions.ArmPosition;
 
 /**
@@ -145,10 +142,6 @@ public final class Constants {
       //public static final double kHomingVelocity = -2;
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
-<<<<<<< HEAD
-      public static final double kHomingVelocity = 0;
-      public static final double kPositionTolerance = 1.5;
-=======
       public static final int kHomeLimitSwitchID = 0;
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
@@ -162,19 +155,12 @@ public final class Constants {
       public static final double kStageOneFF = 0;//0.15;
       public static final double kStageTwoFF = 0;//0.2;
       }
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
     }
 
     public static class Elbow {
       public static final int kMotorID = 19;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-<<<<<<< HEAD
-      public static final double kMaxLimit = 0;
-      public static final double kMinLimit = 0;
-      public static final double kSlewRate = 0;
-      public static final double kPositionTolerance = 1.5;
-=======
       public static final double kMaxLimit = 330;
       public static final double kMinLimit = 195;
       public static final double kSlewRate = 45;
@@ -189,19 +175,12 @@ public final class Constants {
         public static final double kGravityFF = 0.335;
         public static final double kMINGravityFF = 0.00001;
         }
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
     }
 
     public static class Wrist {
       public static final int kMotorID = 16;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-<<<<<<< HEAD
-      public static final double kMaxLimit = 0;
-      public static final double kMinLimit = 0;
-      public static final double kSlewRate = 0;
-      public static final double kPositionTolerance = 1.5;
-=======
       public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
       public static final double kSlewRate = 10;
@@ -216,7 +195,6 @@ public final class Constants {
       public static final double kGravityFF = 0.5;
       public static final double kMinGravityFF = 0;
       }
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
     }
 
     public static class Claw {
@@ -224,12 +202,6 @@ public final class Constants {
       public static final int kMotorID = 18;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-<<<<<<< HEAD
-      public static final double kMaxLimit = 0;
-      public static final double kMinLimit = 0;
-      public static final double kSlewRate = 0;
-      public static final double kPositionTolerance = 1.5;
-=======
       public static final double kMaxLimit = 0; //good
       public static final double kMinLimit = -17.38;
       public static final double kSlewRate = 20;
@@ -247,7 +219,6 @@ public final class Constants {
       public static final double kD = 0.03;
       public static final double kIZone = 2;
       }
->>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
     }
   }
 
