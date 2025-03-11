@@ -445,6 +445,12 @@ public class ArmSubsystem extends SubsystemBase {
   // TODO: moving slow when within the range of the limit switch?
   @Override
   public void periodic() {
+
+    // if tuning, do nothing
+    if(Constants.kTuning) {
+      return;
+    }
+
     counter++;
     ARM_HEIGHT = getCalculatedHeight();
    

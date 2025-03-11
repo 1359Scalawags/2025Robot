@@ -264,7 +264,11 @@ public class ClimberSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-
+      
+    // if tuning, do nothing
+    if(Constants.kTuning) {
+      return;
+    }
       // if (Constants.kDebug == true){
       // SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       // SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
