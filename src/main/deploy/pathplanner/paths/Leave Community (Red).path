@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 8.063510101010102,
+        "y": 1.9311868686868683
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8867097128871766,
-        "y": 6.9375242630744784
+        "x": 7.813793066578993,
+        "y": 1.94307815604073
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 7.0
+        "x": 6.7421717171717175,
+        "y": 1.9311868686868683
       },
       "prevControl": {
-        "x": 2.0894015371738206,
-        "y": 6.989316934304376
+        "x": 6.9921717171717175,
+        "y": 1.9311868686868683
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Leave Community",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

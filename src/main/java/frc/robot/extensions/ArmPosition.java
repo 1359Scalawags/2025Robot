@@ -18,6 +18,7 @@ public class ArmPosition {
         this.elbow = elbow;
         this.wrist = wrist;
     }
+<<<<<<< HEAD
 
     public boolean isNear(ArmPosition position) {
         if(MathUtil.isNear(this.pulley, position.pulley, Constants.ArmSubsystem.Pulley.kPositionTolerance) &&
@@ -26,5 +27,16 @@ public class ArmPosition {
            return true;
 
         return false;
+=======
+        //TODO: tune these tolerances?
+    public boolean isNear(ArmPosition position){
+        if(MathUtil.isNear(this.pulley, position.pulley, Constants.ArmSubsystem.Pulley.kTolerance) && 
+            MathUtil.isNear(this.elbow, position.elbow, Constants.ArmSubsystem.Elbow.kTolerance)&&
+            MathUtil.isNear(this.wrist, position.wrist, Constants.ArmSubsystem.Wrist.kTolerance)){
+            return true;
+        } else {
+            return false;
+        }
+>>>>>>> ccb55d266ba6a39506bcf2d4de652e18d5527e12
     }
 }

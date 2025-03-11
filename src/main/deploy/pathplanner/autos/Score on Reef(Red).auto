@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Test Forward Path"
+            "pathName": "Go to Reef(Red)"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Score on Reef",
   "choreoAuto": false
 }
