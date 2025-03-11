@@ -72,7 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ArmSubsystem.Elbow.PIDF.kGravityFF, Constants.ArmSubsystem.Elbow.kHorizontalAngle);
     
     wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
-        Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
+        Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, 0);
 
 
     // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
@@ -165,7 +165,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 120);
+        .smartCurrentLimit(20, 20, 720);
     
     wristMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
@@ -486,19 +486,21 @@ public class ArmSubsystem extends SubsystemBase {
         // elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
 
         //XXX:WRIST: prevent wrist from going outside valid bounds
-
+        if(counter > 25) {
         if (wristError == false) {
           wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getRelativeWristAngle()));
-          if(counter > 25) {
+         
             counter=0;
             System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
-          }
+          
         }
 
         if (elbowError == false) {
           elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
           ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+          System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
         }
+      }
         
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);

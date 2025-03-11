@@ -272,16 +272,19 @@ public class RobotContainer {
   //   return new InitilizeClimber(m_ClimberSubsystem);
   // }
 
+  public Command intializeArmEncoders() {
+    Command initializeArmEncoders = new InitilizeArmEncoders(m_ArmSubsystem);
+    return initializeArmEncoders.ignoringDisable(true);
+  }
 
   public Command intializeTheArm() {
-    Command initializeArmEncoders = new InitilizeArmEncoders(m_ArmSubsystem);
     Command zeroClaw = new ZeroClaw(m_ArmSubsystem);
     Command zeroPulley = new ZeroPulley(m_ArmSubsystem);
     Command homePulley = new goToHeightHome(m_ArmSubsystem);
 
   //   return homePulley;
 
-   return Commands.sequence(initializeArmEncoders, zeroPulley, zeroClaw, homePulley );
+   return Commands.sequence(zeroPulley, zeroClaw, homePulley );
     // return initializeArm.Commands.sequence(homeClaw.andThen(homePulley));
   }
 
