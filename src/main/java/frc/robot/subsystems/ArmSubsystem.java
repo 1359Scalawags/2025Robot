@@ -191,7 +191,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 480);
+        .smartCurrentLimit(20, 20, 720);
    
     //XXX: Should we use soft limits for the elbow? I've put a template here in case we decide to
     // elbowMotorConfig.softLimit
