@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.Constants;
 import frc.robot.commands.Tuning.Apply_Values;
 import frc.robot.commands.Tuning.Reset_Values;
 import frc.robot.commands.Tuning.Start_Motor;
@@ -92,19 +93,22 @@ public abstract class SparkMaxPIDTunerBase {
             .withPosition(0, 0)
             .withSize(6,1)
             .withProperties(Map.of("Label position", "HIDDEN","Number of columns", 4, "Number of rows", 1, "Show Glyph", true, "Glphy", "PLAY"));
-
-        this.commandButtonLayout.add("Apply", new Apply_Values(this))
-            .withPosition(0, 0)
-            .withSize(2, 1);
-        this.commandButtonLayout.add("Reset", new Reset_Values(this))
-            .withPosition(1, 0)
-            .withSize(2, 1);
-        this.commandButtonLayout.add("Start", new Start_Motor(this))
-            .withPosition(2, 0)
-            .withSize(2, 1);
-        this.commandButtonLayout.add("STOP!", new Stop_Motor(this))
-            .withPosition(3, 0)
-            .withSize(2, 1);
+       
+        //only allow these to be added when tuning
+        if(Constants.kTuning) {
+            this.commandButtonLayout.add("Apply", new Apply_Values(this))
+                .withPosition(0, 0)
+                .withSize(2, 1);
+            this.commandButtonLayout.add("Reset", new Reset_Values(this))
+                .withPosition(1, 0)
+                .withSize(2, 1);
+            this.commandButtonLayout.add("Start", new Start_Motor(this))
+                .withPosition(2, 0)
+                .withSize(2, 1);
+            this.commandButtonLayout.add("STOP!", new Stop_Motor(this))
+                .withPosition(3, 0)
+                .withSize(2, 1);
+        }
 
         this.valueTunerLayout = this.tab.getLayout("Value Tuner", BuiltInLayouts.kGrid)
             .withPosition(2, 1)
