@@ -5,6 +5,9 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import java.security.InvalidParameterException;
 import java.util.function.DoubleSupplier;
+
+import javax.naming.OperationNotSupportedException;
+
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -14,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import frc.robot.Constants;
 
 public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     private GenericEntry arbitraryFFEntry;

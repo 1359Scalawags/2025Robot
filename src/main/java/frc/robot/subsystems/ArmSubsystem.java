@@ -22,6 +22,7 @@ import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SimableSparkMax;
+import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -42,6 +43,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   private GravityAssistedFeedForward elbowFF;
   private GravityAssistedFeedForward wristFF;
+
+  private SparkMaxPIDTunerArmPosition elbowTuner;
 
   public ArmSubsystem() {
     // pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
@@ -73,6 +76,11 @@ public class ArmSubsystem extends SubsystemBase {
     
     wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
         Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, 0);
+
+    if(Constants.kTuning) {
+      elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
+      elbowTuner.buildShuffleboard();
+    }
 
 
     // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
@@ -448,6 +456,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     // if tuning, do nothing
     if(Constants.kTuning) {
+      elbowTuner.updateEncoderValues();
+      elbowTuner.setSafeReferenceRange(185, 300);
       return;
     }
 
@@ -494,6 +504,7 @@ public class ArmSubsystem extends SubsystemBase {
         //XXX:WRIST: prevent wrist from going outside valid bounds
         if(counter > 25) {
         if (wristError == false) {
+          // TODO: Can we change the FF angli input back to the wrist's absolute encoder if we change back to the GravityFF offset
           wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getRelativeWristAngle()));
          
             counter=0;
