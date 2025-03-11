@@ -159,10 +159,10 @@ public class ClimberSubsystem extends SubsystemBase{
         .velocityConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
   
       lockingMotorConfig.closedLoop
-        .p(Constants.ClimberSubsystem.LockingBarMotor.PIDF.kP)
-        .i(Constants.ClimberSubsystem.LockingBarMotor.PIDF.kI)
-        .d(Constants.ClimberSubsystem.LockingBarMotor.PIDF.kD)
-        .iZone(Constants.ClimberSubsystem.LockingBarMotor.PIDF.kIZone)
+        .p(0.01/2)
+        .i(0)//0.000001/2
+        .d(0.01)//0.007/2
+        .iZone(5)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         .positionWrappingEnabled(false)
         .positionWrappingInputRange(0,360);
