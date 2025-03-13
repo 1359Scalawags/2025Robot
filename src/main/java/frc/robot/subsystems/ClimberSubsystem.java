@@ -125,10 +125,11 @@ public class ClimberSubsystem extends SubsystemBase{
         .inverted(true);
        
       positionMotorConfig.closedLoop
-        .p(0.05)
-        .i(0.0000001)
-        .d(0.08)
-        .iZone(30)
+      // 0.05, 0.0000001, 0.08
+        .p(Constants.ClimberSubsystem.PositionMotor.PIDF.kP)
+        .i(Constants.ClimberSubsystem.PositionMotor.PIDF.kI)
+        .d(Constants.ClimberSubsystem.PositionMotor.PIDF.kD)
+        .iZone(Constants.ClimberSubsystem.PositionMotor.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
       // apply configuration
@@ -160,9 +161,9 @@ public class ClimberSubsystem extends SubsystemBase{
         .velocityConversionFactor(Constants.ClimberSubsystem.LockingBarMotor.kConversionFactor);
   
       lockingMotorConfig.closedLoop
-        .p(0.01)
-        .i(0.000001)
-        .d(0.007)
+        .p(0.01/2)
+        .i(0)//0.000001/2
+        .d(0.01)//0.007/2
         .iZone(5)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         .positionWrappingEnabled(false)
@@ -265,7 +266,11 @@ public class ClimberSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-
+      
+    // if tuning, do nothing
+    if(Constants.kTuning) {
+      return;
+    }
       // if (Constants.kDebug == true){
       // SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
       // SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());

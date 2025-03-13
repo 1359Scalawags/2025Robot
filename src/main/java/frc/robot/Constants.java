@@ -18,6 +18,7 @@ import frc.robot.extensions.ArmPosition;
 public final class Constants {
 
   public static boolean kDebug = false;
+  public static boolean kTuning = false;
   public static final String robotName = "Flipper";
 
   public static class SwerveSubsystem {
@@ -64,7 +65,7 @@ public final class Constants {
       public static final int kServoID = 0;
       public static final double maxLimit = 1;
       public static final double minLimit = 0;
-      public static final double latchedValue = 0.8;
+      public static final double latchedValue = 0.7;
       public static final double unLatchedValue = 0.2;
       public static final double kNaxActuateTime = 5.0; //max time to run the servo
       
@@ -75,24 +76,38 @@ public final class Constants {
       public static final double kEncoderOffset = 0;
       public static final double kConversionFactor = 360;
       public static final double kMinLimit = 72;
-      public static final double kMaxLimit = 155;
-      public static final double kUnLockedPosition = 72.0;
+      public static final double kMaxLimit = 162;
+      public static final double kUnLockedPosition = 76.0;
       public static final double kLockedPosition = 155.0;
       public static final double kSlewRate = 90;
+    public static class PIDF{
+      // 0.01 , 0.000001, 0.007
+      public static final double kP = 0.01;
+      public static final double kI = 0.000001;
+      public static final double kD = 0.007;
+      public static final double kIZone = 5;
+      }
     }
 
     public static class PositionMotor {
       public static final int kMotorID = 10;
-      public static final double kMaxAngle = 275.0;//0.037*360;
-      public static final double kMinAngle = 143.0;//0.457*360;
+      public static final double kMaxAngle = 155.0;//0.037*360;
+      public static final double kMinAngle = 40.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
-      public static final double kDeployedAngle = 245.0; // 0.185*360;
-      public static final double kHomeAngle = 150.0; //0.442*360;
-      public static final double kLockingPosition = 170.0;
-      public static final double kLockedPosition = 177.5;
+      public static final double kDeployedAngle = 126.0; // 0.185*360;
+      public static final double kHomeAngle = 45.0; //0.442*360;
+      public static final double kLockingPosition = 65.5;
+      public static final double kLockedPosition = 76.7;
       public static final double kMaxJoystickSpeed = 10;
       public static final double kSlewRate = 45.0;
+    public static class PIDF{
+       // 0.05, 0.0000001, 0.08
+      public static final double kP = 0.05;
+      public static final double kI = 0.0000001;
+      public static final double kD = 0.08;
+      public static final double kIZone = 30;
+      }
     }
   }  
 
@@ -108,6 +123,14 @@ public final class Constants {
       public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293);//correct
       public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293);//correct
       public static final ArmPosition klevel4 = new ArmPosition(52,315,260);//correct
+
+      // public static final ArmPosition kHome = new ArmPosition(0,232,200);
+      // public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
+      // public static final ArmPosition kGround = new ArmPosition(0,232,220);//correct
+      // public static final ArmPosition kLevel1 = new ArmPosition(0,232,232);//correct
+      // public static final ArmPosition kLevel2 = new ArmPosition(0,232,240);//correct
+      // public static final ArmPosition klevel3 = new ArmPosition(0,232,250);//correct
+      // public static final ArmPosition klevel4 = new ArmPosition(0,232,260);//correct
     }
 
     public static class Pulley{
@@ -129,9 +152,9 @@ public final class Constants {
       public static final double kP = 0.07;
       public static final double kI = 0.00003;
       public static final double kD = 0.07;
-      public static final double kIZone = 5;
-      public static final double kStageOneFF = 0.15;
-      public static final double kStageTwoFF = 0.2;
+      public static final double kIZone = 0;//5;
+      public static final double kStageOneFF = 0;//0.15;
+      public static final double kStageTwoFF = 0;//0.2;
       }
     }
 
@@ -146,12 +169,12 @@ public final class Constants {
       public static final double kTolerance = 1.0;
     public static class PIDF{
           //0.025, 0.00001, 0.07
-        public static final double kP = 0.025;
-        public static final double kI = 0.00001;
-        public static final double kD = 0.07;
-        public static final double kIZone = 2;
+        public static final double kP = 0.0075;
+        public static final double kI = 0.00001/4;
+        public static final double kD = 0.005;
+        public static final double kIZone = 5;
         public static final double kGravityFF = 0.335;
-        public static final double kMINGravityFF = 0.00001;
+        public static final double kMINGravityFF = 0;
         }
     }
 
@@ -161,16 +184,16 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
-      public static final double kSlewRate = 10;
+      public static final double kSlewRate = 30;
       public static final double kHorizontalAngle =232.0; //XXX: This is just a guess...must fix
       public static final double kTolerance = 2.0;
     public static class PIDF{
       // (0.006, 0.0000006, 0.006)
-      public static final double kP = 0.006;
-      public static final double kI = 0.0000006;
-      public static final double kD = 0.006;
-      public static final double kIZone = 2;
-      public static final double kGravityFF = 0;
+      public static final double kP = 0.0; //0.0075;
+      public static final double kI = 0.0; //0.00005;
+      public static final double kD = 0.0; //0.006;
+      public static final double kIZone = 5;
+      public static final double kGravityFF = 0.0; //0.1;
       public static final double kMinGravityFF = 0;
       }
     }
@@ -201,8 +224,8 @@ public final class Constants {
   }
 
   public static class Vision { 
-    public static final String klimelightOne = "limelight2+";
-    public static final String klimelightTwo = "limelight3G";
+    public static final String klimelightOne = "limelight-climber";
+    public static final String klimelightTwo = "limelight-arm";
   }
 
 

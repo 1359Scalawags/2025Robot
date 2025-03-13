@@ -41,6 +41,22 @@ public class GravityAssistedFeedForward {
         }
     }
 
+    public void setMinimumFF(double value) {
+        this.m_minimum = value;
+    }
+
+    public double getMinimumFF() {
+        return this.m_minimum;
+    }
+
+    public void setGravityFF(double value) {
+        this.m_gravity = value;
+    }
+
+    double getGravityFF() {
+        return this.m_gravity;
+    }
+
     /**
      * Calculate the gravity compensating feed forward value for the current angle.
      * This method must be updated periodically.
