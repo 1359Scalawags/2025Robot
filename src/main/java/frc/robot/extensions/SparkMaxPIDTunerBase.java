@@ -2,26 +2,21 @@ package frc.robot.extensions;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
-
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import frc.robot.Constants;
 import frc.robot.commands.Tuning.Apply_Values;
 import frc.robot.commands.Tuning.Reset_Values;
