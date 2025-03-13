@@ -114,6 +114,7 @@ public class ClimberSubsystem extends SubsystemBase{
       positionMotorConfig
         .idleMode(IdleMode.kCoast)
         .inverted(false)
+        //TODO: This isn't how ramp rate should be used. Ramp rate is the number of seconds it takes to go from 0 to 100% power.
         .openLoopRampRate(Constants.ClimberSubsystem.PositionMotor.kSlewRate)
         .closedLoopRampRate(Constants.ClimberSubsystem.PositionMotor.kSlewRate)
         .smartCurrentLimit(70, 30, 120);
@@ -141,6 +142,7 @@ public class ClimberSubsystem extends SubsystemBase{
       lockingMotorConfig
         .idleMode(IdleMode.kBrake)
         .inverted(true)
+        //TODO: This isn't how ramp rate should be used. Ramp rate is the number of seconds it takes to go from 0 to 100% power.
         .openLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
         .closedLoopRampRate(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate)
         .smartCurrentLimit(70, 30, 1000);
