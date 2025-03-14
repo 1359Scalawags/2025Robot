@@ -19,6 +19,7 @@ public final class Constants {
 
   public static boolean kDebug = false;
   public static final String robotName = "Flipper";
+  public static final double kRobotLoopTime = 0.02;
 
   public static class SwerveSubsystem {
 
@@ -166,7 +167,8 @@ public final class Constants {
       public static final double kSlewRate = 45;
       public static final double kHorizontalAngle = 232.0;
       public static final double kTolerance = 1.0;
-    public static class PIDF{
+      public static final double kAccelerationRate = 10.0;
+      public static class PIDF{
           //0.025, 0.00001, 0.07
         public static final double kP = 0.025;
         public static final double kI = 0.00001/4;

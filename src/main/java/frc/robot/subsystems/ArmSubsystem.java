@@ -12,6 +12,9 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -42,6 +45,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   private GravityAssistedFeedForward elbowFF;
   private GravityAssistedFeedForward wristFF;
+
+  // Trapezoidal profiling for elbow
+  private TrapezoidProfile elbowProfile;
+  private State elbowStateGoal;
+  private State elbowStateSetpoint;
 
   public ArmSubsystem() {
     // pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
@@ -75,6 +83,11 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
 
 
+    // trapezoidal profiling for the elbow
+    elbowProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Elbow.kSlewRate, Constants.ArmSubsystem.Elbow.kAccelerationRate));
+    elbowStateSetpoint = new State();
+    elbowStateGoal = new State();
+
     // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
     // Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
     // Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
@@ -93,7 +106,6 @@ public class ArmSubsystem extends SubsystemBase {
     elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
-
     if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
       wristError = true;
       System.out.println("------WRIST ERROR---------");
@@ -109,7 +121,7 @@ public class ArmSubsystem extends SubsystemBase {
       DriverStation.reportError("------ELBOW ERROR---------", false);
     } else {
       elbowError = false;
-      elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;      
+      elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;    
     }
 
     System.out.println("--------------Reported Positions at Intialization: --------------");
@@ -496,6 +508,12 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         if (elbowError == false) {
+          
+          // XXX: Uncomment to use trapezoidal profiling for the elbow 
+          // elbowStateGoal = new State(elbowMotorTarget, 0);
+          // elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
+          // elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+
           elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
           ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
         }
