@@ -25,6 +25,7 @@ import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SimableSparkMax;
+import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -45,6 +46,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   private GravityAssistedFeedForward elbowFF;
   private GravityAssistedFeedForward wristFF;
+
+  private SparkMaxPIDTunerArmPosition elbowTuner;
 
   // Trapezoidal profiling for elbow
   private TrapezoidProfile elbowProfile;
@@ -80,7 +83,12 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ArmSubsystem.Elbow.PIDF.kGravityFF, Constants.ArmSubsystem.Elbow.kHorizontalAngle);
     
     wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
-        Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
+        Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, 0);
+
+    if(Constants.kTuning) {
+      elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
+      elbowTuner.buildShuffleboard();
+    }
 
 
     // trapezoidal profiling for the elbow
@@ -177,7 +185,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 120);
+        .smartCurrentLimit(20, 20, 720);
     
     wristMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
@@ -203,7 +211,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 480);
+        .smartCurrentLimit(20, 20, 720);
    
     //XXX: Should we use soft limits for the elbow? I've put a template here in case we decide to
     // elbowMotorConfig.softLimit
@@ -457,6 +465,14 @@ public class ArmSubsystem extends SubsystemBase {
   // TODO: moving slow when within the range of the limit switch?
   @Override
   public void periodic() {
+
+    // if tuning, do nothing
+    if(Constants.kTuning) {
+      elbowTuner.updateEncoderValues();
+      elbowTuner.setSafeReferenceRange(185, 300);
+      return;
+    }
+
     counter++;
     ARM_HEIGHT = getCalculatedHeight();
    
@@ -498,13 +514,14 @@ public class ArmSubsystem extends SubsystemBase {
         // elbowMotor.setReferencePosition(elbowLimiter, elbowMotorTarget);
 
         //XXX:WRIST: prevent wrist from going outside valid bounds
-
+        if(counter > 25) {
         if (wristError == false) {
+          // TODO: Can we change the FF angli input back to the wrist's absolute encoder if we change back to the GravityFF offset
           wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getRelativeWristAngle()));
-          if(counter > 25) {
+         
             counter=0;
             System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
-          }
+          
         }
 
         if (elbowError == false) {
@@ -516,7 +533,9 @@ public class ArmSubsystem extends SubsystemBase {
 
           elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
           ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+          System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
         }
+      }
         
         //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
         clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);

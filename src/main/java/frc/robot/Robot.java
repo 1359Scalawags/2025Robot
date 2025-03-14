@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
       super.robotInit();
-
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
     //TODO: Enable this when arm is enabled
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
@@ -88,6 +88,7 @@ public class Robot extends TimedRobot {
     //XXX: Is this necessary here? If so, also include the arm?
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
   }
 
@@ -106,6 +107,7 @@ public class Robot extends TimedRobot {
     }
     //XXX: Is this necessary here? If so, also include the arm?
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
@@ -120,7 +122,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     //TODO: Is this necessary here? If so, also include the arm?
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
-    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
+    // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 
@@ -133,6 +136,7 @@ public class Robot extends TimedRobot {
   public void simulationInit() {
   //TODO: Is this necessary here? If so, also include the arm?
   //  CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheClimber());
+  CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
    CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
   // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }

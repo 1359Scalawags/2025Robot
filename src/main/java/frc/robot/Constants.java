@@ -18,6 +18,7 @@ import frc.robot.extensions.ArmPosition;
 public final class Constants {
 
   public static boolean kDebug = false;
+  public static boolean kTuning = false;
   public static final String robotName = "Flipper";
   public static final double kRobotLoopTime = 0.02;
 
@@ -116,21 +117,21 @@ public final class Constants {
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
-      // public static final ArmPosition kHome = new ArmPosition(1,200,215);
-      // public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
-      // public static final ArmPosition kGround = new ArmPosition(1,197,148);//correct
-      // public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
-      // public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293);//correct
-      // public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293);//correct
-      // public static final ArmPosition klevel4 = new ArmPosition(52,315,260);//correct
+      public static final ArmPosition kHome = new ArmPosition(1,200,215);
+      public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
+      public static final ArmPosition kGround = new ArmPosition(1,197,148);//correct
+      public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
+      public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293);//correct
+      public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293);//correct
+      public static final ArmPosition klevel4 = new ArmPosition(52,315,260);//correct
 
-      public static final ArmPosition kHome = new ArmPosition(0,232,200);
-      public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
-      public static final ArmPosition kGround = new ArmPosition(0,232,220);//correct
-      public static final ArmPosition kLevel1 = new ArmPosition(0,232,232);//correct
-      public static final ArmPosition kLevel2 = new ArmPosition(0,232,240);//correct
-      public static final ArmPosition klevel3 = new ArmPosition(0,232,250);//correct
-      public static final ArmPosition klevel4 = new ArmPosition(0,232,260);//correct
+      // public static final ArmPosition kHome = new ArmPosition(0,232,200);
+      // public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
+      // public static final ArmPosition kGround = new ArmPosition(0,232,220);//correct
+      // public static final ArmPosition kLevel1 = new ArmPosition(0,232,232);//correct
+      // public static final ArmPosition kLevel2 = new ArmPosition(0,232,240);//correct
+      // public static final ArmPosition klevel3 = new ArmPosition(0,232,250);//correct
+      // public static final ArmPosition klevel4 = new ArmPosition(0,232,260);//correct
     }
 
     public static class Pulley{
@@ -149,9 +150,9 @@ public final class Constants {
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
     public static class PIDF{
        //0.07f, 0.00003f, 0.07f
-      public static final double kP = 0;//0.07
-      public static final double kI = 0;//0.00003
-      public static final double kD = 0;//0.07;
+      public static final double kP = 0.07;
+      public static final double kI = 0.00003;
+      public static final double kD = 0.07;
       public static final double kIZone = 0;//5;
       public static final double kStageOneFF = 0;//0.15;
       public static final double kStageTwoFF = 0;//0.2;
@@ -170,12 +171,12 @@ public final class Constants {
       public static final double kAccelerationRate = 10.0;
       public static class PIDF{
           //0.025, 0.00001, 0.07
-        public static final double kP = 0.025;
+        public static final double kP = 0.0075;
         public static final double kI = 0.00001/4;
-        public static final double kD = 0.1;
-        public static final double kIZone = 2;
+        public static final double kD = 0.005;
+        public static final double kIZone = 5;
         public static final double kGravityFF = 0.335;
-        public static final double kMINGravityFF = 0.00001;
+        public static final double kMINGravityFF = 0;
         }
     }
 
@@ -185,16 +186,16 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
-      public static final double kSlewRate = 10;
+      public static final double kSlewRate = 30;
       public static final double kHorizontalAngle =232.0; //XXX: This is just a guess...must fix
       public static final double kTolerance = 2.0;
     public static class PIDF{
       // (0.006, 0.0000006, 0.006)
-      public static final double kP = 0; //0.006;
-      public static final double kI = 0; //0.0000006;
-      public static final double kD = 0; //0.006;
-      public static final double kIZone = 2;
-      public static final double kGravityFF = 0.5;
+      public static final double kP = 0.0; //0.0075;
+      public static final double kI = 0.0; //0.00005;
+      public static final double kD = 0.0; //0.006;
+      public static final double kIZone = 5;
+      public static final double kGravityFF = 0.0; //0.1;
       public static final double kMinGravityFF = 0;
       }
     }
