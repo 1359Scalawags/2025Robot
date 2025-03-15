@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
     enableLiveWindowInTest(true);
     SmartDashboard.putData(CommandScheduler.getInstance());
     PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+    SmartDashboard.putData(powerDistribution);
 
     // UsbCamera camera = CameraServer.startAutomaticCapture();
     // camera.setResolution(640, 480);
