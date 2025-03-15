@@ -143,15 +143,15 @@ public class ArmSubsystem extends SubsystemBase {
       elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;    
     }
 
-    System.out.println("--------------Reported Positions at Intialization: --------------");
-    System.out.println("  Pulley: " + getPulleyHeight());
-    System.out.println("  Elbow: " + getElbowMotorPosition());
-    System.out.println("  Wrist: " + getWristMotorPosition());
-    System.out.println("  Claw: " + getClawMotorPosition());
-    System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
-    System.out.println("  calculated writst min: " + getAbsoluteWristAngleMin());
-    
-
+    if (Constants.kDebug) {
+      System.out.println("--------------Reported Positions at Intialization: --------------");
+      System.out.println("  Pulley: " + getPulleyHeight());
+      System.out.println("  Elbow: " + getElbowMotorPosition());
+      System.out.println("  Wrist: " + getWristMotorPosition());
+      System.out.println("  Claw: " + getClawMotorPosition());
+      System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
+      System.out.println("  calculated writst min: " + getAbsoluteWristAngleMin());
+    }
 
     pulleyLimiter.reset(pulleyMotorTarget);
     elbowLimiter.reset(elbowMotorTarget);
