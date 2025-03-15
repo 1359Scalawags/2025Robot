@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
@@ -56,6 +57,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   
   public ArmSubsystem() {
+
+    // NetworkTableInstance.getDefault().getTable("SparkMaxData");
+
     // pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
     // elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);
     // wristMotor = new SimableSparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
@@ -104,8 +108,10 @@ public class ArmSubsystem extends SubsystemBase {
     // Shuffleboard.getTab("Arm").add("Wrist Motor", wristMotor);
     // Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
     // Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
-    //Shuffleboard.getTab("Arm").add("Elbow Absolute", elbowMotor.getAbsoluteEncoder());
-    //Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
+
+    Shuffleboard.getTab("Arm").add("Elbow Absolute", elbowMotor.getAppliedOutput());
+    // Shuffleboard.getTab("Arm").addNumber("Elbow Absolute", elbowMotor.getAppliedOutput());
+    // Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
   }
 
   public void initializeArm() {
@@ -528,12 +534,12 @@ public class ArmSubsystem extends SubsystemBase {
         if (elbowError == false) {
           
           // XXX: Uncomment to use trapezoidal profiling for the elbow 
-          // elbowStateGoal = new State(elbowMotorTarget, 0);
-          // elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
-          // elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+          elbowStateGoal = new State(elbowMotorTarget, 0);
+          elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
+          elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
 
-          elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
-          ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+          // elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
+          // ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
           System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
         }
       }
