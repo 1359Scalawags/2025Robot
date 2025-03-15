@@ -4,6 +4,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implements ISparkMaxTuner {
@@ -28,7 +29,7 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implem
             .withPosition(1,0)
             .withSize(1,1)
             .getEntry();  
-        this.gravityFFEntry = super.getValueTuningLayout().add("Gravity FF", this.ffController.getMinimumFF())
+        this.gravityFFEntry = super.getValueTuningLayout().add("Gravity FF", this.ffController.getGravityFF())
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(1,1)
             .withSize(1,1)
@@ -47,9 +48,6 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implem
         sb.append("Gravity FF: " + gravityFFEntry.getDouble(0) + " - ");
         sb.append("Minimum FF: " + minimumFFEntry.getDouble(0));
         System.out.println(sb.toString());
-        if(this.getIsRunning()) {
-            this.startMotor();
-        }
     }
 
     @Override
@@ -57,14 +55,13 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implem
         super.resetTunerValues();
         ffController.setGravityFF(this.gravFF0);
         ffController.setMinimumFF(this.minFF0);
+        this.gravityFFEntry.setDouble(this.gravFF0);
+        this.minimumFFEntry.setDouble(this.minFF0);
     }
 
-    @Override
-    public void startMotor() {
+    public void periodic() {
         double gravityFF = ffController.calculate(this.motor.getAbsoluteEncoder().getPosition());
-        motor.getClosedLoopController().setReference(this.getReference(), this.getControlType(), ClosedLoopSlot.kSlot0, gravityFF + this.getArbitraryFF());
-        this.setRunningState(true);
-
+        super.periodic(gravityFF, this.getArbitraryFF());
     }
 
 }
