@@ -65,7 +65,7 @@ public final class Constants {
       public static final double maxLimit = 1;
       public static final double minLimit = 0;
       public static final double latchedValue = 0.7;
-      public static final double unLatchedValue = 0.2;
+      public static final double unLatchedValue = 0.001;
       public static final double kNaxActuateTime = 5.0; //max time to run the servo
       
     }
@@ -84,7 +84,7 @@ public final class Constants {
     public static class PositionMotor {
       public static final int kMotorID = 10;
       public static final double kMaxAngle = 155.0;//0.037*360;
-      public static final double kMinAngle = 40.0;//0.457*360;
+      public static final double kMinAngle = 30.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 126.0; // 0.185*360;
