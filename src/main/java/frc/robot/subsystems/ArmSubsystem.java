@@ -109,8 +109,8 @@ public class ArmSubsystem extends SubsystemBase {
     // Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
     // Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
 
-    Shuffleboard.getTab("Arm").add("Elbow Absolute", elbowMotor.getAppliedOutput());
-    
+    Shuffleboard.getTab("Arm").add("Elbow Output", elbowMotor.getAppliedOutput());
+
     // Shuffleboard.getTab("Arm").addNumber("Elbow Absolute", elbowMotor.getAppliedOutput());
     // Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
   }
