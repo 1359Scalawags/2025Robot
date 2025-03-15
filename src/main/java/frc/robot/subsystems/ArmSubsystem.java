@@ -49,6 +49,7 @@ public class ArmSubsystem extends SubsystemBase {
   private GravityAssistedFeedForward wristFF;
 
   private SparkMaxPIDTunerArmPosition elbowTuner;
+  private SparkMaxPIDTunerArmPosition wristTuner;
 
   // Trapezoidal profiling for elbow
   private TrapezoidProfile elbowProfile;
@@ -93,6 +94,8 @@ public class ArmSubsystem extends SubsystemBase {
     if(Constants.kTuning) {
       elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
       elbowTuner.buildShuffleboard();
+      wristTuner = new SparkMaxPIDTunerArmPosition("Wrist Motor", wristMotor, ControlType.kPosition, wristFF);
+      wristTuner.buildShuffleboard();
     }
 
 
@@ -481,6 +484,8 @@ public class ArmSubsystem extends SubsystemBase {
     if(Constants.kTuning) {
       elbowTuner.updateEncoderValues();
       elbowTuner.setSafeReferenceRange(185, 300);
+      wristTuner.updateEncoderValues();
+      wristTuner.setSafeReferenceRange(getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
       return;
     }
 
