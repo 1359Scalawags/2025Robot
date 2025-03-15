@@ -91,7 +91,7 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ArmSubsystem.Elbow.PIDF.kGravityFF, Constants.ArmSubsystem.Elbow.kHorizontalAngle);
     
     wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
-        Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, 0);
+        Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
 
     if(Constants.kTuning) {
       elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
@@ -539,7 +539,7 @@ public class ArmSubsystem extends SubsystemBase {
         if(counter > 25) {
         if (wristError == false) {
           // TODO: Can we change the FF angli input back to the wrist's absolute encoder if we change back to the GravityFF offset
-          wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getRelativeWristAngle()));
+          wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
          
             counter=0;
             System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
