@@ -448,7 +448,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
 
     // if tuning, do nothing
-    if(Constants.kTuning) {
+    if(Constants.kTuning == true) {
       elbowTuner.updateEncoderValues();
       elbowTuner.setSafeReferenceRange(185, 300);
       wristTuner.updateEncoderValues();
@@ -458,82 +458,63 @@ public class ArmSubsystem extends SubsystemBase {
       return;
     }
 
-    counter++;
+    // update static variable accessible to other systems
     ARM_HEIGHT = getCalculatedHeight();
    
-
-    if (pulleyMotor.get() < 0) {
-      if (homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
-        pulleyMotor.set(0);
-        pulleyMotor.getEncoder().setPosition(0);
-        pulleyLimiter.reset(0);
-        //XXX: Removed set reference position
-        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley), ControlType.kPosition);
-        pulleyInitialized = true;
-      }
-    }
-
-    // Claw limit switch
-    if (clawMotor.get() > 0) {
-      if (clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState) {
-        clawMotor.set(0);
-        clawMotor.getEncoder().setPosition(0);
-        clawLimiter.reset(0);
-        //XXX: Removed set reference position
-        clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(Constants.ArmSubsystem.Claw.kCloseClaw), ControlType.kPosition);
-        clawInitialized = true;
-      }
-    }
-
-
     double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+    
+    // Display values when debugging
+    counter++;
+    if(counter > 25 && Constants.kDebug) {
+        System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
+        System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
+        counter=0;
+    }    
 
-    if (initialized) {
-      // run motors
-      // if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
-      if (RobotState.isEnabled()) {
-        // This method will be called once per scheduler run
-       
-        //XXX: Removed old set reference position
+    if (initialized && RobotState.isEnabled() && !RobotState.isTest()) {
 
-        //XXX:WRIST: prevent wrist from going outside valid bounds
-        if(counter > 25) {
-        if (wristError == false) {
-          // TODO: Can we change the FF angli input back to the wrist's absolute encoder if we change back to the GravityFF offset
-          wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
-         
-            counter=0;
-            System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
-          
-        }
-
-        if (elbowError == false) {
-          
-          // XXX: Uncomment to use trapezoidal profiling for the elbow 
-          // elbowStateGoal = new State(elbowMotorTarget, 0);
-          // elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
-          // elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
-
-          elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
-          ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
-          System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
+      //check if pulley is home
+      if (pulleyMotor.get() < 0) {
+        if (homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
+          pulleyMotor.set(0);
+          pulleyMotor.getEncoder().setPosition(0);
+          pulleyLimiter.reset(0);
+          //XXX: Removed set reference position
+          pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley), ControlType.kPosition);
+          pulleyInitialized = true;
         }
       }
-        
-        //NOT SAFE: wristMotor.setReferencePosition(wristLimiter, wristMotorTarget);
-        clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
-        //pulleyMotor.setReferencePosition(pulleyLimiter, pulleyMotorTarget);
-
-        pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
-        
-        //XXX: Removed print to indicate code was reaching here
-
-
+  
+      // check if claw is home
+      if (clawMotor.get() > 0) {
+        if (clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState) {
+          clawMotor.set(0);
+          clawMotor.getEncoder().setPosition(0);
+          clawLimiter.reset(0);
+          //XXX: Removed set reference position
+          clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(Constants.ArmSubsystem.Claw.kCloseClaw), ControlType.kPosition);
+          clawInitialized = true;
+        }
       }
-    } else {
-      if ((RobotState.isTeleop() || RobotState.isAutonomous()) && RobotState.isEnabled()) {
-       // wristMotor.setReferencePosition(wristLimiter, wristSafeTarget);
+      if (wristError == false) {
+        wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
       }
+
+      if (elbowError == false) { 
+        // XXX: Uncomment to use trapezoidal profiling for the elbow 
+        // elbowStateGoal = new State(elbowMotorTarget, 0);
+        // elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
+        // elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+
+        elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
+            ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+      }
+    
+      clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
+
+      pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
+      
+
     }
   }
 }
