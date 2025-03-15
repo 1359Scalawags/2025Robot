@@ -27,6 +27,7 @@ import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SimableSparkMax;
 import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
+import frc.robot.extensions.SparkMaxPIDTunerPosition;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -50,6 +51,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   private SparkMaxPIDTunerArmPosition elbowTuner;
   private SparkMaxPIDTunerArmPosition wristTuner;
+  private SparkMaxPIDTunerPosition clawTuner;
 
   // Trapezoidal profiling for elbow
   private TrapezoidProfile elbowProfile;
@@ -96,6 +98,8 @@ public class ArmSubsystem extends SubsystemBase {
       elbowTuner.buildShuffleboard();
       wristTuner = new SparkMaxPIDTunerArmPosition("Wrist Motor", wristMotor, ControlType.kPosition, wristFF);
       wristTuner.buildShuffleboard();
+      clawTuner = new SparkMaxPIDTunerPosition("Claw Motor", clawMotor, ControlType.kPosition);
+      clawTuner.buildShuffleboard();
     }
 
 
@@ -486,6 +490,8 @@ public class ArmSubsystem extends SubsystemBase {
       elbowTuner.setSafeReferenceRange(185, 300);
       wristTuner.updateEncoderValues();
       wristTuner.setSafeReferenceRange(getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+      clawTuner.updateEncoderValues();
+      clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
       return;
     }
 
