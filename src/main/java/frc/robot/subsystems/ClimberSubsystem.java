@@ -74,8 +74,10 @@ public class ClimberSubsystem extends SubsystemBase{
 
         double currentPosition = getClimberPostion();
         double currentLockbar = getLockingMotorPosition();
+
         positionLimiter.reset(currentPosition);
         lockingPositionLimiter.reset(currentLockbar);
+        
         System.out.println("Reported Positions at Intialization: ");
         System.out.println("  Climber Position: " + currentPosition);
         System.out.println("  Lockbar Position: " + currentLockbar);

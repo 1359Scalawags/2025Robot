@@ -220,10 +220,10 @@ public class RobotContainer {
 
   // //TODO: Make a sequential command to lock the arm motor.
 
-    m_AssistantJoystick.button(1).onTrue(Commands.sequence(new LockingPosition(m_ClimberSubsystem),
-      new LatchServo(m_ClimberSubsystem),
-      new WaitCommand(1.5),
-      new LockedPosition(m_ClimberSubsystem)));
+    // m_AssistantJoystick.button(1).onTrue(Commands.sequence(new LockingPosition(m_ClimberSubsystem),
+    //   new LatchServo(m_ClimberSubsystem),
+    //   new WaitCommand(1.5),
+    //   new LockedPosition(m_ClimberSubsystem)));
 
 
     m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
@@ -259,7 +259,9 @@ public class RobotContainer {
 
   public Command intializeTheClimber() {
     //TODO: should this command run when disabled?
-    return new InitilizeClimber(m_ClimberSubsystem);
+    Command initClimber = new InitilizeClimber(m_ClimberSubsystem);
+    Command moveClimber =  new RetractClimber(m_ClimberSubsystem);
+    return initClimber.andThen(moveClimber);
   }
 
   public Command intializeArmEncoders() {

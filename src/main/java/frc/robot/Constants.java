@@ -31,7 +31,7 @@ public final class Constants {
     public static final Object CHASSIS = null;
     public static final double TURN_CONSTANT = 0;
     public static final double kTeleopDeadzone = 0.1;
-    public static final double kAngleSpeedMultiplier = 3/4;
+    public static final double kAngleSpeedMultiplier = 3.0/4.0;
 
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
@@ -94,11 +94,11 @@ public final class Constants {
     public static class PositionMotor {
       public static final int kMotorID = 10;
       public static final double kMaxAngle = 155.0;//0.037*360;
-      public static final double kMinAngle = 35.0;//0.457*360;
+      public static final double kMinAngle = 30.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 126.0; // 0.185*360;
-      public static final double kHomeAngle = 45.0; //0.442*360;
+      public static final double kHomeAngle = 55.0; //0.442*360;
       public static final double kLockingPosition = 65.5;
       public static final double kLockedPosition = 76.7;
       public static final double kMaxJoystickSpeed = 10;
