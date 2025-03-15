@@ -109,8 +109,8 @@ public class ArmSubsystem extends SubsystemBase {
     // Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
     // Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
 
-    Shuffleboard.getTab("Arm").add("Elbow Absolute", elbowMotor.getAppliedOutput());
-    
+    Shuffleboard.getTab("Arm").add("Elbow Output", elbowMotor.getAppliedOutput());
+
     // Shuffleboard.getTab("Arm").addNumber("Elbow Absolute", elbowMotor.getAppliedOutput());
     // Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
   }
@@ -538,12 +538,12 @@ public class ArmSubsystem extends SubsystemBase {
         if (elbowError == false) {
           
           // XXX: Uncomment to use trapezoidal profiling for the elbow 
-          elbowStateGoal = new State(elbowMotorTarget, 0);
-          elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
-          elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+          // elbowStateGoal = new State(elbowMotorTarget, 0);
+          // elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
+          // elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
 
-          // elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
-          // ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+          elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
+          ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
           System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
         }
       }
