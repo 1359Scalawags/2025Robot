@@ -168,12 +168,12 @@ public final class Constants {
       public static final double kSlewRate = 45;
       public static final double kHorizontalAngle = 232.0;
       public static final double kTolerance = 1.0;
-      public static final double kAccelerationRate = 10.0;
+      public static final double kAccelerationRate = 25.0;
       public static class PIDF{
           //0.025, 0.00001, 0.07
-        public static final double kP = 0.0075;
-        public static final double kI = 0.00001/4;
-        public static final double kD = 0.005;
+        public static final double kP = 0.01;
+        public static final double kI = 0.0; //0.00001/8;
+        public static final double kD = 0.01;
         public static final double kIZone = 5;
         public static final double kGravityFF = 0.335;
         public static final double kMINGravityFF = 0;
