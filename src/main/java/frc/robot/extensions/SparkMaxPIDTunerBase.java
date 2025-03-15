@@ -5,6 +5,8 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
+
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
@@ -12,6 +14,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -102,8 +106,9 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         return this.maxReference;
     }
 
-    public void setRunningState(boolean isRunning) {
-        this.isRunning = isRunning;
+    public void setRunningState(boolean motorIsRunning) {
+        this.isRunning = motorIsRunning;
+        this.isRunningEntry.setBoolean(this.isRunning);
     }
 
     public boolean getIsRunning() {
@@ -194,11 +199,15 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         tuner.setSetpoint(0);
     }
 
-    public abstract void startMotor();
+    public void startMotor() {
+        if(RobotState.isEnabled()) {
+            this.setRunningState(true);          
+        }
+    }
 
     public void stopMotor() {
+        this.setRunningState(false);        
         motor.stopMotor();
-        this.isRunning = false;
     }
 
     protected ShuffleboardLayout getCommandButtonLayout() {
@@ -211,6 +220,15 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
 
     protected ShuffleboardLayout getEncoderFeedbackLayout() {
         return this.encoderFeedbackLayout;
+    }
+
+    protected void periodic(double gravityFF, double arbitraryFF) {
+        if(RobotState.isDisabled()) {
+            this.setRunningState(false);   
+        }
+        if(this.isRunning) {
+            motor.getClosedLoopController().setReference(this.reference, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
+        }
     }
 
 }
