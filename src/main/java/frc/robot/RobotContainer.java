@@ -258,7 +258,7 @@ public class RobotContainer {
   }
 
   public Command initializeClimberEncoders() {
-    return new InitilizeClimberEncoders(m_ClimberSubsystem);
+    return new InitilizeClimberEncoders(m_ClimberSubsystem).ignoringDisable(true);
   }
 
   public Command initializeClimberPosition() {
@@ -293,12 +293,6 @@ public class RobotContainer {
   //   return new HomeThePulley(m_ArmSubsystem);
   // }
  
-
-
-  public Command disabledIntializedClimber() {
-    return new DeInitilizeClimber(m_ClimberSubsystem);
-  }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

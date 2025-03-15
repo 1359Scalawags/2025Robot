@@ -87,8 +87,8 @@ public class ClimberSubsystem extends SubsystemBase{
         System.out.println("  Climber Position: " + currentPosition);
         System.out.println("  Lockbar Position: " + currentLockbar);
 
-        positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
-        lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
+        // positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
+        // lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
 
         isInitialized = true;
     }
@@ -292,6 +292,7 @@ public class ClimberSubsystem extends SubsystemBase{
        SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
        SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
        SmartDashboard.putBoolean("Is Climber locked?", moveClimberCommandLock);
+       SmartDashboard.putBoolean("Is Climber Initialized", isInitialized);
 
       if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true){
         double immediateTargetAngle = MathUtil.clamp(positionLimiter.calculate(climberTargetPosition), Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
