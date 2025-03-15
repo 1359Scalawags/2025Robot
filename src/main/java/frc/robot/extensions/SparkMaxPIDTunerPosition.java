@@ -5,6 +5,9 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import java.security.InvalidParameterException;
 import java.util.function.DoubleSupplier;
+
+import javax.naming.OperationNotSupportedException;
+
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -14,8 +17,9 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import frc.robot.Constants;
 
-public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
+public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements ISparkMaxTuner {
     private GenericEntry arbitraryFFEntry;
     private GenericEntry velocityEntry;
     private GenericEntry accelerationEntry;
@@ -120,6 +124,9 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         }
         sb.append("Arbitrary FF: " + arbitraryFFEntry.getDouble(0));
         System.out.println(sb.toString());
+        if(this.getIsRunning()) {
+            this.startMotor();
+        }
     }
 
     @Override
@@ -135,6 +142,7 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     @Override
     public void startMotor() {
         motor.getClosedLoopController().setReference(this.getReference(), this.getControlType(), ClosedLoopSlot.kSlot0, arbitraryFFEntry.getDouble(0));
+        this.setRunningState(true);
     }
 
 }

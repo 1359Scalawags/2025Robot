@@ -2,17 +2,16 @@ package frc.robot.extensions;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
-
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.util.function.BooleanConsumer;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -25,7 +24,7 @@ import frc.robot.commands.Tuning.Reset_Values;
 import frc.robot.commands.Tuning.Start_Motor;
 import frc.robot.commands.Tuning.Stop_Motor;
 
-public abstract class SparkMaxPIDTunerBase {
+public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
     private String name;
     protected SparkMax motor;
     private ControlType controlType;
@@ -37,9 +36,12 @@ public abstract class SparkMaxPIDTunerBase {
     private ShuffleboardTab tab;
     private double p0, i0, d0;
     private double reference; 
+    protected double minReference, maxReference;
     protected Timer updateTimer;
     protected ArrayList<BooleanSupplier> shuffleboardSetupRoutines;
     private boolean isInitialized = false;
+    private boolean isRunning = false;
+    public GenericEntry isRunningEntry;
 
     public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
@@ -48,12 +50,14 @@ public abstract class SparkMaxPIDTunerBase {
         this.shuffleboardSetupRoutines.add(this::setupShuffleboard);
         this.name = name;
         this.motor = motor;
+        this.isRunning = false;
         this.configAccessor = motor.configAccessor.closedLoop;
         this.controlType = ControlType.kDutyCycle;
         this.p0 = configAccessor.getP();
         this.i0 = configAccessor.getI();
         this.d0 = configAccessor.getD();
-
+        this.minReference = Double.MIN_VALUE;
+        this.maxReference = Double.MAX_VALUE;
         this.tuner = new PIDController(this.p0, this.i0, this.d0);
 
         updateTimer = new Timer();
@@ -82,32 +86,62 @@ public abstract class SparkMaxPIDTunerBase {
     }
 
     protected double getReference() {
-        return this.reference;
+        return MathUtil.clamp(this.reference, this.minReference, this.maxReference);
+    }
+
+    public void setSafeReferenceRange(double min, double max) {
+        this.minReference = min;
+        this.maxReference = max;
+    }
+
+    public double getMinReference() {
+        return this.minReference;
+    }
+
+    public double getMaxReference() {
+        return this.maxReference;
+    }
+
+    public void setRunningState(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+
+    public boolean getIsRunning() {
+        return this.isRunning;
     }
 
     private boolean setupShuffleboard() {
         // setup interface in Shuffleboard
         this.tab = Shuffleboard.getTab(this.name + " Tuner");
- 
-        this.commandButtonLayout = this.tab.getLayout("Commands", BuiltInLayouts.kGrid)
-            .withPosition(0, 0)
-            .withSize(6,1)
-            .withProperties(Map.of("Label position", "HIDDEN","Number of columns", 4, "Number of rows", 1, "Show Glyph", true, "Glphy", "PLAY"));
-       
-        //only allow these to be added when tuning
-        if(Constants.kTuning) {
+
+        //only add commands when in tuning mode
+        if(Constants.kTuning) { 
+            this.commandButtonLayout = this.tab.getLayout("Commands", BuiltInLayouts.kGrid)
+                .withPosition(0, 0)
+                .withSize(6,1)
+                .withProperties(Map.of("Label position", "HIDDEN","Number of columns", 5, "Number of rows", 1, "Show Glyph", true, "Glphy", "PLAY"));
+        
             this.commandButtonLayout.add("Apply", new Apply_Values(this))
                 .withPosition(0, 0)
-                .withSize(2, 1);
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kCommand);
             this.commandButtonLayout.add("Reset", new Reset_Values(this))
                 .withPosition(1, 0)
-                .withSize(2, 1);
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kCommand);
             this.commandButtonLayout.add("Start", new Start_Motor(this))
                 .withPosition(2, 0)
-                .withSize(2, 1);
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kCommand);
             this.commandButtonLayout.add("STOP!", new Stop_Motor(this))
                 .withPosition(3, 0)
-                .withSize(2, 1);
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kCommand);
+            this.isRunningEntry = this.commandButtonLayout.add("Motor Running", this.isRunning)
+                .withPosition(4, 0)
+                .withSize(1, 1)
+                .withWidget(BuiltInWidgets.kBooleanBox)
+                .getEntry();
         }
 
         this.valueTunerLayout = this.tab.getLayout("Value Tuner", BuiltInLayouts.kGrid)
@@ -132,6 +166,7 @@ public abstract class SparkMaxPIDTunerBase {
 
     public void updateEncoderValues() {
         // base shows no encoder information by default
+        isRunningEntry.setBoolean(this.isRunning);
     }
 
 
@@ -143,13 +178,15 @@ public abstract class SparkMaxPIDTunerBase {
             .d(tuner.getD());
 
         this.reference = tuner.getSetpoint();
+        this.reference = MathUtil.clamp(this.reference, this.minReference, this.maxReference);
+        tuner.setSetpoint(this.reference);
+
         motor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
         StringBuilder sb = new StringBuilder();
         sb.append("P: " + configAccessor.getP() + " - ");
         sb.append("I: " + configAccessor.getI() + " - ");
         sb.append("D: " + configAccessor.getD());
         System.out.println(sb.toString());
-
     }
 
     public void resetTunerValues() {
@@ -157,12 +194,11 @@ public abstract class SparkMaxPIDTunerBase {
         tuner.setSetpoint(0);
     }
 
-    public void startMotor() {
-        
-    } 
+    public abstract void startMotor();
 
     public void stopMotor() {
         motor.stopMotor();
+        this.isRunning = false;
     }
 
     protected ShuffleboardLayout getCommandButtonLayout() {
