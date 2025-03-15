@@ -264,7 +264,7 @@ public class ArmSubsystem extends SubsystemBase {
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 120);
+        .smartCurrentLimit(20, 20, 600);
 
 
     clawMotorConfig.closedLoop
