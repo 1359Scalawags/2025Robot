@@ -130,7 +130,9 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements IS
     @Override
     public void resetTunerValues() {
         super.resetTunerValues(); // also reset values in base class
-        this.arbitraryFFEntry.setDouble(this.arbitraryFF0);
+        if(this.isInitialized()) {
+            this.arbitraryFFEntry.setDouble(this.arbitraryFF0);            
+        }
         if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
             velocityEntry.setDouble(this.velocity0);
             accelerationEntry.setDouble(this.acceleration0);            
@@ -138,7 +140,11 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements IS
     }
 
     public void periodic() {
-        super.periodic(0, arbitraryFFEntry.getDouble(0));
+        double arb = 0;
+        if(this.isInitialized()) {
+            arb = this.arbitraryFFEntry.getDouble(0);
+        }
+        super.periodic(0, arb);
     }
 
 }

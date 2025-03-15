@@ -55,8 +55,11 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implem
         super.resetTunerValues();
         ffController.setGravityFF(this.gravFF0);
         ffController.setMinimumFF(this.minFF0);
-        this.gravityFFEntry.setDouble(this.gravFF0);
-        this.minimumFFEntry.setDouble(this.minFF0);
+        if(this.isInitialized()){
+            this.gravityFFEntry.setDouble(this.gravFF0);
+            this.minimumFFEntry.setDouble(this.minFF0);            
+        }
+
     }
 
     public void periodic() {
