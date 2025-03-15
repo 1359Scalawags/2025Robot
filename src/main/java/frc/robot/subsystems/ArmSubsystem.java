@@ -115,6 +115,9 @@ public class ArmSubsystem extends SubsystemBase {
     elbowMotorTarget = elbowMotor.getAbsoluteEncoder().getPosition();
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
+    elbowStateGoal = new State(elbowMotorTarget, 0);
+    elbowStateSetpoint = new State(elbowMotorTarget, 0);
+
     if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
       wristError = true;
       System.out.println("------WRIST ERROR---------");
