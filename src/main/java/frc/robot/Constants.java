@@ -218,9 +218,9 @@ public final class Constants {
       
     public static class PIDF{
           //0.05, 0.0001, 0.03
-      public static final double kP = 0.05;
-      public static final double kI = 0.0001;
-      public static final double kD = 0.03;
+      public static final double kP = 0.075;
+      public static final double kI = 0;
+      public static final double kD = 0.1;
       public static final double kIZone = 2;
       }
     }
