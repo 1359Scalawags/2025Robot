@@ -26,6 +26,7 @@ public class InitilizeClimberEncoders extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_subsystem.initializeClimber();
     waitTimer.reset();
     waitTimer.start();
   }
@@ -34,7 +35,7 @@ public class InitilizeClimberEncoders extends Command {
   @Override
   public void execute() {
     if(waitTimer.get() > Constants.ClimberSubsystem.kIntializeDelay) {
-      m_subsystem.initializeClimber();
+
       hasfinished = true;
     }
 

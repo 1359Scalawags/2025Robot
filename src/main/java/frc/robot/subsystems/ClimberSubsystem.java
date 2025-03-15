@@ -94,8 +94,8 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
         //Run in robots disabled init.
-    public void deInitialize() {
-      isInitialized = false;
+    public void setIntialize() {
+      isInitialized = true;
     }
 
     public double getLockingMotorPosition(){
