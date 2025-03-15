@@ -96,7 +96,7 @@ public class RobotContainer {
         .withCaptureDs(true)
         .withCaptureNt(true));
 
-    DogLog.setEnabled(DataLogManager.getLogDir().equals("/home/lvuser/logs"));
+    DogLog.setEnabled(!DataLogManager.getLogDir().equals("/home/lvuser/logs"));
 
     autoChooser = AutoBuilder.buildAutoChooser(); //This will populate all the autos in the project.
     pipelineChooser = new SendableChooser<Command>();
