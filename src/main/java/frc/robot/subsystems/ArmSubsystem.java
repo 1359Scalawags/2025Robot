@@ -451,10 +451,13 @@ public class ArmSubsystem extends SubsystemBase {
     if(Constants.kTuning == true) {
       elbowTuner.updateEncoderValues();
       elbowTuner.setSafeReferenceRange(185, 300);
+      elbowTuner.periodic();
       wristTuner.updateEncoderValues();
       wristTuner.setSafeReferenceRange(getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+      wristTuner.periodic();
       clawTuner.updateEncoderValues();
       clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
+      clawTuner.periodic();
       return;
     }
 
