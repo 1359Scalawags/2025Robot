@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.Constants;
 
-public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
+public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements ISparkMaxTuner {
     private GenericEntry arbitraryFFEntry;
     private GenericEntry velocityEntry;
     private GenericEntry accelerationEntry;
@@ -124,6 +124,9 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         }
         sb.append("Arbitrary FF: " + arbitraryFFEntry.getDouble(0));
         System.out.println(sb.toString());
+        if(this.getIsRunning()) {
+            this.startMotor();
+        }
     }
 
     @Override
@@ -139,6 +142,7 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     @Override
     public void startMotor() {
         motor.getClosedLoopController().setReference(this.getReference(), this.getControlType(), ClosedLoopSlot.kSlot0, arbitraryFFEntry.getDouble(0));
+        this.setRunningState(true);
     }
 
 }

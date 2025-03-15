@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -23,7 +24,7 @@ import frc.robot.commands.Tuning.Reset_Values;
 import frc.robot.commands.Tuning.Start_Motor;
 import frc.robot.commands.Tuning.Stop_Motor;
 
-public abstract class SparkMaxPIDTunerBase {
+public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
     private String name;
     protected SparkMax motor;
     private ControlType controlType;
@@ -39,6 +40,8 @@ public abstract class SparkMaxPIDTunerBase {
     protected Timer updateTimer;
     protected ArrayList<BooleanSupplier> shuffleboardSetupRoutines;
     private boolean isInitialized = false;
+    private boolean isRunning = false;
+    public GenericEntry isRunningEntry;
 
     public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
@@ -47,6 +50,7 @@ public abstract class SparkMaxPIDTunerBase {
         this.shuffleboardSetupRoutines.add(this::setupShuffleboard);
         this.name = name;
         this.motor = motor;
+        this.isRunning = false;
         this.configAccessor = motor.configAccessor.closedLoop;
         this.controlType = ControlType.kDutyCycle;
         this.p0 = configAccessor.getP();
@@ -54,7 +58,6 @@ public abstract class SparkMaxPIDTunerBase {
         this.d0 = configAccessor.getD();
         this.minReference = Double.MIN_VALUE;
         this.maxReference = Double.MAX_VALUE;
-
         this.tuner = new PIDController(this.p0, this.i0, this.d0);
 
         updateTimer = new Timer();
@@ -99,6 +102,14 @@ public abstract class SparkMaxPIDTunerBase {
         return this.maxReference;
     }
 
+    public void setRunningState(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+
+    public boolean getIsRunning() {
+        return this.isRunning;
+    }
+
     private boolean setupShuffleboard() {
         // setup interface in Shuffleboard
         this.tab = Shuffleboard.getTab(this.name + " Tuner");
@@ -108,7 +119,7 @@ public abstract class SparkMaxPIDTunerBase {
             this.commandButtonLayout = this.tab.getLayout("Commands", BuiltInLayouts.kGrid)
                 .withPosition(0, 0)
                 .withSize(6,1)
-                .withProperties(Map.of("Label position", "HIDDEN","Number of columns", 4, "Number of rows", 1, "Show Glyph", true, "Glphy", "PLAY"));
+                .withProperties(Map.of("Label position", "HIDDEN","Number of columns", 5, "Number of rows", 1, "Show Glyph", true, "Glphy", "PLAY"));
         
             this.commandButtonLayout.add("Apply", new Apply_Values(this))
                 .withPosition(0, 0)
@@ -126,6 +137,11 @@ public abstract class SparkMaxPIDTunerBase {
                 .withPosition(3, 0)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kCommand);
+            this.isRunningEntry = this.commandButtonLayout.add("Motor Running", this.isRunning)
+                .withPosition(4, 0)
+                .withSize(1, 1)
+                .withWidget(BuiltInWidgets.kBooleanBox)
+                .getEntry();
         }
 
         this.valueTunerLayout = this.tab.getLayout("Value Tuner", BuiltInLayouts.kGrid)
@@ -150,6 +166,7 @@ public abstract class SparkMaxPIDTunerBase {
 
     public void updateEncoderValues() {
         // base shows no encoder information by default
+        isRunningEntry.setBoolean(this.isRunning);
     }
 
 
@@ -170,7 +187,6 @@ public abstract class SparkMaxPIDTunerBase {
         sb.append("I: " + configAccessor.getI() + " - ");
         sb.append("D: " + configAccessor.getD());
         System.out.println(sb.toString());
-
     }
 
     public void resetTunerValues() {
@@ -178,12 +194,11 @@ public abstract class SparkMaxPIDTunerBase {
         tuner.setSetpoint(0);
     }
 
-    public void startMotor() {
-        
-    } 
+    public abstract void startMotor();
 
     public void stopMotor() {
         motor.stopMotor();
+        this.isRunning = false;
     }
 
     protected ShuffleboardLayout getCommandButtonLayout() {
