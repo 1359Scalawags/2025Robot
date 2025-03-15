@@ -102,14 +102,14 @@ public class ArmSubsystem extends SubsystemBase {
     elbowStateGoal = new State();
 
     // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
-    // Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
+    Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
     // Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
     // Shuffleboard.getTab("Arm").add("Pulley Motor", pulleyMotor);
     // Shuffleboard.getTab("Arm").add("Wrist Motor", wristMotor);
     // Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
     // Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
 
-    Shuffleboard.getTab("Arm").add("Elbow Output", elbowMotor.getAppliedOutput());
+    // Shuffleboard.getTab("Arm").add("Elbow Output", elbowMotor.getAppliedOutput());
 
     // Shuffleboard.getTab("Arm").addNumber("Elbow Absolute", elbowMotor.getAppliedOutput());
     // Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
