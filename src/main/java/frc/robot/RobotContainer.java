@@ -20,7 +20,6 @@ import frc.robot.commands.ArmCommands.goToHeightLevelThree;
 import frc.robot.commands.ArmCommands.goToHeightLevelTwo;
 import frc.robot.commands.ArmCommands.goToHightGround;
 import frc.robot.commands.ArmCommands.openClawCommand;
-import frc.robot.commands.ClimberCommands.Functionality.DeInitilizeClimber;
 import frc.robot.commands.ClimberCommands.Functionality.InitilizeClimberEncoders;
 import frc.robot.commands.ClimberCommands.Functionality.LockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.Functionality.UnlockClimberSubsystem;
