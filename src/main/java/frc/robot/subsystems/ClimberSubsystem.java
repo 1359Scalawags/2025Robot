@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -22,8 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase{
-  // private SimableSparkMax lockingBarMotor;  
-  // private SimableSparkMax positionMotor;
+
   private SparkMax lockingBarMotor;  
   private SparkMax positionMotor;
 
@@ -61,7 +61,6 @@ public class ClimberSubsystem extends SubsystemBase{
       configureLockingBarMotor();
       configurePositionMotor();
       
-
       Shuffleboard.getTab("climber").add("Position Motor Position",positionMotor.getEncoder().getPosition());
 
       debugTimer = new Timer();
