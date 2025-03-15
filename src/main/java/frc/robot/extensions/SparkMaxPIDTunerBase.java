@@ -109,7 +109,7 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
 
     public void setRunningState(boolean motorIsRunning) {
         this.isRunning = motorIsRunning;
-        this.isRunningEntry.setBoolean(this.isRunning);
+        this.isRunningEntry.setBoolean(this.isRunning);            
     }
 
     public boolean getIsRunning() {
@@ -224,6 +224,9 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
     }
 
     protected void periodic(double gravityFF, double arbitraryFF) {
+        if(!this.isInitialized) 
+            return;
+
         if(RobotState.isDisabled()) {
             this.setRunningState(false);   
         }

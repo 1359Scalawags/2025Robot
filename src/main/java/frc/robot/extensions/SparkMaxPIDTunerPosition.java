@@ -140,10 +140,10 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements IS
     }
 
     public void periodic() {
+        if(!this.isInitialized())
+            return;
         double arb = 0;
-        if(this.isInitialized()) {
-            arb = this.arbitraryFFEntry.getDouble(0);
-        }
+        arb = this.arbitraryFFEntry.getDouble(0);
         super.periodic(0, arb);
     }
 

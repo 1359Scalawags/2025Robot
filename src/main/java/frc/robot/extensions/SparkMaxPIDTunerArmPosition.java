@@ -63,6 +63,9 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implem
     }
 
     public void periodic() {
+        if(!this.isInitialized()) 
+            return;
+
         double gravityFF = ffController.calculate(this.motor.getAbsoluteEncoder().getPosition());
         super.periodic(gravityFF, this.getArbitraryFF());
     }
