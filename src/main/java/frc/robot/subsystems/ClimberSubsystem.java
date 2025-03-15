@@ -110,12 +110,12 @@ public class ClimberSubsystem extends SubsystemBase{
       SparkMaxConfig positionMotorConfig = new SparkMaxConfig();
 
       positionMotorConfig
-        .idleMode(IdleMode.kCoast)
+        .idleMode(IdleMode.kBrake)
         .inverted(false)
         //TODO: This isn't how ramp rate should be used. Ramp rate is the number of seconds it takes to go from 0 to 100% power.
-        .openLoopRampRate(Constants.ClimberSubsystem.PositionMotor.kSlewRate)
-        .closedLoopRampRate(Constants.ClimberSubsystem.PositionMotor.kSlewRate)
-        .smartCurrentLimit(70, 30, 120);
+        .openLoopRampRate(1)
+        .closedLoopRampRate(1)
+        .smartCurrentLimit(70, 30, 720);
 
       positionMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ClimberSubsystem.PositionMotor.kEncoderOffset)
