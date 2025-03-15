@@ -175,7 +175,7 @@ public final class Constants {
         public static final double kI = 0.00001/8;
         public static final double kD = 0.01;
         public static final double kIZone = 5;
-        public static final double kGravityFF = 0.2;
+        public static final double kGravityFF = 0.5;
         public static final double kMINGravityFF = 0;
         }
     }
