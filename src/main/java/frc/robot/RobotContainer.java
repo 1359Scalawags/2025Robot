@@ -81,7 +81,7 @@ public class RobotContainer {
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Pearl"));
     // TODO: This needs to be enabled when ready. Also fix initializeArm() below and uncomment calls in Robot.java
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-  //  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   //  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
    private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
@@ -114,9 +114,9 @@ public class RobotContainer {
       false
       ));
 
-    // m_ClimberSubsystem.setDefaultCommand(
-    //   new MoveClimber(m_ClimberSubsystem, 
-    //   this::assistantGetY));
+    m_ClimberSubsystem.setDefaultCommand(
+      new MoveClimber(m_ClimberSubsystem, 
+      this::assistantGetY));
 
       // This is only for testing the pulley motor directly. It will interact badly with the climber when it is unlocked
       // m_ArmSubsystem.setDefaultCommand(new MovePulleyWithJoystick(m_ArmSubsystem, this::assistantGetY));
@@ -200,29 +200,30 @@ public class RobotContainer {
             // - climber default movment command
             //}
             // then just make a button that flips that variable. talk to drive team about it.
-      //TODO: Map these buttons to make it intuitive.
-    // m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
+
+            
+    m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
     
-    // ////m_AssistantJoystick.button(14).onTrue(new RetractClimber(m_ClimberSubsystem));
+    ////m_AssistantJoystick.button(14).onTrue(new RetractClimber(m_ClimberSubsystem));
 
-    // m_AssistantJoystick.button(15).onTrue(new LockClimberBar(m_ClimberSubsystem));
-    // m_AssistantJoystick.button(4).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
+    m_AssistantJoystick.button(15).onTrue(new LockClimberBar(m_ClimberSubsystem));
+    m_AssistantJoystick.button(4).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
 
-    // m_AssistantJoystick.button(12).onTrue(new LatchServo(m_ClimberSubsystem));
-    // m_AssistantJoystick.button(14).onTrue(new UnLatchServo(m_ClimberSubsystem));
+    m_AssistantJoystick.button(12).onTrue(new LatchServo(m_ClimberSubsystem));
+    m_AssistantJoystick.button(14).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
-    // m_AssistantJoystick.button(13).onTrue(new LockingPosition(m_ClimberSubsystem));
-    // m_AssistantJoystick.button(11).onTrue(new LockedPosition(m_ClimberSubsystem));
+    m_AssistantJoystick.button(13).onTrue(new LockingPosition(m_ClimberSubsystem));
+    m_AssistantJoystick.button(11).onTrue(new LockedPosition(m_ClimberSubsystem));
 
-    // m_AssistantJoystick.button(3).onTrue(new DeployClimber(m_ClimberSubsystem));
+    m_AssistantJoystick.button(3).onTrue(new DeployClimber(m_ClimberSubsystem));
 
   // //TODO: Make a sequential command to lock the arm motor.
 
-    // m_AssistantJoystick.button(1).onTrue(Commands.sequence(new LockingPosition(m_ClimberSubsystem),
-    //   new LatchServo(m_ClimberSubsystem),
-    //   new WaitCommand(1.5),
-    //   new LockedPosition(m_ClimberSubsystem)));
+    m_AssistantJoystick.button(1).onTrue(Commands.sequence(new LockingPosition(m_ClimberSubsystem),
+      new LatchServo(m_ClimberSubsystem),
+      new WaitCommand(1.5),
+      new LockedPosition(m_ClimberSubsystem)));
 
 
     m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
@@ -252,14 +253,14 @@ public class RobotContainer {
 
   }
 
-  // public Command lockClimberSubsystemWhenDisabled() {
-  //   return new LockClimberSubsystem(m_ClimberSubsystem);
-  // }
+  public Command lockClimberSubsystemWhenDisabled() {
+    return new LockClimberSubsystem(m_ClimberSubsystem);
+  }
 
-  // public Command intializeTheClimber() {
-  //   //TODO: should this command run when disabled?
-  //   return new InitilizeClimber(m_ClimberSubsystem);
-  // }
+  public Command intializeTheClimber() {
+    //TODO: should this command run when disabled?
+    return new InitilizeClimber(m_ClimberSubsystem);
+  }
 
   public Command intializeArmEncoders() {
     Command initializeArmEncoders = new InitilizeArmEncoders(m_ArmSubsystem);
@@ -291,9 +292,9 @@ public class RobotContainer {
  
 
 
-  // public Command disabledIntializedClimber() {
-  //   return new DeInitilizeClimber(m_ClimberSubsystem);
-  // }
+  public Command disabledIntializedClimber() {
+    return new DeInitilizeClimber(m_ClimberSubsystem);
+  }
 
 
   /**
