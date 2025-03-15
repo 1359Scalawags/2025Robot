@@ -84,7 +84,7 @@ public final class Constants {
     public static class PositionMotor {
       public static final int kMotorID = 10;
       public static final double kMaxAngle = 155.0;//0.037*360;
-      public static final double kMinAngle = 30.0;//0.457*360;
+      public static final double kMinAngle = 35.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 126.0; // 0.185*360;

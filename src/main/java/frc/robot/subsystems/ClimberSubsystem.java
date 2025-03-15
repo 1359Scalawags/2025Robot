@@ -55,11 +55,8 @@ public class ClimberSubsystem extends SubsystemBase{
       configureLockingBarMotor();
       configurePositionMotor();
       
-      Shuffleboard.getTab("climber").add("Position Motor", positionMotor);
-      Shuffleboard.getTab("climber").add("Latching Servo", latchingServo); 
       Shuffleboard.getTab("climber").add("Locking Bar", lockingBarMotor);
       Shuffleboard.getTab("climber").add("Position Motor Position",positionMotor.getEncoder().getPosition());
-      Shuffleboard.getTab("climber").add("Applied output", positionMotor.getAppliedOutput());
 
       debugTimer = new Timer();
       debugTimer.start();
