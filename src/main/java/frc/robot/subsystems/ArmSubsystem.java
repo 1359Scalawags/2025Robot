@@ -95,10 +95,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     if(Constants.kTuning) {
       elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
+      elbowTuner.setSafeReferenceRange(Constants.ArmSubsystem.Elbow.kMinLimit, Constants.ArmSubsystem.Elbow.kMaxLimit);
       elbowTuner.buildShuffleboard();
       wristTuner = new SparkMaxPIDTunerArmPosition("Wrist Motor", wristMotor, ControlType.kPosition, wristFF);
       wristTuner.buildShuffleboard();
       clawTuner = new SparkMaxPIDTunerPosition("Claw Motor", clawMotor, ControlType.kPosition);
+      clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
       clawTuner.buildShuffleboard();
     }
 
@@ -450,13 +452,11 @@ public class ArmSubsystem extends SubsystemBase {
     // if tuning, do nothing
     if(Constants.kTuning == true) {
       elbowTuner.updateEncoderValues();
-      elbowTuner.setSafeReferenceRange(185, 300);
       elbowTuner.periodic();
       wristTuner.updateEncoderValues();
       wristTuner.setSafeReferenceRange(getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
       wristTuner.periodic();
       clawTuner.updateEncoderValues();
-      clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
       clawTuner.periodic();
       return;
     }

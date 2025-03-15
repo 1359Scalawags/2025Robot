@@ -63,6 +63,7 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         this.minReference = Double.MIN_VALUE;
         this.maxReference = Double.MAX_VALUE;
         this.tuner = new PIDController(this.p0, this.i0, this.d0);
+        this.tuner.setSetpoint(MathUtil.clamp(this.tuner.getSetpoint(), this.minReference, this.maxReference));
 
         updateTimer = new Timer();
         updateTimer.reset();
@@ -196,7 +197,7 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
 
     public void resetTunerValues() {
         tuner.setPID(this.p0, this.i0, this.d0);
-        tuner.setSetpoint(0);
+        tuner.setSetpoint(MathUtil.clamp(0, this.minReference, this.maxReference));
     }
 
     public void startMotor() {
