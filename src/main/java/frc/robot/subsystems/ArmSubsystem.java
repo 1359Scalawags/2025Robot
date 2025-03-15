@@ -7,6 +7,9 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import dev.doglog.DogLog;
+
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
@@ -71,20 +74,27 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotorTarget = wristMotor.getAbsoluteEncoder().getPosition();
     if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
       wristError = true;
-      System.out.println("------WRIST ERROR---------");
+      //System.out.println("------WRIST ERROR---------");
+      DogLog.log("ArmSubsystem/ERROR", "------WRIST ERROR---------");
     } else {
       wristError = false;
     }
     clawMotorTarget = clawMotor.getEncoder().getPosition();
 
-    System.out.println("Reported Positions at Intialization: ");
+    DogLog.log("ArmSubsystem/DEBUG", "Reported Positions at Intialization: ");
+    DogLog.log("ArmSubsystem/DEBUG", "\tPully: " + pulleyMotorTarget);
+    DogLog.log("ArmSubsystem/DEBUG", "\tElbow: " + elbowMotorTarget);
+    DogLog.log("ArmSubsystem/DEBUG", "\tClaw: " + clawMotorTarget);
+    DogLog.log("ArmSubsystem/DEBUG", "\tcalculated wrist max: " + getAbsoluteWristAngleMax());
+    DogLog.log("ArmSubsystem/DEBUG", "\tcalculated wrist min: " + getAbsoluteWristAngleMin());
+
+    // System.out.println("Reported Positions at Intialization: ");
     // System.out.println("  Pulley: " + pulleyMotorTarget);
     // System.out.println("  Elbow: " + elbowMotorTarget);
-    System.out.println("  Wrist: " + wristMotorTarget);
-    System.out.println("  Claw: " + clawMotorTarget);
-    System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
-    System.out.println("  calculated writst min: " + getAbsoluteWristAngleMin());
-
+    // System.out.println("  Wrist: " + wristMotorTarget);
+    // System.out.println("  Claw: " + clawMotorTarget);
+    // System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
+    // System.out.println("  calculated writst min: " + getAbsoluteWristAngleMin());
 
     pulleyLimiter.reset(pulleyMotorTarget);
     elbowLimiter.reset(elbowMotorTarget);

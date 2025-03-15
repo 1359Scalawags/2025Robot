@@ -9,6 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.RobotState;
@@ -74,9 +75,12 @@ public class ClimberSubsystem extends SubsystemBase{
         double currentLockbar = getLockingMotorPosition();
         positionLimiter.reset(currentPosition);
         lockingPositionLimiter.reset(currentLockbar);
-        System.out.println("Reported Positions at Intialization: ");
-        System.out.println("  Climber Position: " + currentPosition);
-        System.out.println("  Lockbar Position: " + currentLockbar);
+        DogLog.log("ClimberSubsystem/DEBUG", "Reported Positions at Intialization: ");
+        DogLog.log("ClimberSubsystem/DEBUG", "\tClimber Position: " + currentPosition);
+        DogLog.log("ClimberSubsystem/DEBUG", "\tLockbar Position: " + currentLockbar);
+        //System.out.println("Reported Positions at Intialization: ");
+        //System.out.println("  Climber Position: " + currentPosition);
+        //System.out.println("  Lockbar Position: " + currentLockbar);
 
         positionMotor.getClosedLoopController().setReference(getClimberPostion(), ControlType.kPosition);
         lockingBarMotor.getClosedLoopController().setReference(getLockingMotorPosition(), ControlType.kPosition);
