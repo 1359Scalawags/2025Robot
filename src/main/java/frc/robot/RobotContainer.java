@@ -21,7 +21,7 @@ import frc.robot.commands.ArmCommands.goToHeightLevelTwo;
 import frc.robot.commands.ArmCommands.goToHightGround;
 import frc.robot.commands.ArmCommands.openClawCommand;
 import frc.robot.commands.ClimberCommands.Functionality.DeInitilizeClimber;
-import frc.robot.commands.ClimberCommands.Functionality.InitilizeClimber;
+import frc.robot.commands.ClimberCommands.Functionality.InitilizeClimberEncoders;
 import frc.robot.commands.ClimberCommands.Functionality.LockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.Functionality.UnlockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.Movment.LockedPosition;
@@ -257,11 +257,12 @@ public class RobotContainer {
     return new LockClimberSubsystem(m_ClimberSubsystem);
   }
 
-  public Command intializeTheClimber() {
-    //TODO: should this command run when disabled?
-    Command initClimber = new InitilizeClimber(m_ClimberSubsystem);
-    Command moveClimber =  new RetractClimber(m_ClimberSubsystem);
-    return initClimber.andThen(moveClimber);
+  public Command initializeClimberEncoders() {
+    return new InitilizeClimberEncoders(m_ClimberSubsystem);
+  }
+
+  public Command initializeClimberPosition() {
+    return new RetractClimber(m_ClimberSubsystem);
   }
 
   public Command intializeArmEncoders() {

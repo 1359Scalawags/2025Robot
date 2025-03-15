@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class InitilizeClimber extends Command {
+public class InitilizeClimberEncoders extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_subsystem;
   private Timer waitTimer;
   private boolean hasfinished = false;
 
-  public InitilizeClimber(ClimberSubsystem subsystem) {
+  public InitilizeClimberEncoders(ClimberSubsystem subsystem) {
     m_subsystem = subsystem;
     waitTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
