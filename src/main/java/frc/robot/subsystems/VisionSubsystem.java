@@ -33,14 +33,19 @@ public class VisionSubsystem extends SubsystemBase {
             hasTarget = true; //LL has a target
             PoseEstimate estimatedCameraPose = LimelightHelpers.getBotPoseEstimate_wpiBlue(armCamera);
 
-            SmartDashboard.putBoolean("limelightTV", LimelightHelpers.getTV(armCamera)); //shows there is a target reading 
-            SmartDashboard.putNumber("limelightX", estimatedCameraPose.pose.getX()); //distance left-right from target
-            SmartDashboard.putNumber("limelightY", estimatedCameraPose.pose.getY()); //distance front-back from target
+            if(Constants.kDebug) {
+                SmartDashboard.putBoolean("limelightTV", LimelightHelpers.getTV(armCamera)); //shows there is a target reading 
+                SmartDashboard.putNumber("limelightX", estimatedCameraPose.pose.getX()); //distance left-right from target
+                SmartDashboard.putNumber("limelightY", estimatedCameraPose.pose.getY()); //distance front-back from target
+            }
             return estimatedCameraPose; // returns a pose estimate
         }
-        SmartDashboard.putBoolean("limelightTV", LimelightHelpers.getTV(armCamera));
-        SmartDashboard.putNumber("limelightX", new PoseEstimate().pose.getX());
-        SmartDashboard.putNumber("limelightY", new PoseEstimate().pose.getY());
+        if(Constants.kDebug) {
+            SmartDashboard.putBoolean("limelightTV", LimelightHelpers.getTV(armCamera));
+            SmartDashboard.putNumber("limelightX", new PoseEstimate().pose.getX());
+            SmartDashboard.putNumber("limelightY", new PoseEstimate().pose.getY());            
+        }
+
         return new PoseEstimate(); // IDK abt ths (should return a pose estimate, not sure if its needed)
     }
 
@@ -67,11 +72,17 @@ public class VisionSubsystem extends SubsystemBase {
         if (camera != null) {
             PoseEstimate poseEst = getEstimatedGlobalPose(camera);
             swerve.addVisionMeasurement(poseEst.pose, poseEst.timestampSeconds);
-            SmartDashboard.putBoolean("limelightTV", true);
+            if(Constants.kDebug) {
+                SmartDashboard.putBoolean("limelightTV", true);                
+            }
+
             hasTarget = true;
         } else {
             hasTarget = false;
-            SmartDashboard.putBoolean("limelightTV", false);
+            if(Constants.kDebug) {
+                SmartDashboard.putBoolean("limelightTV", false);                
+            }
+
         }
     }
 
@@ -100,9 +111,14 @@ public class VisionSubsystem extends SubsystemBase {
         }
         if (camera != null) {
             swerve.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
-            SmartDashboard.putBoolean("limelightTV", true);
+            if(Constants.kDebug) {
+                SmartDashboard.putBoolean("limelightTV", true);                
+            }
+
         } else {
-            SmartDashboard.putBoolean("limelightTV", false);
+            if(Constants.kDebug) {
+                SmartDashboard.putBoolean("limelightTV", false);                
+            }
         }
     }
 
