@@ -112,9 +112,9 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         this.isRunningEntry.setBoolean(this.isRunning);            
     }
 
-    public boolean getIsRunning() {
-        return this.isRunning;
-    }
+    // public boolean getIsRunning() {
+    //     return this.isRunning;
+    // }
 
     private boolean setupShuffleboard() {
         // setup interface in Shuffleboard
@@ -172,7 +172,7 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
 
     public void updateEncoderValues() {
         // base shows no encoder information by default
-        isRunningEntry.setBoolean(this.isRunning);
+        
     }
 
 
@@ -223,16 +223,33 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         return this.encoderFeedbackLayout;
     }
 
+    int count = 0;
     protected void periodic(double gravityFF, double arbitraryFF) {
-        if(!this.isInitialized) 
-            return;
+        count++;
+        if(this.isInitialized) {
+            if(RobotState.isDisabled() && this.isRunning) {
+                this.setRunningState(false);   
+                isRunningEntry.setBoolean(false);
+            }
+            if(this.isRunning) {
+                motor.getClosedLoopController().setReference(this.reference, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
+        
+            }            
+        }
+        
+        if(count > 50) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("#---------------TUNER PERIODIC---------------\n");
+            sb.append("# Initialized: " + this.isInitialized + "\n");
+            sb.append("# Motor Running: " + this.isRunning + "\n");
+            sb.append("# Setpoint: " + this.reference + "\n");
+            sb.append("# P: " + this.tuner.getP() + "  I: " + this.tuner.getI() + "  D: " + this.tuner.getD() + "\n");
+            sb.append("# GravFF: " + gravityFF + "  ArbFF: " + arbitraryFF + "\n");
+            sb.append("#--------------------------------------------\n");
+            System.out.println(sb.toString());
+            count = 0;
+        } 
 
-        if(RobotState.isDisabled()) {
-            this.setRunningState(false);   
-        }
-        if(this.isRunning) {
-            motor.getClosedLoopController().setReference(this.reference, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
-        }
     }
 
 }
