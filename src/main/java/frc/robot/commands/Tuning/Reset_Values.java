@@ -14,7 +14,6 @@ public class Reset_Values extends Command {
     @Override
     public void initialize() {
         tuner.resetTunerValues();
-        System.out.println("Resetting Tuner Values");
     }
 
     @Override
