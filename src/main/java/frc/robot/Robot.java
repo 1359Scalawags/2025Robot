@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -40,7 +41,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(CommandScheduler.getInstance());
     PowerDistribution powerDistribution = new PowerDistribution(20, ModuleType.kRev);
     Shuffleboard.getTab("Arm").add(powerDistribution);
-
+    
+    
+    DriverStation.silenceJoystickConnectionWarning(true);
     // UsbCamera camera = CameraServer.startAutomaticCapture();
     // camera.setResolution(640, 480);
     // //camera.setResolution(320, 240);

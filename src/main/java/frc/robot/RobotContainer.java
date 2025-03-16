@@ -94,8 +94,11 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser(); //This will populate all the autos in the project.
     pipelineChooser = new SendableChooser<Command>();
 
-    SmartDashboard.putData("Pipeline Chooser", pipelineChooser);
-    SmartDashboard.putData("Auto Chooser ", autoChooser);
+    if(Constants.kDebug) {
+      SmartDashboard.putData("Pipeline Chooser", pipelineChooser);
+      SmartDashboard.putData("Auto Chooser ", autoChooser);      
+    }
+
 
     // Configure the trigger bindings
     configureBindings();

@@ -95,9 +95,12 @@ public class AbsoluteFieldDrive extends Command {
         }
 
 
-        SmartDashboard.putNumber("Throttle", throttle.getAsDouble() * 100);
-        SmartDashboard.putNumber("swerve X", modvX);
-        SmartDashboard.putNumber("swerve Y", modvY);
+        if(Constants.kDebug) {
+            SmartDashboard.putNumber("Throttle", throttle.getAsDouble() * 100);
+            SmartDashboard.putNumber("swerve X", modvX);
+            SmartDashboard.putNumber("swerve Y", modvY);            
+        }
+
 
     }
 

@@ -2,6 +2,8 @@ package frc.robot.extensions;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
@@ -14,7 +16,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -43,9 +44,19 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
     protected double minReference, maxReference;
     protected Timer updateTimer;
     protected ArrayList<BooleanSupplier> shuffleboardSetupRoutines;
-    private boolean isInitialized = false;
+    private boolean isShuffleboardInitialized = false;
     private boolean isRunning = false;
-    public GenericEntry isRunningEntry;
+    private Verbosity debugVerbosity;
+    private double debugIntervalSeconds;
+    private GenericEntry isRunningEntry;
+    protected final static DecimalFormat df5 = new DecimalFormat("#.#####");
+    protected final static DecimalFormat df10 = new DecimalFormat("#.##########"); 
+
+    public enum Verbosity {
+        none,
+        commands,
+        all
+    }
 
     public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
@@ -55,6 +66,8 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         this.name = name;
         this.motor = motor;
         this.isRunning = false;
+        this.debugVerbosity = Verbosity.commands;
+        this.debugIntervalSeconds = 1.0;
         this.configAccessor = motor.configAccessor.closedLoop;
         this.controlType = ControlType.kDutyCycle;
         this.p0 = configAccessor.getP();
@@ -71,20 +84,37 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
 
     }
 
-    public void buildShuffleboard() {
+    public void addToShuffleboard() {
         for(BooleanSupplier function : shuffleboardSetupRoutines) {
             function.getAsBoolean();
         }
-        this.isInitialized = true;
+        this.isShuffleboardInitialized = true;
     }
 
-    protected boolean isInitialized() {
-        return this.isInitialized;
+    public String getTunerName() {
+        return this.name;
+    }
+
+    public void setVerbosity(Verbosity verbosity) {
+        this.debugVerbosity = verbosity;
+    }
+
+    public void setDebugInterval(double seconds) {
+        this.debugIntervalSeconds = seconds;
+    }
+
+    public Verbosity getVerbosity() {
+        return this.debugVerbosity;
+    }
+
+    protected boolean isShuffleboardInitialized() {
+        return this.isShuffleboardInitialized;
     }
 
     protected ControlType getControlType() {
         return this.controlType;
     }
+
 
     protected void setControlType(ControlType type) {
         this.controlType = type;
@@ -112,9 +142,9 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         this.isRunningEntry.setBoolean(this.isRunning);            
     }
 
-    public boolean getIsRunning() {
-        return this.isRunning;
-    }
+    // public boolean getIsRunning() {
+    //     return this.isRunning;
+    // }
 
     private boolean setupShuffleboard() {
         // setup interface in Shuffleboard
@@ -159,7 +189,7 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         this.tab.add("PID", tuner)
             .withWidget(BuiltInWidgets.kPIDController)
             .withPosition(0, 1)
-            .withSize(1,3)
+            .withSize(2,3)
             .withProperties(Map.of("Label position", "TOP", "Show Glyph", true, "Glphy", "PENCIL"));   
 
         this.encoderFeedbackLayout = this.tab.getLayout("Feedback", BuiltInLayouts.kList)
@@ -170,9 +200,9 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         return true;
     }
 
-    public void updateEncoderValues() {
+    protected void updateEncoderValues() {
         // base shows no encoder information by default
-        isRunningEntry.setBoolean(this.isRunning);
+        
     }
 
 
@@ -188,11 +218,15 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         tuner.setSetpoint(this.reference);
 
         motor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        StringBuilder sb = new StringBuilder();
-        sb.append("P: " + configAccessor.getP() + " - ");
-        sb.append("I: " + configAccessor.getI() + " - ");
-        sb.append("D: " + configAccessor.getD());
-        System.out.println(sb.toString());
+        
+        if(this.debugVerbosity == Verbosity.commands || this.debugVerbosity == Verbosity.all) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("\n#### APPLY: " + this.name + " ####");
+            sb.append("|  P: " + df10.format(configAccessor.getP()) + " - ");
+            sb.append("|  I: " + df10.format(configAccessor.getI()) + " - ");
+            sb.append("|  D: " + df10.format(configAccessor.getD()) );
+            System.out.println(sb.toString());            
+        }
     }
 
     public void resetTunerValues() {
@@ -201,12 +235,14 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
     }
 
     public void startMotor() {
+        System.out.println("\n#### START: " + this.name + " #### \n");
         if(RobotState.isEnabled()) {
             this.setRunningState(true);          
         }
     }
 
     public void stopMotor() {
+        System.out.println("\n#### STOP: " + this.name + " #### \n");
         this.setRunningState(false);        
         motor.stopMotor();
     }
@@ -223,16 +259,34 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         return this.encoderFeedbackLayout;
     }
 
+    int count = 0;
     protected void periodic(double gravityFF, double arbitraryFF) {
-        if(!this.isInitialized) 
-            return;
 
-        if(RobotState.isDisabled()) {
-            this.setRunningState(false);   
+        if(this.isShuffleboardInitialized) {
+            if(RobotState.isDisabled() && this.isRunning) {
+                this.setRunningState(false);   
+                isRunningEntry.setBoolean(false);
+            }
+            if(this.isRunning) {
+                motor.getClosedLoopController().setReference(this.reference, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
+            }            
         }
-        if(this.isRunning) {
-            motor.getClosedLoopController().setReference(this.reference, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
-        }
+
+        count++;        
+        if(count * Constants.kRobotLoopTime > this.debugIntervalSeconds) {
+            if(this.debugVerbosity == Verbosity.all) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("\n#### PERIODIC: " + this.name + " ####\n");
+                sb.append("|  Initialized: " + this.isShuffleboardInitialized + "\n");
+                sb.append("|  Motor Running: " + this.isRunning + "\n");
+                sb.append("|  Setpoint: " + this.reference + "\n");
+                sb.append("|  P: " + df10.format(this.tuner.getP()) + "  I: " + df10.format(this.tuner.getI()) + "  D: " + df10.format(this.tuner.getD()) + "\n");
+                sb.append("|  GravFF: " + df10.format(gravityFF) + "  ArbFF: " + df10.format(arbitraryFF) + "\n");
+                System.out.println(sb.toString());                
+            }
+            count = 0;
+        } 
+
     }
 
 }

@@ -14,7 +14,6 @@ public class Apply_Values extends Command {
     @Override
     public void initialize() {
         tuner.applyTunerValues();
-        System.out.println("Applying Tuner Values");
     }
 
     @Override

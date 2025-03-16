@@ -14,7 +14,6 @@ public class Stop_Motor extends Command {
     @Override
     public void initialize() {
         tuner.stopMotor();
-        System.out.println("Stopping Tuner Motor");
     }
 
     @Override

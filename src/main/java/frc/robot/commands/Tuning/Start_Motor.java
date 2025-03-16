@@ -14,7 +14,6 @@ public class Start_Motor extends Command {
     @Override
     public void initialize() {
         tuner.startMotor();
-        System.out.println("Starting Tuner Motor");
     }
 
     @Override
