@@ -21,98 +21,7 @@ public final class Constants {
   public static final String robotName = "Flipper";
   public static final double kRobotLoopTime = 0.02;
 
-  public static class SwerveSubsystem {
-
-    public static final double MAX_SPEED = 12;
-    public static final double LOOP_TIME = 0;
-    public static final double ROBOT_MASS = 100 ;
-    public static final Object CHASSIS = null;
-    public static final double TURN_CONSTANT = 0;
-    public static final double kTeleopDeadzone = 0.1;
-    public static final double kAngleSpeedMultiplier = 3.0/4.0;
-
-    /*
-     * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
-     *-------------------------------------
-     *  SparkMAX:
-     * BACK LEFT ID-   1
-     * FRONT RIGHT ID- 2
-     * FRONT LEFT ID-  3
-     * BACK RIGHT ID-  4
-     * -------------------------------------
-     * Falcon500:
-     * BACK LEFT ID-   1
-     * FRONT RIGHT ID- 2
-     * FRONT LEFT ID-  3
-     * BACK RIGHT ID-  4
-     * -------------------------------------
-     *  Enconder:
-     * BACK LEFT ID-   5
-     * FRONT RIGHT ID- 6
-     * FRONT LEFT ID-  7
-     * BACK RIGHT ID-  8
-     */
-  }
-
-  public static class ClimberSubsystem {
-    //Can ID's for climber are from 9 to 15
-
-      //Limits 
-      //TODO; make sure these are right
-    public static final double kIntializeDelay = 0.5;
-
-    public static class LatchServo {
-      public static final int kServoID = 0;
-      public static final double maxLimit = 1;
-      public static final double minLimit = 0;
-      public static final double latchedValue = 0.7;
-      public static final double unLatchedValue = 0.001;
-      public static final double kNaxActuateTime = 5.0; //max time to run the servo
-      
-    }
-
-    public static class LockingBarMotor {
-      public static final int kMotorID = 9;
-      public static final double kEncoderOffset = 0;
-      public static final double kConversionFactor = 360;
-      public static final double kMinLimit = 72;
-      public static final double kMaxLimit = 162;
-      public static final double kUnLockedPosition = 76.0;
-      public static final double kLockedPosition = 155.0;
-      public static final double kSlewRate = 90;
-    public static class PIDF{
-      // 0.01 , 0.000001, 0.007
-      public static final double kP = 0.01;
-      public static final double kI = 0.000001;
-      public static final double kD = 0.007;
-      public static final double kIZone = 5;
-      }
-    }
-
-    public static class PositionMotor {
-      public static final int kMotorID = 10;
-      public static final double kMaxAngle = 155.0;//0.037*360;
-      public static final double kMinAngle = 25.0;//0.457*360;
-      public static final double kConversionFactor = 360;
-      public static final double kEncoderOffset = 0.5;    
-      public static final double kDeployedAngle = 126.0; // 0.185*360;
-      public static final double kHomeAngle = 55.0; //0.442*360;
-      public static final double kLockingPosition = 65.5;
-      public static final double kLockedPosition = 76.7;
-      public static final double kMaxJoystickSpeed = 10;
-      public static final double kSlewRate = 45.0;
-    public static class PIDF{
-       // 0.05, 0.0000001, 0.08
-      public static final double kP = 0.05;
-      public static final double kI = 0.0000001;
-      public static final double kD = 0.08;
-      public static final double kIZone = 30;
-      }
-    }
-  }  
-
   public static class ArmSubsystem {
-    //Can ID's for Arm are from 16 to 21
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
@@ -123,14 +32,6 @@ public final class Constants {
       public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293-94);//correct
       public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293-94);//correct
       public static final ArmPosition klevel4 = new ArmPosition(52,315,26-94);//correct
-
-      // public static final ArmPosition kHome = new ArmPosition(0,232,200);
-      // public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
-      // public static final ArmPosition kGround = new ArmPosition(0,232,220);//correct
-      // public static final ArmPosition kLevel1 = new ArmPosition(0,232,232);//correct
-      // public static final ArmPosition kLevel2 = new ArmPosition(0,232,240);//correct
-      // public static final ArmPosition klevel3 = new ArmPosition(0,232,250);//correct
-      // public static final ArmPosition klevel4 = new ArmPosition(0,232,260);//correct
     }
 
     public static class Pulley{
@@ -140,21 +41,20 @@ public final class Constants {
       public static final double kMaxLimit = 52;
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 5;
-      //public static final double kHomingVelocity = -2;
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kHomeLimitSwitchID = 0;
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
-    public static class PIDF{
-       //0.07f, 0.00003f, 0.07f
-      public static final double kP = 0.07;
-      public static final double kI = 0.00003;
-      public static final double kD = 0.07;
-      public static final double kIZone = 0;//5;
-      public static final double kStageOneFF = 0;//0.15;
-      public static final double kStageTwoFF = 0;//0.2;
+      
+      public static class PIDF{
+        public static final double kP = 0.07;
+        public static final double kI = 0.00003;
+        public static final double kD = 0.07;
+        public static final double kIZone = 0;//5;
+        public static final double kStageOneFF = 0;//0.15;
+        public static final double kStageTwoFF = 0;//0.2;
       }
     }
 
@@ -168,15 +68,15 @@ public final class Constants {
       public static final double kHorizontalAngle = 232.0;
       public static final double kTolerance = 1.0;
       public static final double kAccelerationRate = 25.0;
+      
       public static class PIDF{
-          //0.025, 0.00001, 0.07
         public static final double kP = 0.01;
         public static final double kI = 0.00001/8;
         public static final double kD = 0.01;
         public static final double kIZone = 5;
         public static final double kGravityFF = 0.35;
         public static final double kMINGravityFF = 0;
-        }
+      }
     }
 
     public static class Wrist {
@@ -188,20 +88,19 @@ public final class Constants {
       public static final double kSlewRate = 30;
       public static final double kHorizontalAngle =232.0-94; 
       public static final double kTolerance = 2.0;
-    public static final double kAccelerationRate = 25.0; //XXX: this is a guess
-    public static class PIDF{
-      // (0.006, 0.0000006, 0.006)
-      public static final double kP = 0.01; //0.0075;
-      public static final double kI = 0.00001; //0.00005;
-      public static final double kD = 0.03; //0.006;
-      public static final double kIZone = 5;
-      public static final double kGravityFF = 0.25; //0.1;
-      public static final double kMinGravityFF = 0;
+      public static final double kAccelerationRate = 25.0; //XXX: this is a guess
+      
+      public static class PIDF{
+        public static final double kP = 0.01; //0.0075;
+        public static final double kI = 0.00001; //0.00005;
+        public static final double kD = 0.03; //0.006;
+        public static final double kIZone = 5;
+        public static final double kGravityFF = 0.25; //0.1;
+        public static final double kMinGravityFF = 0;
       }
     }
 
     public static class Claw {
-      // posotive motor value closes claw, negative opens
       public static final int kMotorID = 18;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
@@ -212,16 +111,14 @@ public final class Constants {
       public static final double kOpenClaw = -17.38;//good
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
-      //public static final double kHomingVelocity = 300;
       public static final double kHomingPositionIncrement = 1.0 * 0.020; // homing loop time is 20ms
-    public static final double kAccelerationRate = 5; //XXX: this is a guess
+      public static final double kAccelerationRate = 5; //XXX: this is a guess
       
-    public static class PIDF{
-          //0.05, 0.0001, 0.03
-      public static final double kP = 0.075;
-      public static final double kI = 0;
-      public static final double kD = 0.1;
-      public static final double kIZone = 2;
+      public static class PIDF{
+        public static final double kP = 0.075;
+        public static final double kI = 0;
+        public static final double kD = 0.1;
+        public static final double kIZone = 2;
       }
     }
   }
