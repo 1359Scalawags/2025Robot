@@ -114,12 +114,12 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
             StringBuilder sb = new StringBuilder();
             if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
                 if(this.velocityEntry != null && this.accelerationEntry != null) {
-                    sb.append("#  MAX Velocity: " + velocityEntry.getDouble(0.1) + " - ");
-                    sb.append("#  MAX Acceleration: " + accelerationEntry.getDouble(0.1) + " - ");
+                    sb.append("|  MAX Velocity: " + df10.format(velocityEntry.getDouble(0.1)) + " - ");
+                    sb.append(" MAX Acceleration: " + df10.format(accelerationEntry.getDouble(0.1)) + "\n");
                 }
             }
             if(this.arbitraryFFEntry != null) {
-                sb.append("#  Arbitrary FF: " + arbitraryFFEntry.getDouble(0));
+                sb.append("|  Arbitrary FF: " + arbitraryFFEntry.getDouble(0));
             }
             System.out.println(sb.toString());            
         }

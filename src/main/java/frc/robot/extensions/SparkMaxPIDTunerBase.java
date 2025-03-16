@@ -2,6 +2,8 @@ package frc.robot.extensions;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
@@ -46,7 +48,9 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
     private boolean isRunning = false;
     private Verbosity debugVerbosity;
     private double debugIntervalSeconds;
-    public GenericEntry isRunningEntry;
+    private GenericEntry isRunningEntry;
+    protected final static DecimalFormat df5 = new DecimalFormat("#.#####");
+    protected final static DecimalFormat df10 = new DecimalFormat("#.##########"); 
 
     public enum Verbosity {
         none,
@@ -213,10 +217,10 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         
         if(this.debugVerbosity == Verbosity.commands || this.debugVerbosity == Verbosity.all) {
             StringBuilder sb = new StringBuilder();
-            sb.append("#### APPLY VALUES: " + this.name + " ####");
-            sb.append("#  P: " + configAccessor.getP() + " - ");
-            sb.append("#  I: " + configAccessor.getI() + " - ");
-            sb.append("#  D: " + configAccessor.getD());
+            sb.append("\n#### APPLY: " + this.name + " ####");
+            sb.append("|  P: " + df10.format(configAccessor.getP()) + " - ");
+            sb.append("|  I: " + df10.format(configAccessor.getI()) + " - ");
+            sb.append("|  D: " + df10.format(configAccessor.getD()) );
             System.out.println(sb.toString());            
         }
     }
@@ -227,14 +231,14 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
     }
 
     public void startMotor() {
-        System.out.println("#### START: " + this.name + " ####");
+        System.out.println("\n#### START: " + this.name + " #### \n");
         if(RobotState.isEnabled()) {
             this.setRunningState(true);          
         }
     }
 
     public void stopMotor() {
-        System.out.println("#### STOP: " + this.name + " ####");
+        System.out.println("\n#### STOP: " + this.name + " #### \n");
         this.setRunningState(false);        
         motor.stopMotor();
     }
@@ -268,13 +272,12 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         if(count * Constants.kRobotLoopTime > this.debugIntervalSeconds) {
             if(this.debugVerbosity == Verbosity.all) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("#### PERIODIC: " + this.name + " ####\n");
-                sb.append("#  Initialized: " + this.isShuffleboardInitialized + "\n");
-                sb.append("#  Motor Running: " + this.isRunning + "\n");
-                sb.append("#  Setpoint: " + this.reference + "\n");
-                sb.append("#  P: " + this.tuner.getP() + "  I: " + this.tuner.getI() + "  D: " + this.tuner.getD() + "\n");
-                sb.append("#  GravFF: " + gravityFF + "  ArbFF: " + arbitraryFF + "\n");
-                sb.append("#--------------------------------------------\n");
+                sb.append("\n#### PERIODIC: " + this.name + " ####\n");
+                sb.append("|  Initialized: " + this.isShuffleboardInitialized + "\n");
+                sb.append("|  Motor Running: " + this.isRunning + "\n");
+                sb.append("|  Setpoint: " + this.reference + "\n");
+                sb.append("|  P: " + df10.format(this.tuner.getP()) + "  I: " + df10.format(this.tuner.getI()) + "  D: " + df10.format(this.tuner.getD()) + "\n");
+                sb.append("|  GravFF: " + df10.format(gravityFF) + "  ArbFF: " + df10.format(arbitraryFF) + "\n");
                 System.out.println(sb.toString());                
             }
             count = 0;

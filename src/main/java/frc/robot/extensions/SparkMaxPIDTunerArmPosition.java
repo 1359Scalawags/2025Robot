@@ -45,8 +45,8 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition {
         if(this.getVerbosity() == Verbosity.commands || this.getVerbosity() == Verbosity.all) {
             StringBuilder sb = new StringBuilder();
             if(this.gravityFFEntry != null && this.minimumFFEntry != null){
-                sb.append("#  Gravity FF: " + gravityFFEntry.getDouble(0) + " - ");
-                sb.append("#  Minimum FF: " + minimumFFEntry.getDouble(0));
+                sb.append("|  Gravity FF: " + df10.format(gravityFFEntry.getDouble(0)) + " - ");
+                sb.append("|  Minimum FF: " + df10.format(minimumFFEntry.getDouble(0)) );
             }
             System.out.println(sb.toString());            
         }
