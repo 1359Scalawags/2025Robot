@@ -1,13 +1,11 @@
 package frc.robot.extensions;
 
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
-public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implements ISparkMaxTuner {
+public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition {
 
     protected GravityAssistedFeedForward ffController;
     private GenericEntry gravityFFEntry;
@@ -44,10 +42,14 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implem
         ffController.setMinimumFF(this.minimumFFEntry.getDouble(0));
         ffController.setGravityFF(this.gravityFFEntry.getDouble(0));
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Gravity FF: " + gravityFFEntry.getDouble(0) + " - ");
-        sb.append("Minimum FF: " + minimumFFEntry.getDouble(0));
-        System.out.println(sb.toString());
+        if(this.getVerbosity() == Verbosity.commands || this.getVerbosity() == Verbosity.all) {
+            StringBuilder sb = new StringBuilder();
+            if(this.gravityFFEntry != null && this.minimumFFEntry != null){
+                sb.append("#  Gravity FF: " + gravityFFEntry.getDouble(0) + " - ");
+                sb.append("#  Minimum FF: " + minimumFFEntry.getDouble(0));
+            }
+            System.out.println(sb.toString());            
+        }
     }
 
     @Override
@@ -55,7 +57,7 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implem
         super.resetTunerValues();
         ffController.setGravityFF(this.gravFF0);
         ffController.setMinimumFF(this.minFF0);
-        if(this.isInitialized()){
+        if(this.gravityFFEntry != null && this.minimumFFEntry != null){
             this.gravityFFEntry.setDouble(this.gravFF0);
             this.minimumFFEntry.setDouble(this.minFF0);            
         }
@@ -63,9 +65,6 @@ public class SparkMaxPIDTunerArmPosition extends SparkMaxPIDTunerPosition implem
     }
 
     public void periodic() {
-        if(!this.isInitialized()) 
-            return;
-
         double gravityFF = ffController.calculate(this.motor.getAbsoluteEncoder().getPosition());
         super.periodic(gravityFF, this.getArbitraryFF());
     }

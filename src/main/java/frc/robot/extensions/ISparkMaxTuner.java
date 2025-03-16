@@ -5,5 +5,5 @@ public interface ISparkMaxTuner {
     void stopMotor();
     void startMotor();
     void resetTunerValues();
-    void updateEncoderValues();
+    void periodic();
 }

@@ -28,6 +28,7 @@ import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SimableSparkMax;
 import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
 import frc.robot.extensions.SparkMaxPIDTunerPosition;
+import frc.robot.extensions.SparkMaxPIDTunerBase.Verbosity;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -95,11 +96,17 @@ public class ArmSubsystem extends SubsystemBase {
 
     if(Constants.kTuning) {
       elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
-      elbowTuner.buildShuffleboard();
+      elbowTuner.setSafeReferenceRange(185, 300);
+      elbowTuner.addToShuffleboard();
+      elbowTuner.setVerbosity(Verbosity.all);
+
       wristTuner = new SparkMaxPIDTunerArmPosition("Wrist Motor", wristMotor, ControlType.kPosition, wristFF);
-      wristTuner.buildShuffleboard();
+      wristTuner.addToShuffleboard();
+
       clawTuner = new SparkMaxPIDTunerPosition("Claw Motor", clawMotor, ControlType.kPosition);
-      clawTuner.buildShuffleboard();
+      clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
+      clawTuner.addToShuffleboard();
+
     }
 
 
@@ -449,12 +456,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     // if tuning, do nothing
     if(Constants.kTuning == true) {
-      elbowTuner.updateEncoderValues();
-      elbowTuner.setSafeReferenceRange(185, 300);
-      wristTuner.updateEncoderValues();
+      elbowTuner.periodic();
+      wristTuner.periodic();
       wristTuner.setSafeReferenceRange(getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
-      clawTuner.updateEncoderValues();
-      clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
+      clawTuner.periodic();
       return;
     }
 

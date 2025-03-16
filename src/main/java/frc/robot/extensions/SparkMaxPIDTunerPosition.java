@@ -1,26 +1,16 @@
 package frc.robot.extensions;
 
-import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import java.security.InvalidParameterException;
 import java.util.function.DoubleSupplier;
-
-import javax.naming.OperationNotSupportedException;
-
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import frc.robot.Constants;
-
-public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements ISparkMaxTuner {
+public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     private GenericEntry arbitraryFFEntry;
     private GenericEntry velocityEntry;
     private GenericEntry accelerationEntry;
@@ -62,7 +52,10 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements IS
     }
 
     protected double getArbitraryFF() {
-        return arbitraryFFEntry.getDouble(0);
+        double arb = 0;
+        if(arbitraryFFEntry != null) 
+             arb = arbitraryFFEntry.getDouble(0);
+        return arb;
     }
 
     private boolean setupShuffleboard() {
@@ -96,15 +89,13 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements IS
     }
 
     @Override
-    public void updateEncoderValues() {
-        if(this.isInitialized()) {
-            super.updateEncoderValues(); // also update encoder values in base class
-            if(updateTimer.get() > UPDATE_INTERVAL_SECONDS) {
+    protected void updateEncoderValues() {
+        super.updateEncoderValues(); // also update encoder values in base class
+        if(updateTimer.get() > UPDATE_INTERVAL_SECONDS) {
+            if(this.actualPositionEntry != null)
                 this.actualPositionEntry.setDouble(positionEncoderSupplier.getAsDouble());
-                updateTimer.reset();      
-            }            
-        }
-
+            updateTimer.reset();      
+        }            
     }
 
     @Override
@@ -112,39 +103,47 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements IS
         super.applyTunerValues(); // also apply values in base class
         SparkMaxConfig newConfig = new SparkMaxConfig();
 
-        if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
+        if(this.getControlType() == ControlType.kMAXMotionPositionControl && this.velocityEntry != null && this.accelerationEntry != null) {
             newConfig.closedLoop.maxMotion
                 .maxVelocity(velocityEntry.getDouble(0.1))
                 .maxAcceleration(accelerationEntry.getDouble(0.1));
         }
         motor.configure(newConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        StringBuilder sb = new StringBuilder();
-        if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
-            sb.append("MAX Velocity: " + velocityEntry.getDouble(0.1) + " - ");
-            sb.append("MAX Acceleration: " + accelerationEntry.getDouble(0.1) + " - ");
+
+        if(this.getVerbosity() == Verbosity.commands || this.getVerbosity() == Verbosity.all) {
+            StringBuilder sb = new StringBuilder();
+            if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
+                if(this.velocityEntry != null && this.accelerationEntry != null) {
+                    sb.append("#  MAX Velocity: " + velocityEntry.getDouble(0.1) + " - ");
+                    sb.append("#  MAX Acceleration: " + accelerationEntry.getDouble(0.1) + " - ");
+                }
+            }
+            if(this.arbitraryFFEntry != null) {
+                sb.append("#  Arbitrary FF: " + arbitraryFFEntry.getDouble(0));
+            }
+            System.out.println(sb.toString());            
         }
-        sb.append("Arbitrary FF: " + arbitraryFFEntry.getDouble(0));
-        System.out.println(sb.toString());
+
     }
 
     @Override
     public void resetTunerValues() {
         super.resetTunerValues(); // also reset values in base class
-        if(this.isInitialized()) {
+        if(this.arbitraryFFEntry != null) {
             this.arbitraryFFEntry.setDouble(this.arbitraryFF0);            
         }
-        if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
+        if(this.getControlType() == ControlType.kMAXMotionPositionControl && this.velocityEntry != null && this.accelerationEntry != null) {
             velocityEntry.setDouble(this.velocity0);
             accelerationEntry.setDouble(this.acceleration0);            
         }
     }
 
     public void periodic() {
-        if(!this.isInitialized())
-            return;
         double arb = 0;
-        arb = this.arbitraryFFEntry.getDouble(0);
+        if(this.arbitraryFFEntry != null)
+            arb = this.arbitraryFFEntry.getDouble(0);
         super.periodic(0, arb);
+        this.updateEncoderValues();
     }
 
 }
