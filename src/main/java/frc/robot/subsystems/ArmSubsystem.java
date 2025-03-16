@@ -99,6 +99,7 @@ public class ArmSubsystem extends SubsystemBase {
       elbowTuner.setSafeReferenceRange(185, 300);
       elbowTuner.addToShuffleboard();
       elbowTuner.setVerbosity(Verbosity.all);
+      elbowTuner.setDebugInterval(2.0);
 
       wristTuner = new SparkMaxPIDTunerArmPosition("Wrist Motor", wristMotor, ControlType.kPosition, wristFF);
       wristTuner.addToShuffleboard();
@@ -106,7 +107,6 @@ public class ArmSubsystem extends SubsystemBase {
       clawTuner = new SparkMaxPIDTunerPosition("Claw Motor", clawMotor, ControlType.kPosition);
       clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
       clawTuner.addToShuffleboard();
-
     }
 
 

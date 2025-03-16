@@ -99,6 +99,10 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
         this.debugVerbosity = verbosity;
     }
 
+    public void setDebugInterval(double seconds) {
+        this.debugIntervalSeconds = seconds;
+    }
+
     public Verbosity getVerbosity() {
         return this.debugVerbosity;
     }
