@@ -11,38 +11,28 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
-import frc.robot.extensions.SimableSparkMax;
-import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
-import frc.robot.extensions.SparkMaxPIDTunerPosition;
-import frc.robot.extensions.SparkMaxPIDTunerBase.Verbosity;
 
 public class ArmSubsystem extends SubsystemBase {
 
   //private SimableSparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
   private SparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
-  private SlewRateLimiter pulleyLimiter, elbowLimiter, wristLimiter, clawLimiter;
   private double pulleyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
   private static double ARM_HEIGHT;
 
   private DigitalInput homeLimitSwitch;
   private DigitalInput clawLimitSwitch;
 
-  private boolean clawInitialized = false;
-  private boolean pulleyInitialized = false;
+  // private boolean clawInitialized = false;
+  // private boolean pulleyInitialized = false;
   private boolean initialized = false;
   private boolean elbowError = true;
   private boolean wristError = true;
@@ -50,35 +40,34 @@ public class ArmSubsystem extends SubsystemBase {
   private GravityAssistedFeedForward elbowFF;
   private GravityAssistedFeedForward wristFF;
 
-  private SparkMaxPIDTunerArmPosition elbowTuner;
-  private SparkMaxPIDTunerArmPosition wristTuner;
-  private SparkMaxPIDTunerPosition clawTuner;
-
   // Trapezoidal profiling for elbow
   private TrapezoidProfile elbowProfile;
   private State elbowStateGoal;
   private State elbowStateSetpoint;
 
+  // Trapezoidal profiling for wrist
+  private TrapezoidProfile wristProfile;
+  private State wristStateGoal;
+  private State wristStateSetpoint;
+
+
+  // Trapezoidal profiling for claw
+  private TrapezoidProfile clawProfile;
+  private State clawStateGoal;
+  private State clawStateSetpoint;
+
+  // Trapezoidal profiling for pulley
+  private TrapezoidProfile pulleyProfile;
+  private State pulleyStateGoal;
+  private State pulleyStateSetpoint;
+
   
   public ArmSubsystem() {
-
-    // NetworkTableInstance.getDefault().getTable("SparkMaxData");
-
-    // pulleyMotor = new SimableSparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
-    // elbowMotor = new SimableSparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);
-    // wristMotor = new SimableSparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
-    // clawMotor = new SimableSparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
 
     pulleyMotor = new SparkMax(Constants.ArmSubsystem.Pulley.kMotorID, MotorType.kBrushless);
     elbowMotor = new SparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);
     wristMotor = new SparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
     clawMotor = new SparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
-
-    // TODO: Change slewrate limiter constants from 0
-    pulleyLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Pulley.kSlewRate);
-    elbowLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Elbow.kSlewRate);
-    wristLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Wrist.kSlewRate);
-    clawLimiter = new SlewRateLimiter(Constants.ArmSubsystem.Claw.kSlewRate);
 
     configureWristMotor();
     configureElbowMotor();
@@ -94,39 +83,26 @@ public class ArmSubsystem extends SubsystemBase {
     wristFF =  new GravityAssistedFeedForward(Constants.ArmSubsystem.Wrist.PIDF.kMinGravityFF,
         Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
 
-    if(Constants.kTuning) {
-      elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
-      elbowTuner.setSafeReferenceRange(185, 300);
-      elbowTuner.addToShuffleboard();
-      elbowTuner.setVerbosity(Verbosity.all);
-      elbowTuner.setDebugInterval(2.0);
-
-      wristTuner = new SparkMaxPIDTunerArmPosition("Wrist Motor", wristMotor, ControlType.kPosition, wristFF);
-      wristTuner.addToShuffleboard();
-
-      clawTuner = new SparkMaxPIDTunerPosition("Claw Motor", clawMotor, ControlType.kPosition);
-      clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
-      clawTuner.addToShuffleboard();
-    }
-
-
     // trapezoidal profiling for the elbow
     elbowProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Elbow.kSlewRate, Constants.ArmSubsystem.Elbow.kAccelerationRate));
     elbowStateSetpoint = new State();
     elbowStateGoal = new State();
 
-    // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
-    Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
-    // Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
-    // Shuffleboard.getTab("Arm").add("Pulley Motor", pulleyMotor);
-    // Shuffleboard.getTab("Arm").add("Wrist Motor", wristMotor);
-    // Shuffleboard.getTab("Arm").add("Elbow Motor", elbowMotor);
-    // Shuffleboard.getTab("Arm").add("Claw Motor", clawMotor);
+    // trapezoidal profiling for the elbow
+    wristProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Wrist.kSlewRate, Constants.ArmSubsystem.Wrist.kAccelerationRate));
+    wristStateSetpoint = new State();
+    wristStateGoal = new State();
 
-    // Shuffleboard.getTab("Arm").add("Elbow Output", elbowMotor.getAppliedOutput());
+    // trapezoidal profiling for the elbow
+    clawProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Claw.kSlewRate, Constants.ArmSubsystem.Claw.kAccelerationRate));
+    clawStateSetpoint = new State();
+    clawStateGoal = new State();
 
-    // Shuffleboard.getTab("Arm").addNumber("Elbow Absolute", elbowMotor.getAppliedOutput());
-    // Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
+    // trapezoidal profiling for the pulley
+    pulleyProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Claw.kSlewRate, Constants.ArmSubsystem.Claw.kAccelerationRate));
+    pulleyStateSetpoint = new State();
+    pulleyStateGoal = new State();
+
   }
 
   public void initializeArm() {
@@ -139,40 +115,14 @@ public class ArmSubsystem extends SubsystemBase {
     elbowStateGoal = new State(elbowMotorTarget, 0);
     elbowStateSetpoint = new State(elbowMotorTarget, 0);
 
-    if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
-      wristError = true;
-      System.out.println("------WRIST ERROR---------");
-      DriverStation.reportError("------WRIST ERROR---------", false);
-    } else {
-      wristError = false;
-      wristMotorTarget = Constants.ArmSubsystem.Positions.kHome.wrist;    
-    }
+    wristStateGoal = new State(wristMotorTarget, 0);
+    wristStateSetpoint = new State(wristMotorTarget, 0);
 
-    if (MathUtil.isNear(elbowMotorTarget, 0, 2)) {
-      elbowError = true;
-      System.out.println("------ELBOW ERROR---------");
-      DriverStation.reportError("------ELBOW ERROR---------", false);
-    } else {
-      elbowError = false;
-      elbowMotorTarget = Constants.ArmSubsystem.Positions.kHome.elbow;    
-    }
+    clawStateGoal = new State(clawMotorTarget, 0);
+    clawStateSetpoint = new State(clawMotorTarget, 0);
 
-    if (Constants.kDebug) {
-      System.out.println("--------------Reported Positions at Intialization: --------------");
-      System.out.println("  Pulley: " + getPulleyHeight());
-      System.out.println("  Elbow: " + getElbowMotorPosition());
-      System.out.println("  Wrist: " + getWristMotorPosition());
-      System.out.println("  Claw: " + getClawMotorPosition());
-      System.out.println("  calculated writst max: " + getAbsoluteWristAngleMax());
-      System.out.println("  calculated writst min: " + getAbsoluteWristAngleMin());
-    }
-
-    pulleyLimiter.reset(pulleyMotorTarget);
-    elbowLimiter.reset(elbowMotorTarget);
-    wristLimiter.reset(wristMotorTarget);
-    clawLimiter.reset(clawMotorTarget);
-
-    //XXX: Removed old init code that involved telling motors to move here instead of periodic
+    pulleyStateGoal = new State(pulleyMotorTarget, 0);
+    pulleyStateSetpoint = new State(pulleyMotorTarget, 0);
 
     // this is now true as soon as encoders and limiters are initialized
     initialized = true;
@@ -196,7 +146,6 @@ public class ArmSubsystem extends SubsystemBase {
         .pid(Constants.ArmSubsystem.Wrist.PIDF.kP,
              Constants.ArmSubsystem.Wrist.PIDF.kI,
              Constants.ArmSubsystem.Wrist.PIDF.kD)
-
         .iZone(Constants.ArmSubsystem.Wrist.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
@@ -213,13 +162,6 @@ public class ArmSubsystem extends SubsystemBase {
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
         .smartCurrentLimit(20, 20, 720);
-   
-    //XXX: Should we use soft limits for the elbow? I've put a template here in case we decide to
-    // elbowMotorConfig.softLimit
-    //   .forwardSoftLimit(max)
-    //   .forwardSoftLimitEnabled(true)
-    //   .reverseSoftLimit(min)
-    //   .reverseSoftLimitEnabled(true);
 
     elbowMotorConfig.absoluteEncoder
         .zeroOffset(Constants.ArmSubsystem.Elbow.kMotorOffset)
@@ -229,7 +171,6 @@ public class ArmSubsystem extends SubsystemBase {
         .pid(Constants.ArmSubsystem.Elbow.PIDF.kP,
              Constants.ArmSubsystem.Elbow.PIDF.kI,
              Constants.ArmSubsystem.Elbow.PIDF.kD)
-
         .iZone(Constants.ArmSubsystem.Elbow.PIDF.kIZone)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
@@ -255,9 +196,6 @@ public class ArmSubsystem extends SubsystemBase {
              Constants.ArmSubsystem.Pulley.PIDF.kI,
              Constants.ArmSubsystem.Pulley.PIDF.kD)
         .iZone(Constants.ArmSubsystem.Pulley.PIDF.kIZone);
-
-    // .pid(0.045f, 0.00001f, 0.045, ClosedLoopSlot.kSlot1)
-    // .iZone(2, ClosedLoopSlot.kSlot1);
 
     // apply configuration
     pulleyMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -319,6 +257,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   ///XXX: All these goToHeightX functions are only used in one command, are these really needed?
+  /// Short answer....No.
   // Sets arm height to the ground
   public void goToHeightGround() {
     goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kGround.pulley);
@@ -414,7 +353,7 @@ public class ArmSubsystem extends SubsystemBase {
     return homeLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState;
   }
 
-  public double pulleyMotorFF() {
+  public double getPulleyMotorFF() {
     if (getPulleyHeight() <= Constants.ArmSubsystem.Pulley.kStageTwoPulleyPosition) {
       return Constants.ArmSubsystem.Pulley.PIDF.kStageOneFF;
     } else {
@@ -430,9 +369,6 @@ public class ArmSubsystem extends SubsystemBase {
     return pulleyMotor.getEncoder().getPosition();
   }
 
-  //XXX: Removed commented out implementations of getRelativeWristAngle
-
-  //XXX: Why does this work?
   public double getRelativeWristAngle() {
     double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() - Constants.ArmSubsystem.Wrist.kHorizontalAngle;
     return wristAngle;
@@ -448,34 +384,18 @@ public class ArmSubsystem extends SubsystemBase {
     return Constants.ArmSubsystem.Wrist.kMinLimit + elbowDiff;
   }
 
-
-  int counter = 0;
-  // TODO: moving slow when within the range of the limit switch?
   @Override
   public void periodic() {
 
-    // if tuning, do nothing
-    if(Constants.kTuning == true) {
-      elbowTuner.periodic();
-      wristTuner.periodic();
-      wristTuner.setSafeReferenceRange(getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
-      clawTuner.periodic();
+    // if tuning, do not interfere
+    if(Constants.kTuning) {
       return;
     }
 
     // update static variable accessible to other systems
     ARM_HEIGHT = getCalculatedHeight();
-   
-    double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
     
-    // Display values when debugging
-    counter++;
-    if(counter > 25 && Constants.kDebug) {
-        System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
-        System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
-        counter=0;
-    }    
-
+    // run system only when enabled and initialized in Auto or Teleop
     if (initialized && RobotState.isEnabled() && !RobotState.isTest()) {
 
       //check if pulley is home
@@ -483,10 +403,11 @@ public class ArmSubsystem extends SubsystemBase {
         if (homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState) {
           pulleyMotor.set(0);
           pulleyMotor.getEncoder().setPosition(0);
-          pulleyLimiter.reset(0);
-          //XXX: Removed set reference position
-          pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley), ControlType.kPosition);
-          pulleyInitialized = true;
+          
+          // reset profile at 0
+          pulleyStateGoal = new State(Constants.ArmSubsystem.Positions.kHome.pulley, 0);
+          pulleyStateSetpoint = new State(0, 0);
+
         }
       }
   
@@ -495,31 +416,41 @@ public class ArmSubsystem extends SubsystemBase {
         if (clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState) {
           clawMotor.set(0);
           clawMotor.getEncoder().setPosition(0);
-          clawLimiter.reset(0);
-          //XXX: Removed set reference position
-          clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(Constants.ArmSubsystem.Claw.kCloseClaw), ControlType.kPosition);
-          clawInitialized = true;
+
+          // reset profile at 0
+          clawStateGoal = new State(0,0);
+          clawStateSetpoint = new State(0, 0);
         }
       }
-      if (wristError == false) {
-        wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
+
+      // precalculate safe wrist positions
+      double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+
+      // XXX: if one or the other of the wrist is not working, then should we use any of it?
+      if (wristError == false || elbowError == false) {
+        // move the wrist towards its goal
+        wristStateGoal = new State(wristSafeTarget, 0); //MUST USE SAFE TARGET
+        wristStateSetpoint = wristProfile.calculate(Constants.kRobotLoopTime, wristStateSetpoint, wristStateGoal);
+        wristMotor.getClosedLoopController().setReference(wristStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
+
+        // move the elbow towards its goal
+        elbowStateGoal = new State(elbowMotorTarget, 0);
+        elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
+        elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
       }
 
-      if (elbowError == false) { 
-        // XXX: Uncomment to use trapezoidal profiling for the elbow 
-        // elbowStateGoal = new State(elbowMotorTarget, 0);
-        // elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
-        // elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+      // move the claw towards its goal
+      clawStateGoal = new State(clawMotorTarget, 0);
+      clawStateSetpoint = clawProfile.calculate(Constants.kRobotLoopTime, clawStateSetpoint, clawStateGoal);
+      clawMotor.getClosedLoopController().setReference(clawStateSetpoint.position, ControlType.kPosition);
 
-        elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
-            ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
-      }
-    
-      clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
 
-      pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
+      // move the pulley towards its goal
+      pulleyStateGoal = new State(pulleyMotorTarget, 0);
+      pulleyStateSetpoint = pulleyProfile.calculate(Constants.kRobotLoopTime, pulleyStateSetpoint, pulleyStateGoal);
+      pulleyMotor.getClosedLoopController().setReference(pulleyStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, getPulleyMotorFF());
       
-
+      
     }
   }
 }

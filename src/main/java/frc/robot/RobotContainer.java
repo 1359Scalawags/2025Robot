@@ -4,14 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.Constants.Operator;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ArmCommands.ZeroClaw;
 import frc.robot.commands.ArmCommands.ZeroPulley;
 import frc.robot.commands.ArmCommands.InitilizeArmEncoders;
-import frc.robot.commands.ArmCommands.MovePulleyWithJoystick;
 import frc.robot.commands.ArmCommands.closeClawCommand;
 import frc.robot.commands.ArmCommands.goToHeightHome;
 import frc.robot.commands.ArmCommands.goToHeightHumanStation;
@@ -33,12 +29,8 @@ import frc.robot.commands.ClimberCommands.Movment.UnLockClimberBar;
 import frc.robot.commands.ClimberCommands.Servo.LatchServo;
 import frc.robot.commands.ClimberCommands.Servo.UnLatchServo;
 import frc.robot.commands.SwerveCommands.AbsoluteFieldDrive;
-import frc.robot.commands.SwerveCommands.DriveBackward;
-import frc.robot.commands.SwerveCommands.DriveForwardCommand;
-import frc.robot.commands.SwerveCommands.DriveRightCommand;
 import frc.robot.commands.SwerveCommands.FieldCentricCommand;
 import frc.robot.commands.SwerveCommands.RobotCentricCommand;
-import frc.robot.commands.SwerveCommands.RotateCCWCommand;
 import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
 import frc.robot.commands.SwerveCommands.Testing.MoveCardinal;
 import frc.robot.commands.SwerveCommands.Testing.MoveCardinal.CardinalDirection;
@@ -46,24 +38,15 @@ import frc.robot.commands.SwerveCommands.Testing.Rotate;
 import frc.robot.commands.SwerveCommands.Testing.Rotate.RotateDirection;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
-
 import java.io.File;
-import java.util.concurrent.locks.Lock;
-
-import javax.print.attribute.standard.PrinterInfo;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**

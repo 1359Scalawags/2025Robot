@@ -9,10 +9,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class RobotCentricCommand extends Command {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+
   private final SwerveSubsystem m_subsystem;
 
- private boolean robotCentric = true;
   /**
    * Creates a new ExampleCommand.
    *
@@ -20,7 +19,7 @@ public class RobotCentricCommand extends Command {
    */
   public RobotCentricCommand(SwerveSubsystem subsystem) {
     m_subsystem = subsystem; 
-    // robotCentric = state; 
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }

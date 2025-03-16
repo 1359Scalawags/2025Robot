@@ -24,7 +24,6 @@ public class AbsoluteFieldDrive extends Command {
     private DoubleSupplier omega;
     private DoubleSupplier throttle;
     private BooleanSupplier feildRelitive;
-    private boolean isOpenLoop;
     private SwerveController controller;
 
     /**
@@ -44,7 +43,6 @@ public class AbsoluteFieldDrive extends Command {
         this.omega = omega;
         this.throttle = throttle;
         this.feildRelitive = feildRelitive;
-        this.isOpenLoop = isOpenLoop;
         this.controller = swerve.getSwerveController();
         addRequirements(swerve);
     }
@@ -61,32 +59,17 @@ public class AbsoluteFieldDrive extends Command {
             modvX = 0;
             modvY = 0;
         }
-        //Translation2d translation, double rotation, boolean fieldRelative
-        // TODO: implement deadband for X and Y?
+
         double xVelocity = (modvX * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
         double yVelocity = (modvY * Constants.SwerveSubsystem.MAX_SPEED) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
         double angVelocity = (Math.pow(MathUtil.applyDeadband(omega.getAsDouble(), 0.2), 3) * controller.config.maxAngularVelocity) * MathUtil.clamp(throttle.getAsDouble(), 0.1, 1);
 
-        // TODO: slow the speed down if the arm is up in the air
-        // for example:
-        // xVelocity = xVelocity * ArmSubsystem.getSwerveSpeedMultipler()
-        // or something explicitly defined like this
-        // xVelocity = xVelocity * (100 - ArmSystem.getPulleyHeight()) / 100)
-
         if(swerve.isReversed()) {
-            // if(feildRelitive.getAsBoolean()) {
-                //if field relative, just need to flip forward backward
-                swerve.drive(
-                    new Translation2d(-xVelocity, -yVelocity),
-                    angVelocity,
-                    feildRelitive.getAsBoolean());
-            // } else {
-            //     //if robot relative, need a 180 rotation...flip both axes
-            //     swerve.drive(
-            //         new Translation2d(-xVelocity, -yVelocity),
-            //         angVelocity,
-            //         feildRelitive.getAsBoolean());                
-            // }
+            swerve.drive(
+                new Translation2d(-xVelocity, -yVelocity),
+                angVelocity,
+                feildRelitive.getAsBoolean());
+
         } else {
             swerve.drive(
                 new Translation2d(xVelocity, yVelocity),

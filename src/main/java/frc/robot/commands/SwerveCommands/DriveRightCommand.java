@@ -5,14 +5,12 @@
 package frc.robot.commands.SwerveCommands;
 
 import frc.robot.subsystems.SwerveSubsystem;
-import swervelib.SwerveController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class DriveRightCommand extends Command {
     private SwerveSubsystem swerve;
-    private SwerveController controller;
 
     /**
      * 
@@ -26,7 +24,6 @@ public class DriveRightCommand extends Command {
      */
     public DriveRightCommand(SwerveSubsystem swerve) {
         this.swerve = swerve;
-        this.controller = swerve.getSwerveController();
         addRequirements(swerve);
     }
 
