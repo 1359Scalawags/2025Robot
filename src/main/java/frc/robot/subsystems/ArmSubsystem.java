@@ -3,12 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -18,27 +13,22 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  //private SimableSparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
+  private static double ARM_HEIGHT;  
+  
   private SparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
   private double pulleyMotorTarget, elbowMotorTarget, wristMotorTarget, clawMotorTarget;
-  private static double ARM_HEIGHT;
 
-  private DigitalInput homeLimitSwitch;
-  private DigitalInput clawLimitSwitch;
 
-  // private boolean clawInitialized = false;
-  // private boolean pulleyInitialized = false;
+  private DigitalInput homeLimitSwitch, clawLimitSwitch;
+
   private boolean initialized = false;
-  private boolean elbowError = true;
-  private boolean wristError = true;
+  private boolean elbowError = true, wristError = true;
 
-  private GravityAssistedFeedForward elbowFF;
-  private GravityAssistedFeedForward wristFF;
+  private GravityAssistedFeedForward elbowFF, wristFF;
 
   // Trapezoidal profiling for elbow
   private TrapezoidProfile elbowProfile;
@@ -68,11 +58,6 @@ public class ArmSubsystem extends SubsystemBase {
     elbowMotor = new SparkMax(Constants.ArmSubsystem.Elbow.kMotorID, MotorType.kBrushless);
     wristMotor = new SparkMax(Constants.ArmSubsystem.Wrist.kMotorID, MotorType.kBrushless);
     clawMotor = new SparkMax(Constants.ArmSubsystem.Claw.kMotorID, MotorType.kBrushless);
-
-    configureWristMotor();
-    configureElbowMotor();
-    configurePulleyMotor();
-    configureClawMotor();
 
     homeLimitSwitch = new DigitalInput(Constants.ArmSubsystem.Pulley.kHomeLimitSwitchID);
     clawLimitSwitch = new DigitalInput(Constants.ArmSubsystem.Claw.kLimitSwitchID);
@@ -128,229 +113,12 @@ public class ArmSubsystem extends SubsystemBase {
     initialized = true;
   }
 
-  private void configureWristMotor() {
-    SparkMaxConfig wristMotorConfig = new SparkMaxConfig();
-
-    wristMotorConfig
-        .idleMode(IdleMode.kBrake)
-        .inverted(false)
-        .openLoopRampRate(1.0)
-        .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 720);
-    
-    wristMotorConfig.absoluteEncoder
-        .zeroOffset(Constants.ArmSubsystem.Wrist.kMotorOffset)
-        .positionConversionFactor(Constants.ArmSubsystem.Wrist.kConversionFactor);
-
-    wristMotorConfig.closedLoop
-        .pid(Constants.ArmSubsystem.Wrist.PIDF.kP,
-             Constants.ArmSubsystem.Wrist.PIDF.kI,
-             Constants.ArmSubsystem.Wrist.PIDF.kD)
-        .iZone(Constants.ArmSubsystem.Wrist.PIDF.kIZone)
-        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-
-    // apply configuration
-    wristMotor.configure(wristMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-  private void configureElbowMotor() {
-    SparkMaxConfig elbowMotorConfig = new SparkMaxConfig();
-
-    elbowMotorConfig
-        .idleMode(IdleMode.kBrake)
-        .inverted(false)
-        .openLoopRampRate(1.0)
-        .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 720);
-
-    elbowMotorConfig.absoluteEncoder
-        .zeroOffset(Constants.ArmSubsystem.Elbow.kMotorOffset)
-        .positionConversionFactor(Constants.ArmSubsystem.Elbow.kConversionFactor);
-
-    elbowMotorConfig.closedLoop
-        .pid(Constants.ArmSubsystem.Elbow.PIDF.kP,
-             Constants.ArmSubsystem.Elbow.PIDF.kI,
-             Constants.ArmSubsystem.Elbow.PIDF.kD)
-        .iZone(Constants.ArmSubsystem.Elbow.PIDF.kIZone)
-        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-
-    // apply configuration
-    elbowMotor.configure(elbowMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-  private void configurePulleyMotor() {
-    SparkMaxConfig pulleyMotorConfig = new SparkMaxConfig();
-
-    pulleyMotorConfig
-        .idleMode(IdleMode.kBrake)
-        .inverted(false)
-        .openLoopRampRate(1.0)
-        .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 1000);
-
-    pulleyMotorConfig.encoder
-        .positionConversionFactor(Constants.ArmSubsystem.Pulley.kConversionFactor);
-
-    pulleyMotorConfig.closedLoop // TODO: do we want a second slot for the upper part of the Pulley?
-        .pid(Constants.ArmSubsystem.Pulley.PIDF.kP,
-             Constants.ArmSubsystem.Pulley.PIDF.kI,
-             Constants.ArmSubsystem.Pulley.PIDF.kD)
-        .iZone(Constants.ArmSubsystem.Pulley.PIDF.kIZone);
-
-    // apply configuration
-    pulleyMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-  private void configureClawMotor() {
-    SparkMaxConfig clawMotorConfig = new SparkMaxConfig();
-
-    clawMotorConfig
-        .idleMode(IdleMode.kBrake)
-        .inverted(false)
-        .openLoopRampRate(1.0)
-        .closedLoopRampRate(1.0)
-        .smartCurrentLimit(20, 20, 600);
-
-
-    clawMotorConfig.closedLoop
-        .pid(Constants.ArmSubsystem.Claw.PIDF.kP,
-             Constants.ArmSubsystem.Claw.PIDF.kI,
-             Constants.ArmSubsystem.Claw.PIDF.kD)
-        .iZone(Constants.ArmSubsystem.Claw.PIDF.kIZone);
-
-    // apply configuration
-    clawMotor.configure(clawMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  }
-
-  //XXX: Only called in closeClawCommand.java, do we really need it?
-  public void closeClaw() {
-    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kCloseClaw);
-  }
-
-  //XXX: Only called in openClawCommand.java, do we really need it?
-  public void openClaw() {
-    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kOpenClaw);
-  }
-
-  public void goToPulleyMotorPosition(double pulleyMotorPosition) {
-    pulleyMotorTarget = MathUtil.clamp(pulleyMotorPosition, Constants.ArmSubsystem.Pulley.kMinLimit,
-        Constants.ArmSubsystem.Pulley.kMaxLimit);
-  }
-
-  public void goToElbowMotorPosition(double elbowMotorPosition) {
-    elbowMotorTarget = MathUtil.clamp(elbowMotorPosition, Constants.ArmSubsystem.Elbow.kMinLimit,
-        Constants.ArmSubsystem.Elbow.kMaxLimit);
-  }
-
-  public void goToWristMotorPosition(double wristMotorPosition) {
-    wristMotorTarget = MathUtil.clamp(wristMotorPosition, getAbsoluteWristAngleMin(),
-    getAbsoluteWristAngleMax());
-  }
-
-  public void goToClawMotorPosition(double clawMotorPosition) {
-    clawMotorTarget = MathUtil.clamp(clawMotorPosition, Constants.ArmSubsystem.Claw.kMinLimit,
-        Constants.ArmSubsystem.Claw.kMaxLimit);
-  }
-
-  public ArmPosition getArmPosition() {
-    return new ArmPosition(getPulleyHeight(), getElbowMotorPosition(), getWristMotorPosition());
-  }
-
-  ///XXX: All these goToHeightX functions are only used in one command, are these really needed?
-  /// Short answer....No.
-  // Sets arm height to the ground
-  public void goToHeightGround() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kGround.pulley);
-  }
-
-  // Sets arm height to Level Two
-  public void goToHeightL2() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kLevel2.pulley);
-  }
-
-  // Sets arm height to Level Three
-  public void goToHeightL3() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.klevel3.pulley);
-  }
-
-  // Sets arm height to Level Four
-  public void goToHeightL4() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.klevel4.pulley);
-  }
-
-  // Sets arm height to the Human Station
-  public void goToHeightHumanStation() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.pulley);
-
-  }
-
-  public void goToHeightHome() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kHome.pulley);
-  }
-
-  public void goToArmHome() {
-    goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kHome.elbow);
-    goToWristMotorPosition(Constants.ArmSubsystem.Positions.kHome.wrist);
-  }
-
-  // Sets arm position to the Ground
-  public void goToArmGround() {
-    goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kGround.elbow);
-    goToWristMotorPosition(Constants.ArmSubsystem.Positions.kGround.wrist);
-  }
-
-  // Sets arm position to Level Two
-  public void goToArmL2() {
-    goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kLevel2.elbow);
-    goToWristMotorPosition(Constants.ArmSubsystem.Positions.kLevel2.wrist);
-  }
-
-  // Sets arm postion to Level Three
-  public void goToArmL3() {
-    goToElbowMotorPosition(Constants.ArmSubsystem.Positions.klevel3.elbow);
-    goToWristMotorPosition(Constants.ArmSubsystem.Positions.klevel3.wrist);
-  }
-
-  // Sets arm position to Level Four
-  public void goToArmL4() {
-    goToElbowMotorPosition(Constants.ArmSubsystem.Positions.klevel4.elbow);
-    goToWristMotorPosition(Constants.ArmSubsystem.Positions.klevel4.wrist);
-  }
-
-  // Sets arm position to the Human Station
-  public void goToArmHumanStation() {
-    goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.elbow);
-    goToWristMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.wrist);
-  }
-
   public static double getPulleyHeight() {
     return ARM_HEIGHT;
   }
 
-  public static double getSpeedMultiplier() {
-    if(ARM_HEIGHT >= 40) {
-      return 0.25;
-    } else if(ARM_HEIGHT < 10) {
-      return 1.0;
-    } else {
-      return -0.025*ARM_HEIGHT + 1.25;
-    }
-  }
-
   public double getElbowMotorPosition() {
     return elbowMotor.getAbsoluteEncoder().getPosition();
-  }
-
-  public double getClawMotorPosition() {
-    return clawMotor.getEncoder().getPosition();
-  }
-
-  public boolean isClawAtHome() {
-    return clawLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState;
-  }
-
-  public boolean isPulleyAtHome() {
-    return homeLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState;
   }
 
   public double getPulleyMotorFF() {
@@ -365,13 +133,8 @@ public class ArmSubsystem extends SubsystemBase {
     return wristMotor.getAbsoluteEncoder().getPosition();
   }
 
-  public double getCalculatedHeight() {
+  public double getPulleyMotorPosition() {
     return pulleyMotor.getEncoder().getPosition();
-  }
-
-  public double getRelativeWristAngle() {
-    double wristAngle = wristMotor.getAbsoluteEncoder().getPosition() - Constants.ArmSubsystem.Wrist.kHorizontalAngle;
-    return wristAngle;
   }
 
   public double getAbsoluteWristAngleMax() {
@@ -393,7 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     // update static variable accessible to other systems
-    ARM_HEIGHT = getCalculatedHeight();
+    ARM_HEIGHT = getPulleyMotorPosition();
     
     // run system only when enabled and initialized in Auto or Teleop
     if (initialized && RobotState.isEnabled() && !RobotState.isTest()) {
