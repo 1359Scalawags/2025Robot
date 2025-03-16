@@ -18,7 +18,7 @@ import frc.robot.extensions.ArmPosition;
 public final class Constants {
 
   public static final boolean kDebug = false;
-  public static final boolean kTuning = true;
+  public static final boolean kTuning = false;
   
   public static final String robotName = "Flipper";
   public static final double kRobotLoopTime = 0.02;
@@ -192,11 +192,11 @@ public final class Constants {
       public static final double kTolerance = 2.0;
     public static class PIDF{
       // (0.006, 0.0000006, 0.006)
-      public static final double kP = 0.0; //0.0075;
-      public static final double kI = 0.0; //0.00005;
-      public static final double kD = 0.0; //0.006;
+      public static final double kP = 0.01; //0.0075;
+      public static final double kI = 0.00001; //0.00005;
+      public static final double kD = 0.03; //0.006;
       public static final double kIZone = 5;
-      public static final double kGravityFF = 0.0; //0.1;
+      public static final double kGravityFF = 0.5; //0.1;
       public static final double kMinGravityFF = 0;
       }
     }
