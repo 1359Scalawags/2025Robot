@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
@@ -117,6 +118,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
     Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
+
     // Shuffleboard.getTab("Arm").add("IsIntialized", initialized);
     // Shuffleboard.getTab("Arm").add("Pulley Motor", pulleyMotor);
     // Shuffleboard.getTab("Arm").add("Wrist Motor", wristMotor);
@@ -456,6 +458,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     // if tuning, do nothing
     if(Constants.kTuning == true) {
+      SmartDashboard.putNumber("Elbow motor Position", elbowMotor.getAbsoluteEncoder().getPosition());
+
       elbowTuner.periodic();
       wristTuner.periodic();
       wristTuner.setSafeReferenceRange(getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
@@ -501,21 +505,22 @@ public class ArmSubsystem extends SubsystemBase {
           clawInitialized = true;
         }
       }
+
       if (wristError == false) {
         wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
       }
 
       if (elbowError == false) { 
         // XXX: Uncomment to use trapezoidal profiling for the elbow 
-        // elbowStateGoal = new State(elbowMotorTarget, 0);
-        // elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
-        // elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+        elbowStateGoal = new State(elbowMotorTarget, 0);
+        elbowStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
+        elbowMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
 
-        elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
-            ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition())); // must change
+        // elbowMotor.getClosedLoopController().setReference(elbowLimiter.calculate(elbowMotorTarget),
+        //     ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
       }
     
-      clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
+      // clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
 
       pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
       
