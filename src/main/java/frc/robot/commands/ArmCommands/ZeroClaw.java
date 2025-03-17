@@ -19,7 +19,6 @@ public class ZeroClaw extends Command {
     m_subsystem = subsystem;
     // waitTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.

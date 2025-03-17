@@ -214,7 +214,7 @@ public final class Constants {
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
       //public static final double kHomingVelocity = 300;
-      public static final double kHomingPositionIncrement = 1.0 * 0.020; // homing loop time is 20ms
+      public static final double kHomingPositionIncrement = 3.0 * 0.020; // homing loop time is 20ms
       
     public static class PIDF{
           //0.05, 0.0001, 0.03
