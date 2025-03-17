@@ -94,8 +94,10 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveSubsystem(File directory)
   {
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
-    if (Constants.kDebug = true) {
+    if (Constants.kDebug == true) {
       SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    } else {
+      SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
     }
     
     try

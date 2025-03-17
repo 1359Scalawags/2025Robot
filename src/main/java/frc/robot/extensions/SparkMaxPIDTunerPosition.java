@@ -13,13 +13,14 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.Constants;
 
-public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
+public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase implements ISparkMaxTuner {
     private GenericEntry arbitraryFFEntry;
     private GenericEntry velocityEntry;
     private GenericEntry accelerationEntry;
@@ -129,16 +130,15 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     @Override
     public void resetTunerValues() {
         super.resetTunerValues(); // also reset values in base class
-        this.arbitraryFFEntry.setDouble(0);
+        this.arbitraryFFEntry.setDouble(this.arbitraryFF0);
         if(this.getControlType() == ControlType.kMAXMotionPositionControl) {
             velocityEntry.setDouble(this.velocity0);
             accelerationEntry.setDouble(this.acceleration0);            
         }
     }
 
-    @Override
-    public void startMotor() {
-        motor.getClosedLoopController().setReference(this.getReference(), this.getControlType(), ClosedLoopSlot.kSlot0, arbitraryFFEntry.getDouble(0));
+    public void periodic() {
+        super.periodic(0, arbitraryFFEntry.getDouble(0));
     }
 
 }
