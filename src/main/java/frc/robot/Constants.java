@@ -182,7 +182,7 @@ public final class Constants {
 
     public static class Wrist {
       public static final int kMotorID = 16;
-      public static final double kMotorOffset = 0;
+      public static final double kMotorOffset = 94;
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
