@@ -97,7 +97,7 @@ public final class Constants {
       public static final double kMinAngle = 25.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
-      public static final double kDeployedAngle = 136.1; // 0.185*360;
+      public static final double kDeployedAngle = 131.1; // 0.185*360;
       public static final double kHomeAngle = 55.0; //0.442*360;
       public static final double kLockingPosition = 65.5;
       public static final double kLockedPosition = 76.7;
@@ -122,9 +122,9 @@ public final class Constants {
       public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
       public static final ArmPosition kGround = new ArmPosition(2,197,148);//correct
       public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
-      public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293);//correct
-      public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293);//correct
-      public static final ArmPosition klevel4 = new ArmPosition(47,315,26);//correct
+      public static final ArmPosition kLevel2 = new ArmPosition(10.5,305,293);//correct
+      public static final ArmPosition klevel3 = new ArmPosition(26.5,305,293);//correct
+      public static final ArmPosition klevel4 = new ArmPosition(53,315,278);//correct
 
       // public static final ArmPosition kHome = new ArmPosition(0,232,200);
       // public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
@@ -170,12 +170,12 @@ public final class Constants {
       public static final double kSlewRate = 100.0; //45?
       public static final double kHorizontalAngle = 232.0;
       public static final double kTolerance = 1.0;
-      public static final double kAccelerationRate = 120.0;
+      public static final double kAccelerationRate = 90.0;
       public static class PIDF{
           //0.025, 0.00001, 0.07
         public static final double kP = 0.01;
-        public static final double kI = 0;
-        public static final double kD = 0.05;
+        public static final double kI = 0.00001/8;
+        public static final double kD = 0.01;
         public static final double kIZone = 5;
         public static final double kGravityFF = 0.45;
         public static final double kMINGravityFF = 0;
@@ -188,10 +188,10 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
-      public static final double kSlewRate = 75; //45
+      public static final double kSlewRate = 60; //45
       public static final double kHorizontalAngle =232.0; 
       public static final double kTolerance = 2.0;
-    public static final double kAccelerationRate = 66.5;
+    public static final double kAccelerationRate = 60;
     public static class PIDF{
       // (0.006, 0.0000006, 0.006)
       public static final double kP = 0.01; //0.0075;

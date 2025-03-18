@@ -59,10 +59,10 @@ public class Robot extends TimedRobot {
     //TODO: Enable this when arm is enabled
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
-    // armCamera = CameraServer.startAutomaticCapture(1);
-    // // armCamera.isValid();
-    // armCamera.setResolution(640, 360);
-    // armCamera.setFPS(5);
+    armCamera = CameraServer.startAutomaticCapture(0);
+    // armCamera.isValid();
+    armCamera.setResolution(640, 360);
+    armCamera.setFPS(15);
 
   }
 
