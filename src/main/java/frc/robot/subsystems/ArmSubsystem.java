@@ -491,7 +491,7 @@ public class ArmSubsystem extends SubsystemBase {
     // update static variable accessible to other systems
     ARM_HEIGHT = getCalculatedHeight();
    
-    double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+   
     
     // Display values when debugging
     counter++;
@@ -527,8 +527,10 @@ public class ArmSubsystem extends SubsystemBase {
         }
       }
 
+      double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+
       if (wristError == false) {
-        wristStateGoal = new State(wristMotorTarget, 0);
+        wristStateGoal = new State(wristSafeTarget, 0);
         wristStateSetpoint = wristProfile.calculate(Constants.kRobotLoopTime, wristStateSetpoint, wristStateGoal);
         wristMotor.getClosedLoopController().setReference(wristStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
 
