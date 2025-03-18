@@ -510,7 +510,8 @@ public class ArmSubsystem extends SubsystemBase {
           pulleyMotor.getEncoder().setPosition(0);
           pulleyLimiter.reset(0);
           //XXX: Removed set reference position
-          pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley), ControlType.kPosition);
+          // pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(Constants.ArmSubsystem.Positions.kHome.pulley), ControlType.kPosition);
+          pulleyMotorTarget = Constants.ArmSubsystem.Positions.kHome.pulley;
           pulleyInitialized = true;
         }
       }
@@ -522,7 +523,8 @@ public class ArmSubsystem extends SubsystemBase {
           clawMotor.getEncoder().setPosition(0);
           clawLimiter.reset(0);
           //XXX: Removed set reference position
-          clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(Constants.ArmSubsystem.Claw.kCloseClaw), ControlType.kPosition);
+          // clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(Constants.ArmSubsystem.Claw.kCloseClaw), ControlType.kPosition);
+          clawMotorTarget = Constants.ArmSubsystem.Claw.kCloseClaw;
           clawInitialized = true;
         }
       }
