@@ -8,8 +8,13 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import frc.robot.Constants;
 public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     private GenericEntry arbitraryFFEntry;
     private GenericEntry velocityEntry;
@@ -17,10 +22,18 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     private double arbitraryFF0, velocity0, acceleration0;
     private GenericEntry actualPositionEntry;
     private DoubleSupplier positionEncoderSupplier;
+    private TrapezoidProfile motionProfile;
+    private State goalState;
+    private State currenState;
 
     public static double UPDATE_INTERVAL_SECONDS = 0.5;
 
     public SparkMaxPIDTunerPosition(String name, SparkMax motor, ControlType controlType) {
+        this(name, motor, controlType, null);
+
+    }
+
+    public SparkMaxPIDTunerPosition(String name, SparkMax motor, ControlType controlType, TrapezoidProfile motionProfile) {
         super(name, motor);
         this.shuffleboardSetupRoutines.add(this::setupShuffleboard);
 
@@ -48,6 +61,8 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
         } else {
             controlType = ControlType.kPosition;
         }
+
+        this.motionProfile = motionProfile;
 
     }
 
@@ -127,6 +142,15 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
     }
 
     @Override
+    public void startMotor() {
+        if(this.motionProfile != null) {
+            goalState = new State(this.positionEncoderSupplier.getAsDouble(), 0);
+            currenState = new State(this.positionEncoderSupplier.getAsDouble(), 0);            
+        }
+        super.startMotor();
+    }
+
+    @Override
     public void resetTunerValues() {
         super.resetTunerValues(); // also reset values in base class
         if(this.arbitraryFFEntry != null) {
@@ -136,13 +160,23 @@ public class SparkMaxPIDTunerPosition extends SparkMaxPIDTunerBase {
             velocityEntry.setDouble(this.velocity0);
             accelerationEntry.setDouble(this.acceleration0);            
         }
+        if(this.motionProfile != null) {
+            goalState = new State(this.positionEncoderSupplier.getAsDouble(), 0);
+            currenState = new State(this.positionEncoderSupplier.getAsDouble(), 0);            
+        }
     }
 
     public void periodic() {
         double arb = 0;
         if(this.arbitraryFFEntry != null)
             arb = this.arbitraryFFEntry.getDouble(0);
-        super.periodic(0, arb);
+        if(this.motionProfile != null && goalState != null && currenState != null) {
+            this.currenState = this.motionProfile.calculate(Constants.kRobotLoopTime, currenState, goalState);
+            super.periodic(0, arb, this.currenState.position);
+        } else {
+            super.periodic(0, arb);            
+        }
+
         this.updateEncoderValues();
     }
 

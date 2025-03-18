@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
@@ -271,7 +272,26 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
                 motor.getClosedLoopController().setReference(this.reference, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
             }            
         }
+        displayDebug(gravityFF, arbitraryFF);
 
+    }
+
+    protected void periodic(double gravityFF, double arbitraryFF, double immediateTarget) {
+        if(this.isShuffleboardInitialized) {
+            if(RobotState.isDisabled() && this.isRunning) {
+                this.setRunningState(false);   
+                isRunningEntry.setBoolean(false);
+            }
+            if(this.isRunning) {
+                motor.getClosedLoopController().setReference(immediateTarget, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
+            }            
+        }
+
+        displayDebug(gravityFF, arbitraryFF);
+
+    }
+
+    private void displayDebug(double gravityFF, double arbitraryFF) {
         count++;        
         if(count * Constants.kRobotLoopTime > this.debugIntervalSeconds) {
             if(this.debugVerbosity == Verbosity.all) {
@@ -286,7 +306,5 @@ public abstract class SparkMaxPIDTunerBase implements ISparkMaxTuner {
             }
             count = 0;
         } 
-
     }
-
 }
