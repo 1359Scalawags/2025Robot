@@ -156,6 +156,12 @@ public class ArmSubsystem extends SubsystemBase {
     elbowStateGoal = new State(elbowMotorTarget, 0);
     elbowStateSetpoint = new State(elbowMotorTarget, 0);
 
+    pulleyStateGoal = new State(pulleyMotorTarget, 0);
+    pulleyStateSetpoint = new State(pulleyMotorTarget, 0);
+
+    wristStateGoal = new State(wristMotorTarget, 0);
+    wristStateSetpoint = new State(wristMotorTarget, 0);
+
     if (MathUtil.isNear(wristMotorTarget, 0, 2)) {
       wristError = true;
       System.out.println("------WRIST ERROR---------");
@@ -522,9 +528,9 @@ public class ArmSubsystem extends SubsystemBase {
       }
 
       if (wristError == false) {
-        wristStateGoal = new State(elbowMotorTarget, 0);
-        wristStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
-        wristMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+        wristStateGoal = new State(wristMotorTarget, 0);
+        wristStateSetpoint = wristProfile.calculate(Constants.kRobotLoopTime, wristStateSetpoint, wristStateGoal);
+        wristMotor.getClosedLoopController().setReference(wristStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
 
         // wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
       }
@@ -542,9 +548,9 @@ public class ArmSubsystem extends SubsystemBase {
       clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
 
 
-      pulleyStateGoal = new State(elbowMotorTarget, 0);
-      pulleyStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
-      pulleyMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+      pulleyStateGoal = new State(pulleyMotorTarget, 0);
+      pulleyStateSetpoint = pulleyProfile.calculate(Constants.kRobotLoopTime, pulleyStateSetpoint, pulleyStateGoal);
+      pulleyMotor.getClosedLoopController().setReference(pulleyStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
 
       // pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
       
