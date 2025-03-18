@@ -86,6 +86,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     CommandScheduler.getInstance().schedule(m_robotContainer.lockClimberSubsystemWhenDisabled());
+    CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
+
   }
 
   @Override

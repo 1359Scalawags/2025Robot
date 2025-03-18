@@ -120,11 +120,11 @@ public final class Constants {
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,200,215);
       public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
-      public static final ArmPosition kGround = new ArmPosition(1,197,148);//correct
+      public static final ArmPosition kGround = new ArmPosition(2,197,148);//correct
       public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
       public static final ArmPosition kLevel2 = new ArmPosition(6.5,305,293);//correct
       public static final ArmPosition klevel3 = new ArmPosition(22.5,305,293);//correct
-      public static final ArmPosition klevel4 = new ArmPosition(52,315,26);//correct
+      public static final ArmPosition klevel4 = new ArmPosition(47,315,26);//correct
 
       // public static final ArmPosition kHome = new ArmPosition(0,232,200);
       // public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
@@ -141,7 +141,7 @@ public final class Constants {
       public static final double kConversionFactor = 0.13402;
       public static final double kMaxLimit = 52;
       public static final double kMinLimit = 0;
-      public static final double kSlewRate = 5;
+      public static final double kSlewRate = 12; //5
       //public static final double kHomingVelocity = -2;
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
@@ -149,6 +149,7 @@ public final class Constants {
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
+      public static final double kAccelerationRate = 30;
     public static class PIDF{
        //0.07f, 0.00003f, 0.07f
       public static final double kP = 0.07;
@@ -166,14 +167,14 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 330;
       public static final double kMinLimit = 195;
-      public static final double kSlewRate = 70.0;
+      public static final double kSlewRate = 100.0; //45?
       public static final double kHorizontalAngle = 232.0;
       public static final double kTolerance = 1.0;
-      public static final double kAccelerationRate = 80.0;
+      public static final double kAccelerationRate = 120.0;
       public static class PIDF{
           //0.025, 0.00001, 0.07
         public static final double kP = 0.01;
-        public static final double kI = 0.00001/8;
+        public static final double kI = 0;
         public static final double kD = 0.05;
         public static final double kIZone = 5;
         public static final double kGravityFF = 0.45;
@@ -187,9 +188,10 @@ public final class Constants {
       public static final double kConversionFactor = 360;
       public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
-      public static final double kSlewRate = 45;
+      public static final double kSlewRate = 75; //45
       public static final double kHorizontalAngle =232.0; 
       public static final double kTolerance = 2.0;
+    public static final double kAccelerationRate = 66.5;
     public static class PIDF{
       // (0.006, 0.0000006, 0.006)
       public static final double kP = 0.01; //0.0075;

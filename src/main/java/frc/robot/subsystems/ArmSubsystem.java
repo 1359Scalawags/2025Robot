@@ -60,7 +60,14 @@ public class ArmSubsystem extends SubsystemBase {
   private State elbowStateGoal;
   private State elbowStateSetpoint;
 
-  
+  private TrapezoidProfile pulleyProfile;
+  private State pulleyStateGoal;
+  private State pulleyStateSetpoint;
+
+  private TrapezoidProfile wristProfile;
+  private State wristStateGoal;
+  private State wristStateSetpoint;
+
   public ArmSubsystem() {
 
     // NetworkTableInstance.getDefault().getTable("SparkMaxData");
@@ -115,6 +122,14 @@ public class ArmSubsystem extends SubsystemBase {
     elbowProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Elbow.kSlewRate, Constants.ArmSubsystem.Elbow.kAccelerationRate));
     elbowStateSetpoint = new State();
     elbowStateGoal = new State();
+
+    pulleyProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Pulley.kSlewRate, Constants.ArmSubsystem.Pulley.kAccelerationRate));
+    pulleyStateSetpoint = new State();
+    pulleyStateGoal = new State();
+
+    wristProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Wrist.kSlewRate, Constants.ArmSubsystem.Wrist.kAccelerationRate));
+    wristStateSetpoint = new State();
+    wristStateGoal = new State();
 
     // Shuffleboard.getTab("Arm").add("ArmLimitSwitch", homeLimitSwitch);
     Shuffleboard.getTab("Arm").add("ClawLimitSwitch", clawLimitSwitch);
@@ -507,7 +522,11 @@ public class ArmSubsystem extends SubsystemBase {
       }
 
       if (wristError == false) {
-        wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
+        wristStateGoal = new State(elbowMotorTarget, 0);
+        wristStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
+        wristMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+
+        // wristMotor.getClosedLoopController().setReference(wristLimiter.calculate(wristSafeTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, wristFF.calculate(getWristMotorPosition()));
       }
 
       if (elbowError == false) { 
@@ -522,7 +541,12 @@ public class ArmSubsystem extends SubsystemBase {
     
       clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
 
-      pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
+
+      pulleyStateGoal = new State(elbowMotorTarget, 0);
+      pulleyStateSetpoint = elbowProfile.calculate(Constants.kRobotLoopTime, elbowStateSetpoint, elbowStateGoal);
+      pulleyMotor.getClosedLoopController().setReference(elbowStateSetpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
+
+      // pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
       
 
     }
