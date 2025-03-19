@@ -27,9 +27,8 @@ import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SimableSparkMax;
-import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
-import frc.robot.extensions.SparkMaxPIDTunerPosition;
-import frc.robot.extensions.SparkMaxPIDTunerBase.Verbosity;
+import frc.robot.extensions.SparkMaxTrapezoidalTuner;
+import frc.robot.extensions.SparkMaxTrapezoidalTuner.Verbosity;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -51,9 +50,9 @@ public class ArmSubsystem extends SubsystemBase {
   private GravityAssistedFeedForward elbowFF;
   private GravityAssistedFeedForward wristFF;
 
-  private SparkMaxPIDTunerArmPosition elbowTuner;
-  private SparkMaxPIDTunerArmPosition wristTuner;
-  private SparkMaxPIDTunerPosition clawTuner;
+  private SparkMaxTrapezoidalTuner elbowTuner;
+  private SparkMaxTrapezoidalTuner wristTuner;
+  private SparkMaxTrapezoidalTuner clawTuner;
 
   // Trapezoidal profiling for elbow
   private TrapezoidProfile elbowProfile;
@@ -103,18 +102,21 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
 
     if(Constants.kTuning) {
-      elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
+      elbowTuner = new SparkMaxTrapezoidalTuner("Elbow Motor", elbowMotor, ControlType.kPosition);
+      elbowTuner.setMotionProfile(Constants.ArmSubsystem.Elbow.kSlewRate, Constants.ArmSubsystem.Elbow.kAccelerationRate);      
+      elbowTuner.setFeedForwardController(elbowFF);
       elbowTuner.setSafeReferenceRange(185, 300);
-      elbowTuner.addToShuffleboard();
-      elbowTuner.setVerbosity(Verbosity.all);
-      elbowTuner.setDebugInterval(2.0);
+      elbowTuner.setVerbosity(Verbosity.all, 2.0);
 
-      wristTuner = new SparkMaxPIDTunerArmPosition("Wrist Motor", wristMotor, ControlType.kPosition, wristFF);
-      wristTuner.addToShuffleboard();
+      wristTuner = new SparkMaxTrapezoidalTuner("Wrist Motor", wristMotor, ControlType.kPosition);
+      wristTuner.setMotionProfile(Constants.ArmSubsystem.Wrist.kSlewRate, Constants.ArmSubsystem.Wrist.kAccelerationRate);
+      wristTuner.setFeedForwardController(wristFF);
+      wristTuner.setVerbosity(Verbosity.commands, 2.0);
 
-      clawTuner = new SparkMaxPIDTunerPosition("Claw Motor", clawMotor, ControlType.kPosition);
+      clawTuner = new SparkMaxTrapezoidalTuner("Claw Motor", clawMotor, ControlType.kPosition);
+      clawTuner.setMotionProfile(Constants.ArmSubsystem.Claw.kSlewRate, Constants.ArmSubsystem.Claw.kAccelerationRate);
       clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
-      clawTuner.addToShuffleboard();
+      clawTuner.setVerbosity(Verbosity.commands, 2.0);
     }
 
 

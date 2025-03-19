@@ -6,11 +6,9 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.RobotState;
@@ -19,7 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.extensions.SimableSparkMax;
-import frc.robot.extensions.SparkMaxPIDTunerPosition;
+import frc.robot.extensions.SparkMaxTrapezoidalTuner;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -38,7 +36,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
   private SlewRateLimiter positionLimiter;
   private SlewRateLimiter lockingPositionLimiter;
-  private SparkMaxPIDTunerPosition positionTuner;
 
   // TODO: make this make sense to the drivers when it is in the dashboard
   private boolean moveClimberCommandLock = true;
@@ -71,13 +68,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     debugTimer = new Timer();
     debugTimer.start();
-
-    if (Constants.kTuning) {
-      positionTuner = new SparkMaxPIDTunerPosition("Climber Position", positionMotor, ControlType.kPosition);
-      positionTuner.setSafeReferenceRange(Constants.ClimberSubsystem.PositionMotor.kMinAngle,
-          Constants.ClimberSubsystem.PositionMotor.kMinAngle);
-      positionTuner.addToShuffleboard();
-    }
 
   }
 
@@ -293,23 +283,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
     // if tuning, do nothing
     if (Constants.kTuning) {
-      positionTuner.periodic();
       return;
     }
-    // if (Constants.kDebug == true){
-    // SmartDashboard.putNumber("Locking Motor Position",
-    // getLockingMotorPosition());
-    // SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
-    // SmartDashboard.putNumber("Servo position", getServoAngle());
-    // SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
-    // if(debugTimer.get() > 1.5) {
-    // System.out.println("Applied Position Motor Output: " +
-    // positionMotor.getAppliedOutput());
-    // System.out.println("Current Absolute Angle: " +
-    // positionMotor.getAbsoluteEncoder().getPosition());
-    // debugTimer.reset();
-    // }
-    // }
 
     SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
     SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
