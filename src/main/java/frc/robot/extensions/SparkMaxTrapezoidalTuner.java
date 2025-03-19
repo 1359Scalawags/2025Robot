@@ -428,15 +428,21 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
 
         // run the motor if enabled
         if(this.isRunning) {
+            // combine feedforward values
+            double feedForward = arbitraryFF;
+            if(ffController != null) {
+                feedForward += ffController.calculate(this.positionEncoderSupplier.getAsDouble());
+            }
+
             if(this.controlType == ControlType.kPosition) {
                 goalState = new State(this.reference, 0);    
                 currentState = motionProfile.calculate(Constants.kRobotLoopTime, currentState, goalState);
-                motor.getClosedLoopController().setReference(currentState.position, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
+                motor.getClosedLoopController().setReference(currentState.position, this.controlType, ClosedLoopSlot.kSlot0, feedForward);
             } 
             else if(this.controlType == ControlType.kVelocity) {
                 goalState = new State(0, this.reference);
                 currentState = motionProfile.calculate(Constants.kRobotLoopTime, currentState, goalState);
-                motor.getClosedLoopController().setReference(currentState.velocity, this.controlType, ClosedLoopSlot.kSlot0, gravityFF + arbitraryFF);
+                motor.getClosedLoopController().setReference(currentState.velocity, this.controlType, ClosedLoopSlot.kSlot0, feedForward);
             } 
             else {
                 throw new InvalidParameterException("Only position and velocity control is supported.");
