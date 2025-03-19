@@ -116,6 +116,7 @@ public final class Constants {
 
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
+    public static final boolean kEnabled = false;
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
