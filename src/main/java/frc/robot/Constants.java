@@ -18,7 +18,7 @@ import frc.robot.extensions.ArmPosition;
 public final class Constants {
 
   public static final boolean kDebug = false;
-  public static final boolean kTuning = false;
+  public static final boolean kTuning = true;
   
   public static final String robotName = "Flipper";
   public static final double kRobotLoopTime = 0.02;

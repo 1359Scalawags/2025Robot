@@ -99,7 +99,7 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         this.debugVerbosity = Verbosity.commands;
         this.debugIntervalSeconds = 1.0;
         this.configAccessor = motor.configAccessor.closedLoop;
-        this.controlType = ControlType.kDutyCycle;
+        this.controlType = controlType;
         this.p0 = configAccessor.getP();
         this.i0 = configAccessor.getI();
         this.d0 = configAccessor.getD();
@@ -236,6 +236,11 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
     }
 
     private void setupShuffleboardTrapezoidal() {
+        this.trapezoidProfileLayout = this.tab.getLayout("Trapezoid Profile", BuiltInLayouts.kGrid)
+            .withPosition(2, 1)
+            .withSize(1,3)
+            .withProperties(Map.of("Label position", "TOP","Number of columns", 1, "Number of rows", 3, "Show Glyph", true, "Glphy", "PENCIL"));
+
         this.accelerationEntry = this.trapezoidProfileLayout.add("Acceleration", this.acceleration0)
             .withWidget(BuiltInWidgets.kTextView)
             .withPosition(0, 0)
@@ -250,8 +255,8 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
 
     private void setupShuffleboardFeedForward() {
         this.feedForwardLayout = this.tab.getLayout("Feed Forward", BuiltInLayouts.kGrid)
-            .withPosition(2, 1)
-            .withSize(2,3)
+            .withPosition(3, 1)
+            .withSize(1,3)
             .withProperties(Map.of("Label position", "TOP","Number of columns", 1, "Number of rows", 3, "Show Glyph", true, "Glphy", "PENCIL"));
 
         this.arbitraryFFEntry = this.feedForwardLayout.add("Arbitrary FF", this.arbitraryFF0)
@@ -278,7 +283,7 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
 
     private void setupShuffleboardMonitoring() {
         this.encoderFeedbackLayout = this.tab.getLayout("Encoder Monitoring", BuiltInLayouts.kList)
-            .withPosition(4, 1)
+            .withPosition(5, 1)
             .withSize(2,3)
             .withProperties(Map.of("Label position", "TOP","Number of columns", 1, "Number of rows", 3, "Show Glyph", true, "Glphy", "HEARTBEAT"));
 
@@ -367,8 +372,10 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
     private void pushToGenericEntries() {
         // update feedforward
         this.arbitraryFFEntry.setDouble(this.arbitraryFF);
-        this.gravityFFEntry.setDouble(this.gravityFF);
-        this.minimumFFEntry.setDouble(this.minimumFF);
+        if(ffController != null) {
+            this.gravityFFEntry.setDouble(this.gravityFF);
+            this.minimumFFEntry.setDouble(this.minimumFF);            
+        }
 
         // update trapezoid profile
         this.accelerationEntry.setDouble(this.acceleration);
@@ -378,10 +385,12 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
     private void pullFromGenericEntries() {
         // update feedforward
         this.arbitraryFF = arbitraryFFEntry.getDouble(this.arbitraryFF0);
-        this.gravityFF = gravityFFEntry.getDouble(this.gravityFF0);
-        this.minimumFF = minimumFFEntry.getDouble(this.minimumFF);
-        this.ffController.setGravityFF(this.gravityFF);
-        this.ffController.setMinimumFF(this.minimumFF);
+        if(ffController != null) {
+            this.gravityFF = gravityFFEntry.getDouble(this.gravityFF0);
+            this.minimumFF = minimumFFEntry.getDouble(this.minimumFF);
+            this.ffController.setGravityFF(this.gravityFF);
+            this.ffController.setMinimumFF(this.minimumFF);            
+        }
 
         // update trapezoid profile
         this.velocity = velocityEntry.getDouble(this.velocity0);
