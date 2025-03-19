@@ -61,6 +61,7 @@ public final class Constants {
 
       //Limits 
       //TODO; make sure these are right
+    public static final boolean kEnabled = false; // disables the climber
     public static final double kIntializeDelay = 0.5;
 
     public static class LatchServo {

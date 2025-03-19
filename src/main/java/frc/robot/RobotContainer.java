@@ -80,7 +80,7 @@ public class RobotContainer {
     new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Pearl"));
     // TODO: This needs to be enabled when ready. Also fix initializeArm() below and uncomment calls in Robot.java
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+   private final ClimberSubsystem m_ClimberSubsystem;
   //  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
    private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
    private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
@@ -91,6 +91,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    if(Constants.ClimberSubsystem.kEnabled) {
+      m_ClimberSubsystem = new ClimberSubsystem();
+    } else {
+      m_ClimberSubsystem = null;
+    }
     autoChooser = AutoBuilder.buildAutoChooser(); //This will populate all the autos in the project.
     pipelineChooser = new SendableChooser<Command>();
 
@@ -116,9 +121,12 @@ public class RobotContainer {
       false
       ));
 
-    m_ClimberSubsystem.setDefaultCommand(
-      new MoveClimber(m_ClimberSubsystem, 
-      this::assistantGetY));
+      if(m_ClimberSubsystem != null) {
+        m_ClimberSubsystem.setDefaultCommand(
+          new MoveClimber(m_ClimberSubsystem, 
+          this::assistantGetY));        
+      }
+
 
       // This is only for testing the pulley motor directly. It will interact badly with the climber when it is unlocked
       // m_ArmSubsystem.setDefaultCommand(new MovePulleyWithJoystick(m_ArmSubsystem, this::assistantGetY));
@@ -203,22 +211,24 @@ public class RobotContainer {
             //}
             // then just make a button that flips that variable. talk to drive team about it.
 
-            
-    m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
+    if(m_ClimberSubsystem != null) {
+      m_AssistantJoystick.button(16).onTrue(new UnlockClimberSubsystem(m_ClimberSubsystem));
 
-    
-    ////m_AssistantJoystick.button(14).onTrue(new RetractClimber(m_ClimberSubsystem));
+      
+      ////m_AssistantJoystick.button(14).onTrue(new RetractClimber(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(15).onTrue(new LockClimberBar(m_ClimberSubsystem));
-    m_AssistantJoystick.button(4).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
+      m_AssistantJoystick.button(15).onTrue(new LockClimberBar(m_ClimberSubsystem));
+      m_AssistantJoystick.button(4).onTrue(new UnLockClimberBar(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(12).onTrue(new LatchServo(m_ClimberSubsystem));
-    m_AssistantJoystick.button(14).onTrue(new UnLatchServo(m_ClimberSubsystem));
+      m_AssistantJoystick.button(12).onTrue(new LatchServo(m_ClimberSubsystem));
+      m_AssistantJoystick.button(14).onTrue(new UnLatchServo(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(13).onTrue(new LockingPosition(m_ClimberSubsystem));
-    m_AssistantJoystick.button(11).onTrue(new LockedPosition(m_ClimberSubsystem));
+      m_AssistantJoystick.button(13).onTrue(new LockingPosition(m_ClimberSubsystem));
+      m_AssistantJoystick.button(11).onTrue(new LockedPosition(m_ClimberSubsystem));
 
-    m_AssistantJoystick.button(3).onTrue(new DeployClimber(m_ClimberSubsystem));
+      m_AssistantJoystick.button(3).onTrue(new DeployClimber(m_ClimberSubsystem));      
+    }
+
 
   // //TODO: Make a sequential command to lock the arm motor.
 
@@ -256,14 +266,20 @@ public class RobotContainer {
   }
 
   public Command lockClimberSubsystemWhenDisabled() {
+    if(m_ClimberSubsystem == null)
+      return new WaitCommand(0.01);
     return new LockClimberSubsystem(m_ClimberSubsystem);
   }
 
   public Command initializeClimberEncoders() {
+    if(m_ClimberSubsystem == null)
+      return new WaitCommand(0.01);
     return new InitilizeClimberEncoders(m_ClimberSubsystem).ignoringDisable(true);
   }
 
   public Command initializeClimberPosition() {
+    if(m_ClimberSubsystem == null)
+      return new WaitCommand(0.01);
     return new RetractClimber(m_ClimberSubsystem);
   }
 
