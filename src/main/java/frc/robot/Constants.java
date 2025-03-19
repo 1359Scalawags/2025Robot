@@ -94,14 +94,14 @@ public final class Constants {
 
     public static class PositionMotor {
       public static final int kMotorID = 10;
-      public static final double kMaxAngle = 155.0;//0.037*360;
-      public static final double kMinAngle = 25.0;//0.457*360;
+      public static final double kMaxAngle = 201.0;//0.037*360;
+      public static final double kMinAngle = 83.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
-      public static final double kDeployedAngle = 131.1; // 0.185*360;
-      public static final double kHomeAngle = 55.0; //0.442*360;
-      public static final double kLockingPosition = 65.5;
-      public static final double kLockedPosition = 76.7;
+      public static final double kDeployedAngle = 195.1; // 0.185*360;
+      public static final double kHomeAngle = 88.0; //0.442*360;
+      public static final double kLockingPosition = 128.0;
+      public static final double kLockedPosition = 138.0;
       public static final double kMaxJoystickSpeed = 10;
       public static final double kSlewRate = 45.0;
     public static class PIDF{
