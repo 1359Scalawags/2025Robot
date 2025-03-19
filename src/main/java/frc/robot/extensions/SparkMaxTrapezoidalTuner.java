@@ -108,8 +108,8 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         this.tuner = new PIDController(this.p0, this.i0, this.d0);
         this.tuner.setSetpoint(MathUtil.clamp(this.tuner.getSetpoint(), this.minReference, this.maxReference));
 
-        if(controlType != ControlType.kPosition && controlType != ControlType.kVelocity) {
-            throw new InvalidParameterException("Must be a position or velocity control type.");
+        if(controlType != ControlType.kPosition) {
+            throw new UnsupportedOperationException("Only position control is currently implemented.");
         }
         
         // encoder initialization
@@ -120,12 +120,14 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
             this.positionEncoderSupplier = motor.getEncoder()::getPosition;
             this.velocityEncoderSupplier = motor.getEncoder()::getVelocity;
         }
-        if(this.positionEncoderSupplier == null) {
-            throw new NullPointerException("Position encoder supplier is not instantiated.");
+
+        if(this.positionEncoderSupplier == null || this.velocityEncoderSupplier == null) {
+            throw new NullPointerException("Encoder suppliers are not instantiated.");
         }
 
 
         this.velocity0 = 0;
+        this.acceleration0 = 0;
         this.motionConstraints = null;
         this.motionProfile = null;
 
@@ -276,7 +278,7 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
                 .withPosition(0,2)
                 .withSize(1,1)
                 .getEntry();              
-        }
+        } 
 
 
     }
@@ -403,8 +405,8 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         this.currentState = new State(this.positionEncoderSupplier.getAsDouble(), this.velocityEncoderSupplier.getAsDouble());
         if(this.controlType == ControlType.kPosition) {
             this.goalState = new State(this.reference, 0);
-        } else if(this.controlType == ControlType.kVelocity) {
-            this.goalState = new State(0, this.reference);
+        } else {
+            throw new UnsupportedOperationException("Only position control is currently implemented.");
         }
     }
 
@@ -448,13 +450,8 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
                 currentState = motionProfile.calculate(Constants.kRobotLoopTime, currentState, goalState);
                 motor.getClosedLoopController().setReference(currentState.position, this.controlType, ClosedLoopSlot.kSlot0, feedForward);
             } 
-            else if(this.controlType == ControlType.kVelocity) {
-                goalState = new State(0, this.reference);
-                currentState = motionProfile.calculate(Constants.kRobotLoopTime, currentState, goalState);
-                motor.getClosedLoopController().setReference(currentState.velocity, this.controlType, ClosedLoopSlot.kSlot0, feedForward);
-            } 
             else {
-                throw new InvalidParameterException("Only position and velocity control is supported.");
+                throw new InvalidParameterException("Only position control is supported.");
             }
         }            
 
