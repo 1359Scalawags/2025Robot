@@ -104,12 +104,14 @@ public final class Constants {
       public static final double kLockedPosition = 138.0;
       public static final double kMaxJoystickSpeed = 10;
       public static final double kSlewRate = 45.0;
-    public static class PIDF{
-       // 0.05, 0.0000001, 0.08
-      public static final double kP = 0.07;
-      public static final double kI = 0.0000005;
-      public static final double kD = 0.08;
-      public static final double kIZone = 30;
+      public static final double kMaxVelocity = 60.0;
+      public static final double kMaxAcceleration = 90.0;
+      public static class PIDF{
+        // 0.05, 0.0000001, 0.08
+        public static final double kP = 0.05;
+        public static final double kI = 0.0000001;
+        public static final double kD = 0.08;
+        public static final double kIZone = 30;
       }
     }
   }  

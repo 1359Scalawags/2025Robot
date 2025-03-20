@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -13,6 +14,9 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
@@ -40,6 +44,10 @@ public class ClimberSubsystem extends SubsystemBase {
   private SlewRateLimiter lockingPositionLimiter;
   private SparkMaxPIDTunerPosition positionTuner;
 
+  private TrapezoidProfile positionProfile;
+  private State positionCurrentState;
+  private State positionGoalState;
+
   // TODO: make this make sense to the drivers when it is in the dashboard
   private boolean moveClimberCommandLock = true;
 
@@ -61,11 +69,15 @@ public class ClimberSubsystem extends SubsystemBase {
     lockingBarEncoder = lockingBarMotor.getAbsoluteEncoder();
     positionEncoder = positionMotor.getAbsoluteEncoder();
 
+    configureLockingBarMotor();
+    configurePositionMotor();
+
     positionLimiter = new SlewRateLimiter(Constants.ClimberSubsystem.PositionMotor.kSlewRate);
     lockingPositionLimiter = new SlewRateLimiter(Constants.ClimberSubsystem.LockingBarMotor.kSlewRate);
 
-    configureLockingBarMotor();
-    configurePositionMotor();
+    positionProfile = new TrapezoidProfile(new Constraints(Constants.ClimberSubsystem.PositionMotor.kMaxVelocity, Constants.ClimberSubsystem.PositionMotor.kMaxAcceleration));
+    positionCurrentState = new State();
+    positionGoalState = new State();
 
     Shuffleboard.getTab("climber").add("Position Motor Position", positionMotor.getEncoder().getPosition());
 
@@ -91,6 +103,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
     positionLimiter.reset(currentPosition);
     lockingPositionLimiter.reset(currentLockbar);
+
+    positionCurrentState = new State(currentPosition, 0);
+    positionGoalState = new State(currentPosition, 0);
 
     System.out.println("Reported Positions at Intialization: ");
     System.out.println("  Climber Position: " + currentPosition);
@@ -319,7 +334,14 @@ public class ClimberSubsystem extends SubsystemBase {
     if ((RobotState.isTeleop() || RobotState.isAutonomous()) && isInitialized == true) {
       double immediateTargetAngle = MathUtil.clamp(positionLimiter.calculate(climberTargetPosition),
           Constants.ClimberSubsystem.PositionMotor.kMinAngle, Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
+      
+      // XXX: comment if using trapezoidal profile
       positionMotor.getClosedLoopController().setReference(immediateTargetAngle, ControlType.kPosition);
+
+      // XXX: uncomment for trapezoidal profile
+      // positionGoalState = new State(climberTargetPosition, 0);
+      // positionCurrentState = positionProfile.calculate(Constants.kRobotLoopTime, positionCurrentState, positionGoalState);
+      // positionMotor.getClosedLoopController().setReference(positionCurrentState.position, ControlType.kPosition);
 
       double lockingImmediateTargetAngle = MathUtil.clamp(lockingPositionLimiter.calculate(lockingTargetPosition),
           Constants.ClimberSubsystem.LockingBarMotor.kMinLimit, Constants.ClimberSubsystem.LockingBarMotor.kMaxLimit);
