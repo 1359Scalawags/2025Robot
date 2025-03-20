@@ -53,6 +53,7 @@ import java.util.concurrent.locks.Lock;
 import javax.print.attribute.standard.PrinterInfo;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -117,6 +118,9 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     setDefaultCommands();
+
+    // NamedNamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
+    // Commands.registerCommand("moveL2", new openClawCommand(m_ArmSubsystem));
   }
 
   private void setDefaultCommands() {
