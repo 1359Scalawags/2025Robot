@@ -100,7 +100,7 @@ public final class Constants {
       public static final double kEncoderOffset = 0.5;    
       public static final double kDeployedAngle = 185.1; // 0.185*360;
       public static final double kHomeAngle = 88.0; //0.442*360;
-      public static final double kLockingPosition = 128.0;
+      public static final double kLockingPosition = 125.0;
       public static final double kLockedPosition = 138.0;
       public static final double kMaxJoystickSpeed = 10;
       public static final double kSlewRate = 45.0;
@@ -108,8 +108,8 @@ public final class Constants {
       public static final double kMaxAcceleration = 90.0;
       public static class PIDF{
         // 0.05, 0.0000001, 0.08
-        public static final double kP = 0.05;
-        public static final double kI = 0.0000001;
+        public static final double kP = 0.07;
+        public static final double kI = 0.0000005;
         public static final double kD = 0.08;
         public static final double kIZone = 30;
       }
@@ -122,13 +122,13 @@ public final class Constants {
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
-      public static final ArmPosition kHome = new ArmPosition(1,200,215);
-      public static final ArmPosition kHumanStation = new ArmPosition(4,200,215);
-      public static final ArmPosition kGround = new ArmPosition(2,197,148);//correct
+      public static final ArmPosition kHome = new ArmPosition(1,305,293);
+      public static final ArmPosition kHumanStation = new ArmPosition(12,300,203);
+      public static final ArmPosition kGround = new ArmPosition(2,193,148);//correct
       public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
-      public static final ArmPosition kLevel2 = new ArmPosition(10.5,305,293);//correct
-      public static final ArmPosition klevel3 = new ArmPosition(26.5,305,293);//correct
-      public static final ArmPosition klevel4 = new ArmPosition(53,315,278);//correct
+      public static final ArmPosition kLevel2 = new ArmPosition(9,305,293);//correct
+      public static final ArmPosition klevel3 = new ArmPosition(24.5,305,293);//correct
+      public static final ArmPosition klevel4 = new ArmPosition(50,315,278);//correct
 
       // public static final ArmPosition kHome = new ArmPosition(0,232,200);
       // public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
@@ -145,7 +145,7 @@ public final class Constants {
       public static final double kConversionFactor = 0.13402;
       public static final double kMaxLimit = 52;
       public static final double kMinLimit = 0;
-      public static final double kSlewRate = 12; //5
+      public static final double kSlewRate = 10; //5
       //public static final double kHomingVelocity = -2;
       public static final double kStageTwoPulleyPosition = 25; 
       public static final boolean kLimitSwitchPressedState = false;
@@ -153,7 +153,7 @@ public final class Constants {
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
-      public static final double kAccelerationRate = 30;
+      public static final double kAccelerationRate = 45;
     public static class PIDF{
        //0.07f, 0.00003f, 0.07f
       public static final double kP = 0.07;
@@ -217,10 +217,11 @@ public final class Constants {
       public static final double kSlewRate = 20;
       public static final double kCloseClaw = 0;//good
       public static final double kOpenClaw = -17.38;//good
+      public static final double kHalfClaw = -8;//good
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
       //public static final double kHomingVelocity = 300;
-      public static final double kHomingPositionIncrement = 3.0 * 0.020; // homing loop time is 20ms
+      public static final double kHomingPositionIncrement = 1.0 * 0.020; // homing loop time is 20ms
       
     public static class PIDF{
           //0.05, 0.0001, 0.03

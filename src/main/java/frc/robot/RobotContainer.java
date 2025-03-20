@@ -326,14 +326,18 @@ public class RobotContainer {
     if(m_ArmSubsystem == null) {
       return new WaitCommand(0.01);  
     }
-    Command zeroClaw = new ZeroClaw(m_ArmSubsystem);
     Command zeroPulley = new ZeroPulley(m_ArmSubsystem);
     Command homePulley = new goToHeightHome(m_ArmSubsystem);
 
     // return homePulley;
 
-    return Commands.sequence(zeroPulley, zeroClaw, homePulley);
+    return Commands.sequence(zeroPulley, new WaitCommand(0.5), homePulley);
     // return initializeArm.Commands.sequence(homeClaw.andThen(homePulley));
+  }
+
+  public Command homeClaw() {
+    Command homeclaw = new ZeroClaw(m_ArmSubsystem);
+    return homeclaw;
   }
 
   // public Command intializeJustTheArm() {

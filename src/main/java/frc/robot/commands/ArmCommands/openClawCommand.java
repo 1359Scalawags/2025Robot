@@ -22,7 +22,7 @@ public class openClawCommand extends Command {
   public openClawCommand(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    // addRequirements(subsystem);
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.

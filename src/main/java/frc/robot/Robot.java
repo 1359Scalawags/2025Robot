@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
       armCamera = CameraServer.startAutomaticCapture(0);
       // armCamera.isValid();
       armCamera.setResolution(640, 360);
-      armCamera.setFPS(15);      
+      armCamera.setFPS(20);      
     } catch (Exception ex) {
       System.out.println("The USB camera could not be initialized.");
     }
@@ -112,6 +112,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().schedule(m_robotContainer.initializeClimberPosition());    
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.homeClaw());
 
   }
 
@@ -133,6 +134,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().schedule(m_robotContainer.initializeClimberPosition());    
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+    CommandScheduler.getInstance().schedule(m_robotContainer.homeClaw());
 
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
@@ -164,6 +166,7 @@ public class Robot extends TimedRobot {
   CommandScheduler.getInstance().schedule(m_robotContainer.initializeClimberPosition());    
   CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
   CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
+  CommandScheduler.getInstance().schedule(m_robotContainer.homeClaw());
   // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 

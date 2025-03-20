@@ -317,6 +317,10 @@ public class ArmSubsystem extends SubsystemBase {
     goToClawMotorPosition(Constants.ArmSubsystem.Claw.kOpenClaw);
   }
 
+  public void halfOpenClaw() {
+    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kHalfClaw);
+  }
+
   public void goToPulleyMotorPosition(double pulleyMotorPosition) {
     pulleyMotorTarget = MathUtil.clamp(pulleyMotorPosition, Constants.ArmSubsystem.Pulley.kMinLimit,
         Constants.ArmSubsystem.Pulley.kMaxLimit);
@@ -471,6 +475,9 @@ public class ArmSubsystem extends SubsystemBase {
     return Constants.ArmSubsystem.Wrist.kMinLimit + elbowDiff;
   }
 
+  public boolean isClawInitialized() {
+    return clawInitialized;
+  }
 
   int counter = 0;
   // TODO: moving slow when within the range of the limit switch?
