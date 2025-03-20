@@ -28,7 +28,9 @@ public class openClawCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.openClaw();
+    if (m_subsystem.isClawInitialized()) {
+      m_subsystem.openClaw();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
