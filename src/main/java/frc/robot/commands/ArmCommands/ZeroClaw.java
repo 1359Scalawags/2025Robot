@@ -33,7 +33,7 @@ public class ZeroClaw extends Command {
   public void execute() {
     // if(waitTimer.get() > 1.0) {
       double currentPosition = m_subsystem.getClawMotorPosition();
-      m_subsystem.goToClawMotorPosition(currentPosition + Constants.ArmSubsystem.Claw.kHomingPositionIncrement);      
+      m_subsystem.goToClawMotorPosition(currentPosition + Constants.ArmSubsystem.Claw.kHomingPositionIncrement, true);      
     // }
   }
 

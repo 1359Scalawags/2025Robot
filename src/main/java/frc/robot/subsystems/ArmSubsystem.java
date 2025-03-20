@@ -309,16 +309,16 @@ public class ArmSubsystem extends SubsystemBase {
 
   //XXX: Only called in closeClawCommand.java, do we really need it?
   public void closeClaw() {
-    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kCloseClaw);
+    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kCloseClaw, false);
   }
 
   //XXX: Only called in openClawCommand.java, do we really need it?
   public void openClaw() {
-    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kOpenClaw);
+    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kOpenClaw, false);
   }
 
   public void halfOpenClaw() {
-    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kHalfClaw);
+    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kHalfClaw, false);
   }
 
   public void goToPulleyMotorPosition(double pulleyMotorPosition) {
@@ -336,9 +336,14 @@ public class ArmSubsystem extends SubsystemBase {
     getAbsoluteWristAngleMax());
   }
 
-  public void goToClawMotorPosition(double clawMotorPosition) {
-    clawMotorTarget = MathUtil.clamp(clawMotorPosition, Constants.ArmSubsystem.Claw.kMinLimit,
-        Constants.ArmSubsystem.Claw.kMaxLimit);
+  public void goToClawMotorPosition(double clawMotorPosition, boolean isHoming) {
+    if(isHoming) {
+      clawMotorTarget = clawMotorPosition;
+    } else {
+      clawMotorTarget = MathUtil.clamp(clawMotorPosition, Constants.ArmSubsystem.Claw.kMinLimit,
+          Constants.ArmSubsystem.Claw.kMaxLimit);      
+    }
+
   }
 
   public ArmPosition getArmPosition() {
@@ -498,16 +503,6 @@ public class ArmSubsystem extends SubsystemBase {
     // update static variable accessible to other systems
     ARM_HEIGHT = getCalculatedHeight();
    
-   
-    
-    // Display values when debugging
-    counter++;
-    if(counter > 25 && Constants.kDebug) {
-        System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
-        System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
-        counter=0;
-    }    
-
     if (initialized && RobotState.isEnabled() && !RobotState.isTest()) {
 
       //check if pulley is home
@@ -556,7 +551,8 @@ public class ArmSubsystem extends SubsystemBase {
         //     ControlType.kPosition, ClosedLoopSlot.kSlot0, elbowFF.calculate(getElbowMotorPosition()));
       }
     
-      clawMotor.getClosedLoopController().setReference(clawLimiter.calculate(clawMotorTarget), ControlType.kPosition);
+      double clawSlewTarget = clawLimiter.calculate(clawMotorTarget);
+      clawMotor.getClosedLoopController().setReference(clawSlewTarget, ControlType.kPosition);
 
 
       pulleyStateGoal = new State(pulleyMotorTarget, 0);
@@ -565,7 +561,19 @@ public class ArmSubsystem extends SubsystemBase {
 
       // pulleyMotor.getClosedLoopController().setReference(pulleyLimiter.calculate(pulleyMotorTarget), ControlType.kPosition, ClosedLoopSlot.kSlot0, pulleyMotorFF());
       
-
+      // Display values when debugging  
+      if(Constants.kDebug) {
+        clawInitialized = SmartDashboard.getBoolean("Variable: clawInitialized", clawInitialized);
+        counter++;
+        if(counter > 25) {
+            //System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
+            //System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
+            System.out.println("Claw - Position: " + clawMotor.getEncoder().getPosition() + "  Target: " + clawMotorTarget + "  Slew Target: " + clawSlewTarget);
+            counter=0;
+        }     
+      }   
     }
+   
   }
+
 }
