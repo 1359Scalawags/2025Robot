@@ -75,7 +75,7 @@ public class ClimberSubsystem extends SubsystemBase {
     if (Constants.kTuning) {
       positionTuner = new SparkMaxPIDTunerPosition("Climber Position", positionMotor, ControlType.kPosition);
       positionTuner.setSafeReferenceRange(Constants.ClimberSubsystem.PositionMotor.kMinAngle,
-          Constants.ClimberSubsystem.PositionMotor.kMinAngle);
+          Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
       positionTuner.addToShuffleboard();
     }
 

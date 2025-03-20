@@ -61,7 +61,7 @@ public final class Constants {
 
       //Limits 
       //TODO; make sure these are right
-    public static final boolean kEnabled = false; // disables the climber
+    public static final boolean kEnabled = true; // disables the climber
     public static final double kIntializeDelay = 0.5;
 
     public static class LatchServo {
@@ -94,11 +94,11 @@ public final class Constants {
 
     public static class PositionMotor {
       public static final int kMotorID = 10;
-      public static final double kMaxAngle = 201.0;//0.037*360;
+      public static final double kMaxAngle = 207.0;//0.037*360;
       public static final double kMinAngle = 83.0;//0.457*360;
       public static final double kConversionFactor = 360;
       public static final double kEncoderOffset = 0.5;    
-      public static final double kDeployedAngle = 195.1; // 0.185*360;
+      public static final double kDeployedAngle = 185.1; // 0.185*360;
       public static final double kHomeAngle = 88.0; //0.442*360;
       public static final double kLockingPosition = 128.0;
       public static final double kLockedPosition = 138.0;
@@ -106,8 +106,8 @@ public final class Constants {
       public static final double kSlewRate = 45.0;
     public static class PIDF{
        // 0.05, 0.0000001, 0.08
-      public static final double kP = 0.05;
-      public static final double kI = 0.0000001;
+      public static final double kP = 0.07;
+      public static final double kI = 0.0000005;
       public static final double kD = 0.08;
       public static final double kIZone = 30;
       }
@@ -116,7 +116,7 @@ public final class Constants {
 
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
-    public static final boolean kEnabled = false;
+    public static final boolean kEnabled = true;
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
