@@ -48,7 +48,7 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
 
     //initial values
     private double p0, i0, d0, gravityFF0, minimumFF0, arbitraryFF0, velocity0, acceleration0;
-    private double gravityFF, minimumFF, arbitraryFF, velocity, acceleration;
+    private double arbitraryFF, velocity, acceleration;
     
     //PID tuning
     private PIDController tuner;  
@@ -91,7 +91,7 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         all
     }
 
-    public SparkMaxTrapezoidalTuner(String name, SparkMax motor, ControlType controlType) {
+    public SparkMaxTrapezoidalTuner(String name, SparkMax motor, ControlType controlType, GravityAssistedFeedForward gravityController) {
         this.name = name;
         this.motor = motor;
         this.controlType = controlType;        
@@ -132,13 +132,13 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         this.motionProfile = null;
 
         // feed forward initialization
-        this.ffController = null;
+        this.ffController = gravityController;
         this.arbitraryFF0 = 0;    
-        this.gravityFF0 = 0;
-        this.minimumFF0 = 0;    
-
-
-
+        if(this.ffController != null) {
+            this.gravityFF0 = this.ffController.getGravityFF();
+            this.minimumFF0 = this.ffController.getMinimumFF();              
+        }
+  
         //build shuffleboard interface
         setupShuffleboard();
 
@@ -155,19 +155,6 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         this.acceleration = this.acceleration0;
         this.velocity = this.velocity0;
         rebuildMotionProfile();
-    }
-
-    public void setFeedForwardController(GravityAssistedFeedForward controller) {
-        this.ffController = controller;
-        if(ffController != null) {
-            this.gravityFF0 = ffController.getGravityFF();
-            this.minimumFF0 = ffController.getMinimumFF();               
-        } else {
-            this.gravityFF0 = 0;
-            this.minimumFF0 = 0;    
-        }
-        this.gravityFF = this.gravityFF0;
-        this.minimumFF = this.minimumFF0;
     }
 
     public void setSafeReferenceRange(double min, double max) {
@@ -267,13 +254,13 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
             .withSize(1,1)
             .getEntry();  
 
-        if(ffController != null) {
-            this.minimumFFEntry = this.feedForwardLayout.add("Min Grav FF", this.minimumFF)
+        if(this.ffController != null) {
+            this.minimumFFEntry = this.feedForwardLayout.add("Min Grav FF", this.ffController.getMinimumFF())
                 .withWidget(BuiltInWidgets.kTextView)
                 .withPosition(0,1)
                 .withSize(1,1)
                 .getEntry();  
-            this.gravityFFEntry = this.feedForwardLayout.add("Gravity FF", this.gravityFF)
+            this.gravityFFEntry = this.feedForwardLayout.add("Gravity FF", this.ffController.getGravityFF())
                 .withWidget(BuiltInWidgets.kTextView)
                 .withPosition(0,2)
                 .withSize(1,1)
@@ -331,11 +318,6 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
             rebuildMotionProfile();
         }
 
-        if(ffController != null) {
-            ffController.setMinimumFF(this.minimumFF);
-            ffController.setGravityFF(this.gravityFF);
-        }
-
         if(this.debugVerbosity == Verbosity.commands || this.debugVerbosity == Verbosity.all) {
             System.out.println(this.getDebugString("Apply"));
         }
@@ -348,8 +330,10 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         sb.append("|  I: " + df10.format(configAccessor.getI()) + " - ");
         sb.append("|  D: " + df10.format(configAccessor.getD()) + "\n");
         sb.append("|  FF: Arbitrary: " + df10.format(this.arbitraryFF) + " - ");
-        sb.append("|  Gravity: " + df10.format(this.gravityFF) + " - ");
-        sb.append("|  Min Grav: " + df10.format(this.minimumFF) + "\n");
+        if(ffController != null) {
+            sb.append("|  Gravity: " + df10.format(this.ffController.getGravityFF()) + " - ");
+            sb.append("|  Min Grav: " + df10.format(this.ffController.getMinimumFF()) + "\n");            
+        }
         return sb.toString();    
     }
 
@@ -357,8 +341,10 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
 
         this.reference = MathUtil.clamp(0, this.minReference, this.maxReference);
         this.arbitraryFF = this.arbitraryFF0;
-        this.gravityFF = this.gravityFF0;
-        this.minimumFF = this.minimumFF0;
+        if(ffController != null) {
+            this.ffController.setGravityFF(this.gravityFF0);
+            this.ffController.setMinimumFF(this.minimumFF0);
+        }
         this.acceleration = this.acceleration0;
         this.velocity = this.velocity0;
 
@@ -375,8 +361,8 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         // update feedforward
         this.arbitraryFFEntry.setDouble(this.arbitraryFF);
         if(ffController != null) {
-            this.gravityFFEntry.setDouble(this.gravityFF);
-            this.minimumFFEntry.setDouble(this.minimumFF);            
+            this.gravityFFEntry.setDouble(this.ffController.getGravityFF());
+            this.minimumFFEntry.setDouble(this.ffController.getMinimumFF());            
         }
 
         // update trapezoid profile
@@ -388,10 +374,10 @@ public class SparkMaxTrapezoidalTuner implements ISparkMaxTuner {
         // update feedforward
         this.arbitraryFF = arbitraryFFEntry.getDouble(this.arbitraryFF0);
         if(ffController != null) {
-            this.gravityFF = gravityFFEntry.getDouble(this.gravityFF0);
-            this.minimumFF = minimumFFEntry.getDouble(this.minimumFF);
-            this.ffController.setGravityFF(this.gravityFF);
-            this.ffController.setMinimumFF(this.minimumFF);            
+            double gff = gravityFFEntry.getDouble(this.gravityFF0);
+            double mff = minimumFFEntry.getDouble(this.minimumFF0);
+            this.ffController.setGravityFF(gff);
+            this.ffController.setMinimumFF(mff);            
         }
 
         // update trapezoid profile

@@ -102,18 +102,16 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ArmSubsystem.Wrist.PIDF.kGravityFF, Constants.ArmSubsystem.Wrist.kHorizontalAngle);
 
     if(Constants.kTuning) {
-      elbowTuner = new SparkMaxTrapezoidalTuner("Elbow Motor", elbowMotor, ControlType.kPosition);
+      elbowTuner = new SparkMaxTrapezoidalTuner("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
       elbowTuner.setMotionProfile(Constants.ArmSubsystem.Elbow.kSlewRate, Constants.ArmSubsystem.Elbow.kAccelerationRate);      
-      elbowTuner.setFeedForwardController(elbowFF);
       elbowTuner.setSafeReferenceRange(185, 300);
       elbowTuner.setVerbosity(Verbosity.all, 2.0);
 
-      wristTuner = new SparkMaxTrapezoidalTuner("Wrist Motor", wristMotor, ControlType.kPosition);
+      wristTuner = new SparkMaxTrapezoidalTuner("Wrist Motor", wristMotor, ControlType.kPosition, wristFF);
       wristTuner.setMotionProfile(Constants.ArmSubsystem.Wrist.kSlewRate, Constants.ArmSubsystem.Wrist.kAccelerationRate);
-      wristTuner.setFeedForwardController(wristFF);
       wristTuner.setVerbosity(Verbosity.commands, 2.0);
 
-      clawTuner = new SparkMaxTrapezoidalTuner("Claw Motor", clawMotor, ControlType.kPosition);
+      clawTuner = new SparkMaxTrapezoidalTuner("Claw Motor", clawMotor, ControlType.kPosition, null);
       clawTuner.setMotionProfile(Constants.ArmSubsystem.Claw.kSlewRate, Constants.ArmSubsystem.Claw.kAccelerationRate);
       clawTuner.setSafeReferenceRange(Constants.ArmSubsystem.Claw.kMinLimit, Constants.ArmSubsystem.Claw.kMaxLimit);
       clawTuner.setVerbosity(Verbosity.commands, 2.0);

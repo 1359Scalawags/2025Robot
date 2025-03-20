@@ -1,0 +1,110 @@
+{
+  "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
+    "Shuffleboard": {
+      "Claw Motor Tuner": {
+        "Encoder Monitoring": {
+          "open": true
+        },
+        "Feed Forward": {
+          "open": true
+        },
+        "Trapezoid Profile": {
+          "open": true
+        }
+      },
+      "Elbow Motor Tuner": {
+        "Commands": {
+          "open": true
+        },
+        "Feed Forward": {
+          "open": true
+        },
+        "Trapezoid Profile": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    },
+    "Transitory Values": {
+      "open": false
+    },
+    "combined": true,
+    "transitory": {
+      "Shuffleboard": {
+        "Claw Motor Tuner": {
+          "Commands": {
+            "open": true
+          },
+          "PID": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Arm/ClawLimitSwitch": "Digital Input",
+      "/Shuffleboard/Claw Motor Tuner/Commands/Apply": "Command",
+      "/Shuffleboard/Claw Motor Tuner/Commands/Reset": "Command",
+      "/Shuffleboard/Claw Motor Tuner/Commands/STOP!": "Command",
+      "/Shuffleboard/Claw Motor Tuner/Commands/Start": "Command",
+      "/Shuffleboard/Claw Motor Tuner/PID": "PIDController",
+      "/Shuffleboard/Elbow Motor Tuner/Commands/Apply": "Command",
+      "/Shuffleboard/Elbow Motor Tuner/Commands/Reset": "Command",
+      "/Shuffleboard/Elbow Motor Tuner/Commands/STOP!": "Command",
+      "/Shuffleboard/Elbow Motor Tuner/Commands/Start": "Command",
+      "/Shuffleboard/Elbow Motor Tuner/PID": "PIDController",
+      "/Shuffleboard/Wrist Motor Tuner/Commands/Apply": "Command",
+      "/Shuffleboard/Wrist Motor Tuner/Commands/Reset": "Command",
+      "/Shuffleboard/Wrist Motor Tuner/Commands/STOP!": "Command",
+      "/Shuffleboard/Wrist Motor Tuner/Commands/Start": "Command",
+      "/Shuffleboard/Wrist Motor Tuner/PID": "PIDController",
+      "/SmartDashboard/Alerts": "Alerts",
+      "/SmartDashboard/Encoders": "Alerts",
+      "/SmartDashboard/IMU": "Alerts",
+      "/SmartDashboard/JSON": "Alerts",
+      "/SmartDashboard/Motors": "Alerts",
+      "/SmartDashboard/PathPlanner": "Alerts",
+      "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/Swerve Drive": "Alerts"
+    },
+    "windows": {
+      "/Shuffleboard/Claw Motor Tuner/PID": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Elbow Motor Tuner/Commands/STOP!": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/Elbow Motor Tuner/Commands/Start": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Server": {
+      "Publishers": {
+        "open": true
+      },
+      "open": true
+    }
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "localhost"
+  }
+}
