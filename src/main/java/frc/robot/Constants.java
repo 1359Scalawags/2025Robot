@@ -145,7 +145,7 @@ public final class Constants {
       public static final double kConversionFactor = 0.13402;
       public static final double kMaxLimit = 52;
       public static final double kMinLimit = 0;
-      public static final double kSlewRate = 10; //5
+      public static final double kSlewRate = 8; //5
       //public static final double kHomingVelocity = -2;
       public static final double kStageTwoPulleyPosition = 12; 
       public static final boolean kLimitSwitchPressedState = false;
@@ -153,15 +153,15 @@ public final class Constants {
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
-      public static final double kAccelerationRate = 24;
+      public static final double kAccelerationRate = 48;
     public static class PIDF{
        //0.07f, 0.00003f, 0.07f
       public static final double kP = 0.05;
       public static final double kI = 0.00006;
       public static final double kD = 0.07;
       public static final double kIZone = 0;//5;
-      public static final double kStageOneFF = 0;//0.15;
-      public static final double kStageTwoFF = 0;//0.2;
+      public static final double kStageOneFF = 0.15;//0.15;
+      public static final double kStageTwoFF = 0.2;//0.2;
       }
     }
 
