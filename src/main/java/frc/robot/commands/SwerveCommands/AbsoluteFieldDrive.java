@@ -16,7 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An example command that uses an example subsystem. */
+
 public class AbsoluteFieldDrive extends Command {
     private SwerveSubsystem swerve;
     private DoubleSupplier vX;
@@ -24,9 +24,10 @@ public class AbsoluteFieldDrive extends Command {
     private DoubleSupplier omega;
     private DoubleSupplier throttle;
     private BooleanSupplier feildRelitive;
-    private boolean isOpenLoop;
     private SwerveController controller;
-
+    
+    @SuppressWarnings("unused")
+    private boolean isOpenLoop;
     /**
      * 
      * @param swerve

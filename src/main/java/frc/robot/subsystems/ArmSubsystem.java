@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.ClosedLoopSlot;
@@ -9,14 +13,11 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
@@ -26,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
-import frc.robot.extensions.SimableSparkMax;
 import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
 import frc.robot.extensions.SparkMaxPIDTunerPosition;
 import frc.robot.extensions.SparkMaxPIDTunerBase.Verbosity;
@@ -347,7 +347,6 @@ public class ArmSubsystem extends SubsystemBase {
       clawMotorTarget = MathUtil.clamp(clawMotorPosition, Constants.ArmSubsystem.Claw.kMinLimit,
           Constants.ArmSubsystem.Claw.kMaxLimit);      
     }
-
   }
 
   public ArmPosition getArmPosition() {
@@ -488,8 +487,13 @@ public class ArmSubsystem extends SubsystemBase {
     return clawInitialized;
   }
 
+  public boolean isPulleyInitialized() {
+    return pulleyInitialized;
+  }
+
   int counter = 0;
   // TODO: moving slow when within the range of the limit switch?
+  @SuppressWarnings("unused")
   @Override
   public void periodic() {
 
