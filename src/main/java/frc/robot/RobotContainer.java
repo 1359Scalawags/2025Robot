@@ -96,7 +96,7 @@ public class RobotContainer {
         .withCaptureDs(true)
         .withCaptureNt(true));
 
-    // TODO: use an external drive for logs. Writing logs to the RoboRio is known to fry the internal memory.
+    // TODO: use an external drive for logs (e.g. USB drive). Writing logs directly to the RoboRio will shorten the life of the RoboRio.
     DogLog.setEnabled(!DataLogManager.getLogDir().equals("/home/lvuser/logs"));
 
     autoChooser = AutoBuilder.buildAutoChooser(); //This will populate all the autos in the project.
