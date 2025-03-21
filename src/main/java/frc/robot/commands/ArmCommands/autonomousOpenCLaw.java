@@ -1,16 +1,16 @@
+package frc.robot.commands.ArmCommands;
+
 
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 
-package frc.robot.commands.ArmCommands;
-
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class closeClawCommand extends Command {
+public class autonomousOpenCLaw extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
 
@@ -19,7 +19,7 @@ public class closeClawCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public closeClawCommand(ArmSubsystem subsystem) {
+  public autonomousOpenCLaw(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     // addRequirements(subsystem);
@@ -28,7 +28,7 @@ public class closeClawCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      m_subsystem.closeClaw();
+      m_subsystem.autonomousOpenClaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,8 +42,9 @@ public class closeClawCommand extends Command {
 
   // Returns true when the command should end.
   @Override
-    //TODO: do we want tolerances?
+    //TODO: Do we want tolerences?
   public boolean isFinished() {
     return true;
   }
 }
+

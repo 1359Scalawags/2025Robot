@@ -10,6 +10,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ArmCommands.ZeroClaw;
 import frc.robot.commands.ArmCommands.ZeroPulley;
+import frc.robot.commands.ArmCommands.autonomousOpenCLaw;
 import frc.robot.commands.ArmCommands.InitilizeArmEncoders;
 import frc.robot.commands.ArmCommands.MovePulleyWithJoystick;
 import frc.robot.commands.ArmCommands.closeClawCommand;
@@ -110,17 +111,15 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser(); // This will populate all the autos in the project.
     pipelineChooser = new SendableChooser<Command>();
 
-    if (Constants.kDebug) {
-      SmartDashboard.putData("Pipeline Chooser", pipelineChooser);
-      SmartDashboard.putData("Auto Chooser ", autoChooser);
-    }
+    SmartDashboard.putData("Pipeline Chooser", pipelineChooser);
+    SmartDashboard.putData("Auto Chooser ", autoChooser);
 
     // Configure the trigger bindings
     configureBindings();
     setDefaultCommands();
 
-    // NamedNamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
-    // Commands.registerCommand("moveL2", new openClawCommand(m_ArmSubsystem));
+    NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
+    NamedCommands.registerCommand("Open Claw", new autonomousOpenCLaw(m_ArmSubsystem));
   }
 
   private void setDefaultCommands() {

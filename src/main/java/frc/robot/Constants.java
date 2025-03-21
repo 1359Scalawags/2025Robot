@@ -50,7 +50,7 @@ public final class Constants {
      * -------------------------------------
      *  Enconder:
      * BACK LEFT ID-   5
-     * FRONT RIGHT ID- 6
+     * FRONT RIGHT ID- 
      * FRONT LEFT ID-  7
      * BACK RIGHT ID-  8
      */
@@ -124,11 +124,11 @@ public final class Constants {
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,305,293);
       public static final ArmPosition kHumanStation = new ArmPosition(12,300,203);
-      public static final ArmPosition kGround = new ArmPosition(2,193,148);//correct
+      public static final ArmPosition kGround = new ArmPosition(2.25,193,148);//correct
       public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
       public static final ArmPosition kLevel2 = new ArmPosition(9,305,293);//correct
       public static final ArmPosition klevel3 = new ArmPosition(24.5,305,293);//correct
-      public static final ArmPosition klevel4 = new ArmPosition(50,315,278);//correct
+      public static final ArmPosition klevel4 = new ArmPosition(51,315,278);//correct
 
       // public static final ArmPosition kHome = new ArmPosition(0,232,200);
       // public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
@@ -147,17 +147,17 @@ public final class Constants {
       public static final double kMinLimit = 0;
       public static final double kSlewRate = 10; //5
       //public static final double kHomingVelocity = -2;
-      public static final double kStageTwoPulleyPosition = 25; 
+      public static final double kStageTwoPulleyPosition = 12; 
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kHomeLimitSwitchID = 0;
       public static final double kLimitSwitchPosition = 1;
       public static final double kTolerance = 0.5;
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
-      public static final double kAccelerationRate = 45;
+      public static final double kAccelerationRate = 24;
     public static class PIDF{
        //0.07f, 0.00003f, 0.07f
-      public static final double kP = 0.07;
-      public static final double kI = 0.00003;
+      public static final double kP = 0.05;
+      public static final double kI = 0.00006;
       public static final double kD = 0.07;
       public static final double kIZone = 0;//5;
       public static final double kStageOneFF = 0;//0.15;
@@ -221,8 +221,9 @@ public final class Constants {
       public static final boolean kLimitSwitchPressedState = false;
       public static final int kLimitSwitchID = 1;
       //public static final double kHomingVelocity = 300;
-      public static final double kHomingPositionIncrement = 1.0 * 0.020; // homing loop time is 20ms
-      
+      public static final double kHomingPositionIncrement = 75.0 * 0.020; // homing loop time is 20ms
+    public static final double kAutoOpenClaw = -5;
+    
     public static class PIDF{
           //0.05, 0.0001, 0.03
       public static final double kP = 0.075;
