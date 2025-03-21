@@ -321,6 +321,10 @@ public class ArmSubsystem extends SubsystemBase {
     goToClawMotorPosition(Constants.ArmSubsystem.Claw.kHalfClaw, false);
   }
 
+  public void autonomousOpenClaw() {
+    goToClawMotorPosition(Constants.ArmSubsystem.Claw.kAutoOpenClaw, false);
+  }
+
   public void goToPulleyMotorPosition(double pulleyMotorPosition) {
     pulleyMotorTarget = MathUtil.clamp(pulleyMotorPosition, Constants.ArmSubsystem.Pulley.kMinLimit,
         Constants.ArmSubsystem.Pulley.kMaxLimit);

@@ -107,12 +107,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    //XXX: Is this necessary here? If so, also include the arm?
+
     CommandScheduler.getInstance().schedule(m_robotContainer.initializeClimberEncoders());
     CommandScheduler.getInstance().schedule(m_robotContainer.initializeClimberPosition());    
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
-    CommandScheduler.getInstance().schedule(m_robotContainer.homeClaw());
 
   }
 

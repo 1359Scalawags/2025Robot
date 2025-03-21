@@ -5,9 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Go To Reef (Center)"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Go To Reef (Center)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "moveL2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Open Claw"
           }
         }
       ]
