@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.*;
+
+import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -15,16 +18,25 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
@@ -67,6 +79,15 @@ public class ArmSubsystem extends SubsystemBase {
   private TrapezoidProfile wristProfile;
   private State wristStateGoal;
   private State wristStateSetpoint;
+
+  // For simulation
+  private DCMotor pulleySimMotor, elbowSimMotor, wristSimMotor, clawSimMotor;
+  private SparkMaxSim pulleySim, elbowSim, wristSim, clawSim;
+  private ElevatorSim pulleyElevatorSim;
+  private SingleJointedArmSim elbowArmSim;
+  private SingleJointedArmSim wristArmSim;
+  private LinearSystemSim clawLinearSim;
+
 
   public ArmSubsystem() {
 
@@ -144,6 +165,38 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Shuffleboard.getTab("Arm").addNumber("Elbow Absolute", elbowMotor.getAppliedOutput());
     // Shuffleboard.getTab("Arm").add("Wrist Absolute", wristMotor.getAbsoluteEncoder());
+
+    if(Robot.isSimulation()) {
+      clawSimMotor = DCMotor.getNEO(1);
+      pulleySimMotor = DCMotor.getNeo550(1);
+      wristSimMotor = DCMotor.getNeo550(1);
+      elbowSimMotor = DCMotor.getNeo550(1);
+
+      pulleySim = new SparkMaxSim(pulleyMotor, pulleySimMotor);
+      elbowSim = new SparkMaxSim(elbowMotor, elbowSimMotor);
+      wristSim = new SparkMaxSim(wristMotor, wristSimMotor);
+      clawSim = new SparkMaxSim(clawMotor, clawSimMotor);
+
+      pulleyElevatorSim = new ElevatorSim(
+                          pulleySimMotor,
+                          1.0/64,
+                          10.0,
+                          0.1,
+                          0,
+                          1.32,
+                          true,
+                          0,
+                          0.01,
+                          0.0);
+
+      Angle minElbow = Degrees.of(Constants.ArmSubsystem.Elbow.kMinLimit);
+      Angle maxElbow = Degrees.of(Constants.ArmSubsystem.Elbow.kMaxLimit);
+      Angle startElbow = Degrees.of(150);
+      wristArmSim = new SingleJointedArmSim(clawSimMotor, 1.0/64, 1, 0.5, minElbow.in(Radians), maxElbow.in(Radians), true, startElbow.in(Radians), 0, 0);
+                      
+    }
+
+
   }
 
   public void initializeArm() {
@@ -582,6 +635,15 @@ public class ArmSubsystem extends SubsystemBase {
       }   
     }
    
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    pulleyElevatorSim.setInput(pulleySim.getAppliedOutput() * RoboRioSim.getVInVoltage());
+    pulleyElevatorSim.update(Constants.kRobotLoopTime);
+
+    pulleySim.iterate(pulleyElevatorSim.getVelocityMetersPerSecond(), RoboRioSim.getVInVoltage(), 0.02);
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(pulleyElevatorSim.getCurrentDrawAmps()));
   }
 
 }
