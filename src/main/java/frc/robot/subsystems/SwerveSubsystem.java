@@ -509,7 +509,7 @@ public class SwerveSubsystem extends SubsystemBase {
   {
     // slows the movment of the robot as the pulley increases
     Translation2d translationMod = translation.times(ArmSubsystem.getSpeedMultiplier());
-    double rotationMod =  ((rotation * Constants.SwerveSubsystem.kAngleSpeedMultiplier) * (ArmSubsystem.getSpeedMultiplier() * 1/2));
+    double rotationMod =  ((rotation * Constants.SwerveSubsystem.kAngleSpeedMultiplier) * (ArmSubsystem.getSpeedMultiplier()*(1/(1.5))));
     //XXX: do we need to limit the velocity of the rotation 
     swerveDrive.drive(translationMod,
                       rotationMod,
