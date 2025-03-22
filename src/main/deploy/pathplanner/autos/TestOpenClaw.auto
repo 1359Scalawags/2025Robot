@@ -5,15 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "moveL2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OpenClaw"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "noMove"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "moveL2"
+                }
+              }
+            ]
           }
         }
       ]
