@@ -175,7 +175,7 @@ public final class Constants {
       public static final double kMinLimit = 195;
       public static final double kSlewRate = 100.0; //45?
       public static final double kHorizontalAngle = 232.0;
-      public static final double kTolerance = 1.0;
+      public static final double kTolerance = 2.5;
       public static final double kAccelerationRate = 90.0;
       public static class PIDF{
           //0.025, 0.00001, 0.07
@@ -196,7 +196,7 @@ public final class Constants {
       public static final double kMinLimit = 142.0; // measure when elbow is horizontal
       public static final double kSlewRate = 60; //45
       public static final double kHorizontalAngle =232.0; 
-      public static final double kTolerance = 2.0;
+      public static final double kTolerance = 3.0;
     public static final double kAccelerationRate = 60;
     public static class PIDF{
       // (0.006, 0.0000006, 0.006)
@@ -214,10 +214,10 @@ public final class Constants {
       public static final int kMotorID = 18;
       public static final double kMotorOffset = 0;
       public static final double kConversionFactor = 360;
-      public static final double kMaxLimit = 0; //good
+      public static final double kMaxLimit = 3.5; //good
       public static final double kMinLimit = -17.38;
       public static final double kSlewRate = 20;
-      public static final double kCloseClaw = 0;//good
+      public static final double kCloseClaw = 3.25;//good
       public static final double kOpenClaw = -17.38;//good
       public static final double kHalfClaw = -17.38;//-10;//good
       public static final boolean kLimitSwitchPressedState = false;
