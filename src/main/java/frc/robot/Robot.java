@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
       armCamera = CameraServer.startAutomaticCapture(0);
       // armCamera.isValid();
       armCamera.setResolution(640, 360);
-      armCamera.setFPS(20);      
+      armCamera.setFPS(15);      
     } catch (Exception ex) {
       System.out.println("The USB camera could not be initialized.");
     }

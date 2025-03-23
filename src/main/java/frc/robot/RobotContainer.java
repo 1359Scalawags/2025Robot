@@ -42,6 +42,10 @@ import frc.robot.commands.SwerveCommands.FieldCentricCommand;
 import frc.robot.commands.SwerveCommands.RobotCentricCommand;
 import frc.robot.commands.SwerveCommands.RotateCCWCommand;
 import frc.robot.commands.SwerveCommands.ZeroGyroCommand;
+import frc.robot.commands.SwerveCommands.Nudge.NudgeCCW;
+import frc.robot.commands.SwerveCommands.Nudge.NudgeCW;
+import frc.robot.commands.SwerveCommands.Nudge.NudgeLeft;
+import frc.robot.commands.SwerveCommands.Nudge.NudgeRight;
 import frc.robot.commands.SwerveCommands.Testing.MoveCardinal;
 import frc.robot.commands.SwerveCommands.Testing.MoveCardinal.CardinalDirection;
 import frc.robot.commands.SwerveCommands.Testing.Rotate;
@@ -107,12 +111,12 @@ public class RobotContainer {
     }
     if (Constants.ArmSubsystem.kEnabled) {
       m_ArmSubsystem = new ArmSubsystem();
-      NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
-      NamedCommands.registerCommand("OpenClaw", new autonomousOpenCLaw(m_ArmSubsystem));
+    //   NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
+    //   NamedCommands.registerCommand("OpenClaw", new autonomousOpenCLaw(m_ArmSubsystem));
     } else {
       m_ArmSubsystem = null;
-      NamedCommands.registerCommand("moveL2", new WaitCommand(0.0001));
-      NamedCommands.registerCommand("OpenClaw", new WaitCommand(0.0001));
+      // NamedCommands.registerCommand("moveL2", new WaitCommand(0.0001));
+      // NamedCommands.registerCommand("OpenClaw", new WaitCommand(0.0001));
     }
 
     // adding in the named comamnds for PP (Needs to be at top?)
@@ -276,6 +280,10 @@ public class RobotContainer {
     m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
     m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
     m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
+    m_DriverJoystick.povRight().onTrue(new NudgeCW(m_SwerveSubsystem));
+    m_DriverJoystick.povLeft().onTrue(new NudgeCCW(m_SwerveSubsystem));
+    m_DriverJoystick.button(2).onTrue(new NudgeLeft(m_SwerveSubsystem));
+    m_DriverJoystick.button(3).onTrue(new NudgeRight(m_SwerveSubsystem));
 
     // if (Constants.kDebug) {
     // new JoystickButton(m_DriverJoystick,
@@ -294,13 +302,13 @@ public class RobotContainer {
 
     // XXX: These are for testing only. They should be commented after testing is
     // completed.
-    m_DriverJoystick.button(12).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.N));
-    m_DriverJoystick.button(15).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.S));
-    m_DriverJoystick.button(16).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.E));
-    m_DriverJoystick.button(13).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.W));
-    m_DriverJoystick.button(8).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.SE));
-    m_DriverJoystick.button(11).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CW));
-    m_DriverJoystick.button(5).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CCW));
+    // m_DriverJoystick.button(12).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.N));
+    // m_DriverJoystick.button(15).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.S));
+    // m_DriverJoystick.button(16).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.E));
+    // m_DriverJoystick.button(13).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.W));
+    // m_DriverJoystick.button(8).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.SE));
+    // m_DriverJoystick.button(11).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CW));
+    // m_DriverJoystick.button(5).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CCW));
 
   }
 
