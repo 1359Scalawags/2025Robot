@@ -98,7 +98,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
+ 
     if (Constants.ClimberSubsystem.kEnabled) {
       m_ClimberSubsystem = new ClimberSubsystem();
     } else {
@@ -106,13 +106,15 @@ public class RobotContainer {
     }
     if (Constants.ArmSubsystem.kEnabled) {
       m_ArmSubsystem = new ArmSubsystem();
+      NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
+      NamedCommands.registerCommand("OpenClaw", new autonomousOpenCLaw(m_ArmSubsystem));
     } else {
       m_ArmSubsystem = null;
     }
 
     // adding in the named comamnds for PP (Needs to be at top?)
-    NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
-    NamedCommands.registerCommand("OpenClaw", new autonomousOpenCLaw(m_ArmSubsystem));
+    
+    
 
 
     autoChooser = AutoBuilder.buildAutoChooser(); // This will populate all the autos in the project.
