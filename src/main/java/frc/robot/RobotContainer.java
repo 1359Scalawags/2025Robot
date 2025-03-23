@@ -13,6 +13,7 @@ import frc.robot.commands.ArmCommands.ZeroPulley;
 import frc.robot.commands.ArmCommands.autonomousOpenCLaw;
 import frc.robot.commands.ArmCommands.InitilizeArmEncoders;
 import frc.robot.commands.ArmCommands.MovePulleyWithJoystick;
+import frc.robot.commands.ArmCommands.NudgePulleyHeight;
 import frc.robot.commands.ArmCommands.closeClawCommand;
 import frc.robot.commands.ArmCommands.goToHeightHome;
 import frc.robot.commands.ArmCommands.goToHeightHumanStation;
@@ -110,6 +111,8 @@ public class RobotContainer {
       NamedCommands.registerCommand("OpenClaw", new autonomousOpenCLaw(m_ArmSubsystem));
     } else {
       m_ArmSubsystem = null;
+      NamedCommands.registerCommand("moveL2", new WaitCommand(0.0001));
+      NamedCommands.registerCommand("OpenClaw", new WaitCommand(0.0001));
     }
 
     // adding in the named comamnds for PP (Needs to be at top?)
@@ -223,7 +226,10 @@ public class RobotContainer {
       m_AssistantJoystick.button(10).onTrue(new goToHeightLevelFour(m_ArmSubsystem));
       m_AssistantJoystick.button(7).onTrue(new goToHeightLevelThree(m_ArmSubsystem));
       m_AssistantJoystick.button(6).onTrue(new goToHeightLevelTwo(m_ArmSubsystem));
-      m_AssistantJoystick.button(9).onTrue(new goToHightGround(m_ArmSubsystem));      
+      m_AssistantJoystick.button(9).onTrue(new goToHightGround(m_ArmSubsystem)); 
+      
+      m_AssistantJoystick.povDown().onTrue(new NudgePulleyHeight(m_ArmSubsystem, NudgePulleyHeight.NudgeDirection.down));
+      m_AssistantJoystick.povUp().onTrue(new NudgePulleyHeight(m_ArmSubsystem, NudgePulleyHeight.NudgeDirection.up));
     }
 
 

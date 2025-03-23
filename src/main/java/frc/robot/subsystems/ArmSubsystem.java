@@ -331,6 +331,11 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ArmSubsystem.Pulley.kMaxLimit);
   }
 
+  public void nudgePulleyMotorPosition(double amount) {
+    pulleyMotorTarget =MathUtil.clamp(pulleyMotorTarget + amount, Constants.ArmSubsystem.Pulley.kMinLimit,
+    Constants.ArmSubsystem.Pulley.kMaxLimit);
+  }
+
   public void goToElbowMotorPosition(double elbowMotorPosition) {
     elbowMotorTarget = MathUtil.clamp(elbowMotorPosition, Constants.ArmSubsystem.Elbow.kMinLimit,
         Constants.ArmSubsystem.Elbow.kMaxLimit);

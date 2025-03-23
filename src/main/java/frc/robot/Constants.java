@@ -121,6 +121,7 @@ public final class Constants {
     public static final boolean kEnabled = true;
     public static final double kIntializeDelay = 1.0;
 
+
     public static class Positions {
       public static final ArmPosition kHome = new ArmPosition(1,305,293);
       public static final ArmPosition kHumanStation = new ArmPosition(19,283,169.5); //(232+40,(232+35)-85)
@@ -154,14 +155,15 @@ public final class Constants {
       public static final double kTolerance = 0.5;
       public static final double kHomingPositionIncrement = -5.0 * 0.020; // homing loop time is 20ms
       public static final double kAccelerationRate = 50;//48
-    public static class PIDF{
-       //0.07f, 0.00003f, 0.07f
-      public static final double kP = 0.145; //0.05
-      public static final double kI = 0.00006;
-      public static final double kD = 0.03; //0.07
-      public static final double kIZone = 0;//5;
-      public static final double kStageOneFF = 0.15;//0.15;
-      public static final double kStageTwoFF = 0.2;//0.2;
+      public static final double kPulleyNudgeUpDistance = 0.25;    
+      public static class PIDF{
+        //0.07f, 0.00003f, 0.07f
+        public static final double kP = 0.145; //0.05
+        public static final double kI = 0.00006;
+        public static final double kD = 0.03; //0.07
+        public static final double kIZone = 0;//5;
+        public static final double kStageOneFF = 0.15;//0.15;
+        public static final double kStageTwoFF = 0.2;//0.2;
       }
     }
 
