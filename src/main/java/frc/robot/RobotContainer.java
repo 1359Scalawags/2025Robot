@@ -114,9 +114,7 @@ public class RobotContainer {
 
     // adding in the named comamnds for PP (Needs to be at top?)
     
-    
-
-
+  
     autoChooser = AutoBuilder.buildAutoChooser(); // This will populate all the autos in the project.
     pipelineChooser = new SendableChooser<Command>();
 
