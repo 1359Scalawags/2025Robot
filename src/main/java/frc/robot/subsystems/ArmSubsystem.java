@@ -17,20 +17,15 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,12 +35,10 @@ import frc.robot.Robot;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
 import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
-import frc.robot.extensions.SparkMaxPIDTunerPosition;
 import frc.robot.extensions.SparkMaxPIDTunerBase.Verbosity;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  //private SimableSparkMax pulleyMotor, elbowMotor, wristMotor, clawMotor;
   private SparkMax pulleyMotor, elbowMotor;
   private double pulleyMotorTarget, elbowMotorTarget;
   private static double ARM_HEIGHT;
@@ -114,15 +107,26 @@ public class ArmSubsystem extends SubsystemBase {
 
       pulleyElevatorSim = new ElevatorSim(
                           pulleySimMotor,
-                          1.0/64,
+                          64/1.0,
                           10.0,
                           0.1,
                           0,
                           1.32,
                           true,
                           0,
-                          0.01,
-                          0.0);                
+                          0.01, 0.0);        
+
+       //estimated on 5 lbs and 15 inches (thinking of wrist and claw as stationary)       
+      elbowArmSim = new SingleJointedArmSim(
+                          elbowSimMotor, 
+                          64/1.0, 
+                          0.027435,
+                          0.3810,
+                          -1.0472,
+                          1.7453,
+                          true,
+                          0, //horizontal
+                          0.01, 0.0);
     }
   }
 
@@ -300,7 +304,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
   public boolean isPulleyAtHome() {
-    return homeLimitSwitch.get() == Constants.ArmSubsystem.Claw.kLimitSwitchPressedState;
+    return homeLimitSwitch.get() == Constants.ArmSubsystem.Pulley.kLimitSwitchPressedState;
   }
 
   public double pulleyMotorFF() {
@@ -380,6 +384,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     //update the SparkMax simulator
     pulleySim.iterate(pulleyElevatorSim.getVelocityMetersPerSecond(), RoboRioSim.getVInVoltage(), 0.02);
+
+    elbowArmSim.setInput(elbowSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
+    elbowArmSim.update(Constants.kRobotLoopTime);
 
     //update battery voltage
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(pulleySim.getMotorCurrent()));
