@@ -121,13 +121,13 @@ public final class Constants {
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
-      public static final ArmPosition kHome = new ArmPosition(1,305,293);
-      public static final ArmPosition kHumanStation = new ArmPosition(12,300,203);
-      public static final ArmPosition kGround = new ArmPosition(2.25,193,148);//correct
-      public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
-      public static final ArmPosition kLevel2 = new ArmPosition(9,305,293);//correct
-      public static final ArmPosition klevel3 = new ArmPosition(24.5,305,293);//correct
-      public static final ArmPosition klevel4 = new ArmPosition(51,315,278);//correct
+      public static final ArmPosition kHome = new ArmPosition(1,305);
+      public static final ArmPosition kHumanStation = new ArmPosition(12,300);
+      public static final ArmPosition kGround = new ArmPosition(2.25,193);//correct
+      public static final ArmPosition kLevel1 = new ArmPosition(1,295);//correct
+      public static final ArmPosition kLevel2 = new ArmPosition(9,305);//correct
+      public static final ArmPosition klevel3 = new ArmPosition(24.5,305);//correct
+      public static final ArmPosition klevel4 = new ArmPosition(51,315);//correct
 
       // public static final ArmPosition kHome = new ArmPosition(0,232,200);
       // public static final ArmPosition kHumanStation = new ArmPosition(0,232,210);
@@ -183,53 +183,6 @@ public final class Constants {
         public static final double kGravityFF = 0.45;
         public static final double kMINGravityFF = 0;
         }
-    }
-
-    public static class Wrist {
-      public static final int kMotorID = 16;
-      public static final double kMotorOffset = 0.737;
-      public static final double kConversionFactor = 360;
-      public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
-      public static final double kMinLimit = 147.0; // measure when elbow is horizontal
-      public static final double kSlewRate = 60; //45
-      public static final double kHorizontalAngle =232.0; 
-      public static final double kTolerance = 2.0;
-    public static final double kAccelerationRate = 60;
-    public static class PIDF{
-      // (0.006, 0.0000006, 0.006)
-      public static final double kP = 0.01; //0.0075;
-      public static final double kI = 0.00001; //0.00005;
-      public static final double kD = 0.03; //0.006;
-      public static final double kIZone = 5;
-      public static final double kGravityFF = 0.5; //0.1;
-      public static final double kMinGravityFF = 0;
-      }
-    }
-
-    public static class Claw {
-      // posotive motor value closes claw, negative opens
-      public static final int kMotorID = 18;
-      public static final double kMotorOffset = 0;
-      public static final double kConversionFactor = 360;
-      public static final double kMaxLimit = 0; //good
-      public static final double kMinLimit = -17.38;
-      public static final double kSlewRate = 20;
-      public static final double kCloseClaw = 0;//good
-      public static final double kOpenClaw = -17.38;//good
-      public static final double kHalfClaw = -8;//good
-      public static final boolean kLimitSwitchPressedState = false;
-      public static final int kLimitSwitchID = 1;
-      //public static final double kHomingVelocity = 300;
-      public static final double kHomingPositionIncrement = 75.0 * 0.020; // homing loop time is 20ms
-    public static final double kAutoOpenClaw = -5;
-    
-    public static class PIDF{
-          //0.05, 0.0001, 0.03
-      public static final double kP = 0.075;
-      public static final double kI = 0;
-      public static final double kD = 0.1;
-      public static final double kIZone = 2;
-      }
     }
   }
 
