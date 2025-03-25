@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TestSubsystem;
 import frc.robot.commands.ArmCommands.ZeroPulley;
 import frc.robot.commands.ArmCommands.InitilizeArmEncoders;
 import frc.robot.commands.ArmCommands.goToHeightHome;
@@ -33,9 +34,12 @@ import frc.robot.commands.SwerveCommands.Testing.MoveCardinal;
 import frc.robot.commands.SwerveCommands.Testing.MoveCardinal.CardinalDirection;
 import frc.robot.commands.SwerveCommands.Testing.Rotate;
 import frc.robot.commands.SwerveCommands.Testing.Rotate.RotateDirection;
+import frc.robot.commands.TestingCommands.ControlTestMotorWithJoystick;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import java.io.File;
+import java.util.ArrayList;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import dev.doglog.DogLog;
@@ -52,12 +56,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here
 
-  private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem(
-      new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Pearl"));
+  private final SwerveSubsystem m_SwerveSubsystem;
 
   // uncomment calls in Robot.java
   private final ArmSubsystem m_ArmSubsystem;
   private final ClimberSubsystem m_ClimberSubsystem;
+  private final TestSubsystem m_TestSubsystem;
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
   private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
@@ -73,6 +77,17 @@ public class RobotContainer {
     DogLogOptions logOptions = new DogLogOptions().withCaptureConsole(true).withCaptureDs(true).withLogExtras(true);
     DogLog.setOptions(logOptions);
 
+    if(Constants.TestSystem.kEnabled) {
+      m_TestSubsystem = new TestSubsystem();
+    } else {
+      m_TestSubsystem = null;
+    }
+
+    if(Constants.SwerveSubsystem.kEnabled) {
+      m_SwerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "YAGSLConfigJSON/Pearl")); 
+    } else {
+      m_SwerveSubsystem = null;
+    }
 
     if (Constants.ClimberSubsystem.kEnabled) {
       m_ClimberSubsystem = new ClimberSubsystem();
@@ -84,33 +99,49 @@ public class RobotContainer {
     } else {
       m_ArmSubsystem = null;
     }
-    autoChooser = AutoBuilder.buildAutoChooser(); // This will populate all the autos in the project.
-    pipelineChooser = new SendableChooser<Command>();
 
+    if(m_SwerveSubsystem != null) {
+      autoChooser = AutoBuilder.buildAutoChooser(); // This will populate all the autos in the project.      
+    } else {
+      autoChooser = new SendableChooser<Command>();
+    }
+    SmartDashboard.putData("Auto Chooser ", autoChooser);    
+
+    pipelineChooser = new SendableChooser<Command>();
     SmartDashboard.putData("Pipeline Chooser", pipelineChooser);
-    SmartDashboard.putData("Auto Chooser ", autoChooser);
+
 
     // Configure the trigger bindings
     configureBindings();
     setDefaultCommands();
 
-    NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
   }
 
   private void setDefaultCommands() {
-    m_SwerveSubsystem.setDefaultCommand(
-        new AbsoluteFieldDrive(m_SwerveSubsystem,
-            this::driverGetForward,
-            this::driverGetRight,
-            this::driverGetZ,
-            this::driverGetThrottle,
-            m_SwerveSubsystem::getFeildCentric,
-            false));
+    if(m_SwerveSubsystem != null) {
+      m_SwerveSubsystem.setDefaultCommand(
+          new AbsoluteFieldDrive(
+              m_SwerveSubsystem,
+              this::driverGetForward,
+              this::driverGetRight,
+              this::driverGetZ,
+              this::driverGetThrottle,
+              m_SwerveSubsystem::getFeildCentric,
+              false));      
+    }
 
     if (m_ClimberSubsystem != null) {
       m_ClimberSubsystem.setDefaultCommand(
-          new MoveClimber(m_ClimberSubsystem,
+          new MoveClimber(
+              m_ClimberSubsystem,
               this::assistantGetY));
+    }
+
+    if(m_TestSubsystem != null) {
+      m_TestSubsystem.setDefaultCommand(
+          new ControlTestMotorWithJoystick(
+              m_TestSubsystem, 
+              this::testGetForward));
     }
 
   }
@@ -189,16 +220,19 @@ public class RobotContainer {
       m_AssistantJoystick.button(3).onTrue(new DeployClimber(m_ClimberSubsystem));
     }
 
-    m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
-    m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
-    m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
-    m_DriverJoystick.button(12).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.N));
-    m_DriverJoystick.button(15).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.S));
-    m_DriverJoystick.button(16).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.E));
-    m_DriverJoystick.button(13).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.W));
-    m_DriverJoystick.button(8).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.SE));
-    m_DriverJoystick.button(11).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CW));
-    m_DriverJoystick.button(5).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CCW));
+    if(m_SwerveSubsystem != null) {
+      m_DriverJoystick.button(1).onTrue(new ZeroGyroCommand(m_SwerveSubsystem));
+      m_DriverJoystick.button(2).onTrue(new FieldCentricCommand(m_SwerveSubsystem));
+      m_DriverJoystick.button(3).onTrue(new RobotCentricCommand(m_SwerveSubsystem));
+      m_DriverJoystick.button(12).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.N));
+      m_DriverJoystick.button(15).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.S));
+      m_DriverJoystick.button(16).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.E));
+      m_DriverJoystick.button(13).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.W));
+      m_DriverJoystick.button(8).whileTrue(new MoveCardinal(m_SwerveSubsystem, CardinalDirection.SE));
+      m_DriverJoystick.button(11).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CW));
+      m_DriverJoystick.button(5).whileTrue(new Rotate(m_SwerveSubsystem, RotateDirection.CCW));      
+    }
+ 
 
   }
 
@@ -241,6 +275,13 @@ public class RobotContainer {
     //return Commands.sequence(zeroPulley, new WaitCommand(0.5), homePulley);
   }
 
+  public ArrayList<Runnable> getSimulationPeriodicMethods() {
+    ArrayList<Runnable> simPeriodicList = new ArrayList<Runnable>();
+    if(m_TestSubsystem != null) {
+      simPeriodicList.add(m_TestSubsystem::simulationPeriodic);
+    }
+    return simPeriodicList;
+  }
   // public Runnable getArmFastSimPeriodic() {
   //   return m_ArmSubsystem::fastSimulationPeriodic;
   // }

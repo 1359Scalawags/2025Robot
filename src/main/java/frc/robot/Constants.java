@@ -24,7 +24,7 @@ public final class Constants {
   public static final double kSimulationLoopTime = 0.02;
 
   public static class SwerveSubsystem {
-
+    public static final boolean kEnabled = false;
     public static final double MAX_SPEED = 12;
     public static final double LOOP_TIME = 0;
     public static final double ROBOT_MASS = 100 ;
@@ -32,6 +32,7 @@ public final class Constants {
     public static final double TURN_CONSTANT = 0;
     public static final double kTeleopDeadzone = 0.1;
     public static final double kAngleSpeedMultiplier = 3.0/4.0;
+
 
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
@@ -61,7 +62,7 @@ public final class Constants {
 
     //Limits 
     //TODO; make sure these are right
-    public static final boolean kEnabled = true; // disables the climber
+    public static final boolean kEnabled = false; // disables the climber
     public static final double kIntializeDelay = 0.5;
 
     public static class LatchServo {
@@ -118,7 +119,7 @@ public final class Constants {
 
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
-    public static final boolean kEnabled = true;
+    public static final boolean kEnabled = false;
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
@@ -215,6 +216,11 @@ public final class Constants {
   public static class Testing {
     public static final double kSwerveTranslateSpeed = 0.3;
     public static final double kSwerveRotateSpeed = 0.5;
+  }
+
+  public static class TestSystem {
+    public static final boolean kEnabled = true;
+    public static final int kTestMotor = 300;
   }
 
 
