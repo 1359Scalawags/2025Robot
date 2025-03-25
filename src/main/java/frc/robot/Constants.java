@@ -16,11 +16,12 @@ import frc.robot.extensions.ArmPosition;
  */
 public final class Constants {
 
-  public static final boolean kDebug = false;
+  public static final boolean kDebug = true;
   public static final boolean kTuning = false;
   
   public static final String robotName = "Flipper";
   public static final double kRobotLoopTime = 0.02;
+  public static final double kSimulationLoopTime = 0.02;
 
   public static class SwerveSubsystem {
 
@@ -204,6 +205,10 @@ public final class Constants {
     public static class AssistJoystick {
       public static final int kPort = 1;
       public static final int deployClimberButton = 7;
+    }
+
+    public static class TestJoystick {
+      public static final int kPort = 2;
     }
   }
 
