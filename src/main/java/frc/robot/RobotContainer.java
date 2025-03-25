@@ -38,11 +38,12 @@ import frc.robot.subsystems.ClimberSubsystem;
 import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import dev.doglog.DogLog;
+import dev.doglog.DogLogOptions;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -60,6 +61,7 @@ public class RobotContainer {
   // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
   private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
+  private final CommandJoystick m_LogitechAttack = new CommandJoystick(Constants.Operator.TestJoystick.kPort);
 
   SendableChooser<Command> autoChooser;
   SendableChooser<Command> pipelineChooser;
@@ -68,6 +70,10 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    DogLogOptions logOptions = new DogLogOptions().withCaptureConsole(true).withCaptureDs(true).withLogExtras(true);
+    DogLog.setOptions(logOptions);
+
+
     if (Constants.ClimberSubsystem.kEnabled) {
       m_ClimberSubsystem = new ClimberSubsystem();
     } else {
@@ -138,24 +144,26 @@ public class RobotContainer {
     return m_DriverJoystick.getThrottle();
   }
 
+  public double testGetRight() {
+    return -m_LogitechAttack.getX();
+  }
+
+  public double testGetForward() {
+    return -m_LogitechAttack.getY();
+  }
+
+  public double testGetZ() {
+    return m_LogitechAttack.getZ();
+  }
+
+  public double testGetThrottle() {
+    return m_LogitechAttack.getThrottle();
+  }
+
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
 
     if(m_ArmSubsystem != null) {
@@ -229,9 +237,13 @@ public class RobotContainer {
     }
     Command zeroPulley = new ZeroPulley(m_ArmSubsystem);
     Command homePulley = new goToHeightHome(m_ArmSubsystem);
-
-    return Commands.sequence(zeroPulley, new WaitCommand(0.5), homePulley);
+    return zeroPulley;
+    //return Commands.sequence(zeroPulley, new WaitCommand(0.5), homePulley);
   }
+
+  // public Runnable getArmFastSimPeriodic() {
+  //   return m_ArmSubsystem::fastSimulationPeriodic;
+  // }
 
 
 }
