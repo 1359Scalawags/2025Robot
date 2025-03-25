@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.extensions.SparkMaxPIDTunerPosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -42,7 +41,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
   private SlewRateLimiter positionLimiter;
   private SlewRateLimiter lockingPositionLimiter;
-  private SparkMaxPIDTunerPosition positionTuner;
 
   @SuppressWarnings("unused") 
   private TrapezoidProfile positionProfile;
@@ -86,13 +84,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     debugTimer = new Timer();
     debugTimer.start();
-
-    if (Constants.kTuning) {
-      positionTuner = new SparkMaxPIDTunerPosition("Climber Position", positionMotor, ControlType.kPosition);
-      positionTuner.setSafeReferenceRange(Constants.ClimberSubsystem.PositionMotor.kMinAngle,
-          Constants.ClimberSubsystem.PositionMotor.kMaxAngle);
-      positionTuner.addToShuffleboard();
-    }
 
   }
 
@@ -308,26 +299,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    // if tuning, do nothing
-    if (Constants.kTuning) {
-      positionTuner.periodic();
-      return;
-    }
-    // if (Constants.kDebug == true){
-    // SmartDashboard.putNumber("Locking Motor Position",
-    // getLockingMotorPosition());
-    // SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());
-    // SmartDashboard.putNumber("Servo position", getServoAngle());
-    // SmartDashboard.putBoolean("Is climber Unlocked", moveClimberCommandLock);
-    // if(debugTimer.get() > 1.5) {
-    // System.out.println("Applied Position Motor Output: " +
-    // positionMotor.getAppliedOutput());
-    // System.out.println("Current Absolute Angle: " +
-    // positionMotor.getAbsoluteEncoder().getPosition());
-    // debugTimer.reset();
-    // }
-    // }
 
     SmartDashboard.putNumber("Locking Motor Position", getLockingMotorPosition());
     SmartDashboard.putNumber("Climber Motor Position", getClimberPostion());

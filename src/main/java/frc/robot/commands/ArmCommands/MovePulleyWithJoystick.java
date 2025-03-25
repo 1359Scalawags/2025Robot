@@ -31,9 +31,9 @@ public class MovePulleyWithJoystick extends Command {
 
   @Override
   public void execute() {
-    double current = ArmSubsystem.getPulleyHeight();
+    double current = m_subsystem.getPulleyHeight();
     double target = current + joystickSupplier.getAsDouble();
-    m_subsystem.goToPulleyMotorPosition(target);
+    m_subsystem.goToPulleyMotorPosition(target, false);
   }
 
   @Override

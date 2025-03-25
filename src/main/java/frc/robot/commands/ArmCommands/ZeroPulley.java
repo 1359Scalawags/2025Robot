@@ -30,8 +30,8 @@ public class ZeroPulley extends Command {
   @Override
   public void execute() {
     // if(waitTimer.get() > 1.0) {
-      double currentPosition = ArmSubsystem.getPulleyHeight();
-      m_subsystem.goToPulleyMotorPosition(currentPosition + Constants.ArmSubsystem.Pulley.kHomingPositionIncrement);
+      double currentPosition = m_subsystem.getPulleyHeight();
+      m_subsystem.goToPulleyMotorPosition(currentPosition + Constants.ArmSubsystem.Pulley.kHomingPositionIncrement, true);
     // }
 
   }

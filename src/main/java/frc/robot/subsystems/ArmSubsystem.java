@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.*;
-
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkMax;
@@ -28,14 +26,11 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.extensions.ArmPosition;
 import frc.robot.extensions.GravityAssistedFeedForward;
-import frc.robot.extensions.SparkMaxPIDTunerArmPosition;
-import frc.robot.extensions.SparkMaxPIDTunerBase.Verbosity;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -50,8 +45,6 @@ public class ArmSubsystem extends SubsystemBase {
   private boolean elbowError = true;
 
   private GravityAssistedFeedForward elbowFF;
-
-  private SparkMaxPIDTunerArmPosition elbowTuner;
 
   // Trapezoidal profiling for elbow
   private TrapezoidProfile elbowProfile;
@@ -82,14 +75,6 @@ public class ArmSubsystem extends SubsystemBase {
     elbowFF = new GravityAssistedFeedForward(Constants.ArmSubsystem.Elbow.PIDF.kMINGravityFF,
         Constants.ArmSubsystem.Elbow.PIDF.kGravityFF, Constants.ArmSubsystem.Elbow.kHorizontalAngle);
 
-    if(Constants.kTuning) {
-      elbowTuner = new SparkMaxPIDTunerArmPosition("Elbow Motor", elbowMotor, ControlType.kPosition, elbowFF);
-      elbowTuner.setSafeReferenceRange(185, 300);
-      elbowTuner.addToShuffleboard();
-      elbowTuner.setVerbosity(Verbosity.all);
-      elbowTuner.setDebugInterval(2.0);
-    }
-
     elbowProfile = new TrapezoidProfile(new Constraints(Constants.ArmSubsystem.Elbow.kSlewRate, Constants.ArmSubsystem.Elbow.kAccelerationRate));
     elbowStateSetpoint = new State();
     elbowStateGoal = new State();
@@ -109,11 +94,11 @@ public class ArmSubsystem extends SubsystemBase {
                           pulleySimMotor,
                           64/1.0,
                           10.0,
-                          0.1,
+                          0.0254,
                           0,
                           1.32,
                           true,
-                          0,
+                          0.1,
                           0.01, 0.0);        
 
        //estimated on 5 lbs and 15 inches (thinking of wrist and claw as stationary)       
@@ -211,9 +196,14 @@ public class ArmSubsystem extends SubsystemBase {
     pulleyMotor.configure(pulleyMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void goToPulleyMotorPosition(double pulleyMotorPosition) {
-    pulleyMotorTarget = MathUtil.clamp(pulleyMotorPosition, Constants.ArmSubsystem.Pulley.kMinLimit,
-        Constants.ArmSubsystem.Pulley.kMaxLimit);
+  public void goToPulleyMotorPosition(double pulleyMotorPosition, boolean isHoming) {
+    if(isHoming) {
+      pulleyMotorTarget = pulleyMotorPosition;
+    } else {
+      pulleyMotorTarget = MathUtil.clamp(pulleyMotorPosition, Constants.ArmSubsystem.Pulley.kMinLimit,
+          Constants.ArmSubsystem.Pulley.kMaxLimit);      
+    }
+
   }
 
   public void goToElbowMotorPosition(double elbowMotorPosition) {
@@ -227,32 +217,32 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Sets arm height to the ground
   public void goToHeightGround() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kGround.pulley);
+    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kGround.pulley, false);
   }
 
   // Sets arm height to Level Two
   public void goToHeightL2() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kLevel2.pulley);
+    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kLevel2.pulley, false);
   }
 
   // Sets arm height to Level Three
   public void goToHeightL3() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.klevel3.pulley);
+    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.klevel3.pulley, false);
   }
 
   // Sets arm height to Level Four
   public void goToHeightL4() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.klevel4.pulley);
+    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.klevel4.pulley, false);
   }
 
   // Sets arm height to the Human Station
   public void goToHeightHumanStation() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.pulley);
+    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.pulley, false);
 
   }
 
   public void goToHeightHome() {
-    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kHome.pulley);
+    goToPulleyMotorPosition(Constants.ArmSubsystem.Positions.kHome.pulley,  false);
   }
 
   public void goToArmHome() {
@@ -284,8 +274,8 @@ public class ArmSubsystem extends SubsystemBase {
     goToElbowMotorPosition(Constants.ArmSubsystem.Positions.kHumanStation.elbow);
   }
 
-  public static double getPulleyHeight() {
-    return ARM_HEIGHT;
+  public double getPulleyHeight() {
+    return this.pulleyMotor.getEncoder().getPosition();
   }
 
   public static double getSpeedMultiplier() {
@@ -315,10 +305,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
-  public double getCalculatedHeight() {
-    return pulleyMotor.getEncoder().getPosition();
-  }
-
   public boolean isPulleyInitialized() {
     return pulleyInitialized;
   }
@@ -329,15 +315,8 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    // if tuning, do nothing
-    if(Constants.kTuning == true) {
-      SmartDashboard.putNumber("Elbow motor Position", elbowMotor.getAbsoluteEncoder().getPosition());
-      elbowTuner.periodic();
-      return;
-    }
-
     // update static variable accessible to other systems
-    ARM_HEIGHT = getCalculatedHeight();
+    ARM_HEIGHT = getPulleyHeight();
    
     if (initialized && RobotState.isEnabled() && !RobotState.isTest()) {
 
@@ -366,6 +345,7 @@ public class ArmSubsystem extends SubsystemBase {
       if(Constants.kDebug) {
         counter++;
         if(counter > 25) {
+            System.out.println("Pulley Target: " + pulleyMotorTarget + "  Actual: " + getPulleyHeight());
             //System.out.println("WristAngle: " + getRelativeWristAngle() + " FF: " + wristFF.calculate(getRelativeWristAngle()) + " Output: " + wristMotor.getAppliedOutput());
             //System.out.println("ElbowAngle: " + getElbowMotorPosition() + " FF: " + elbowFF.calculate(getElbowMotorPosition()) + " Output: " + elbowMotor.getAppliedOutput());
             counter=0;
@@ -375,21 +355,26 @@ public class ArmSubsystem extends SubsystemBase {
    
   }
 
-  @Override
+  long totalRuns = 0;
   public void simulationPeriodic() {
 
     //update the WPILIB elevator simulator
     pulleyElevatorSim.setInput(pulleySim.getAppliedOutput() * RoboRioSim.getVInVoltage());
-    pulleyElevatorSim.update(Constants.kRobotLoopTime);
+    pulleyElevatorSim.update(Constants.kSimulationLoopTime);
 
     //update the SparkMax simulator
     pulleySim.iterate(pulleyElevatorSim.getVelocityMetersPerSecond(), RoboRioSim.getVInVoltage(), 0.02);
 
     elbowArmSim.setInput(elbowSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
-    elbowArmSim.update(Constants.kRobotLoopTime);
+    elbowArmSim.update(Constants.kSimulationLoopTime);
 
     //update battery voltage
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(pulleySim.getMotorCurrent()));
+
+    // totalRuns++;
+    // if(totalRuns % 50 == 0) {
+    //   //System.out.println("RUN: ArmSubsystem::simulationPeriodic() x " + 50);
+    // }
   }
 
 }
