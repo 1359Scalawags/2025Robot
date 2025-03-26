@@ -35,6 +35,7 @@ import frc.robot.commands.SwerveCommands.Testing.MoveCardinal.CardinalDirection;
 import frc.robot.commands.SwerveCommands.Testing.Rotate;
 import frc.robot.commands.SwerveCommands.Testing.Rotate.RotateDirection;
 import frc.robot.commands.TestingCommands.ControlTestMotorWithJoystick;
+import frc.robot.commands.TestingCommands.InitilizeTestElevatorEncoders;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import java.io.File;
@@ -48,6 +49,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -77,7 +79,7 @@ public class RobotContainer {
     DogLogOptions logOptions = new DogLogOptions().withCaptureConsole(true).withCaptureDs(true).withLogExtras(true);
     DogLog.setOptions(logOptions);
 
-    if(Constants.TestSystem.kEnabled) {
+    if(Constants.TestSubsystem.kEnabled) {
       m_TestSubsystem = new TestSubsystem();
     } else {
       m_TestSubsystem = null;
@@ -146,6 +148,16 @@ public class RobotContainer {
 
   }
 
+  // XXX: a basic implementation of a deadband
+  private static double linearDeadband(double raw, double deadband)
+  {
+  
+      if (Math.abs(raw) < deadband) 
+        return 0;
+    
+     return Math.signum(raw) * (Math.abs(raw)-deadband) / (1-deadband);
+  }
+
   // Configure remote movements
   public double assistantGetY() {
     return -m_AssistantJoystick.getY();
@@ -180,7 +192,7 @@ public class RobotContainer {
   }
 
   public double testGetForward() {
-    return -m_LogitechAttack.getY();
+    return linearDeadband(-m_LogitechAttack.getY(), 0.025);
   }
 
   public double testGetZ() {
@@ -281,6 +293,13 @@ public class RobotContainer {
       simPeriodicList.add(m_TestSubsystem::simulationPeriodic);
     }
     return simPeriodicList;
+  }
+
+  public Command initializeTestElevator() {
+    if(m_TestSubsystem == null) {
+      return new WaitCommand(0.01);
+    }
+    return Commands.sequence(new WaitCommand(0.5), new InitilizeTestElevatorEncoders(m_TestSubsystem));
   }
   // public Runnable getArmFastSimPeriodic() {
   //   return m_ArmSubsystem::fastSimulationPeriodic;

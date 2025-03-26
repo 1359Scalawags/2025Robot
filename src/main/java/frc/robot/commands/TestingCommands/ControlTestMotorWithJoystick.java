@@ -2,6 +2,7 @@ package frc.robot.commands.TestingCommands;
 
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.TestSubsystem;
 
 
@@ -24,7 +25,7 @@ public class ControlTestMotorWithJoystick extends Command {
 
   @Override
   public void initialize() {
-    m_subsystem.move(joystickSupplier.getAsDouble() * 3);
+    m_subsystem.move(joystickSupplier.getAsDouble() * Constants.TestSubsystem.Elevator.kSpeedMetersPerSecond * Constants.kRobotLoopTime);
   }
 
   @Override

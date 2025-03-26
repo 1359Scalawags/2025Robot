@@ -34,6 +34,8 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   public Robot() {
+    super(Constants.kRobotLoopTime);
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -58,6 +60,7 @@ public class Robot extends TimedRobot {
     super.robotInit();
     CommandScheduler.getInstance().schedule(m_robotContainer.initializeClimberEncoders());
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
+    CommandScheduler.getInstance().schedule(m_robotContainer.initializeTestElevator().ignoringDisable(true));
 
     try {
       armCamera = CameraServer.startAutomaticCapture(0);

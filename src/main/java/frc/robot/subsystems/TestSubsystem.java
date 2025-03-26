@@ -13,28 +13,59 @@ import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.constraint.MaxVelocityConstraint;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class TestSubsystem extends SubsystemBase {
-    private SparkMax testSparkMax;
-    private SparkSim testSparkMaxSim;
-    private DCMotor testDCMotorNeo;
-    private ElevatorSim testElevator;
+    private SparkMax elevatorSparkMax;
+    private SparkSim elevatorSparkMaxSim;
+    private DCMotor elevatorDCMotorNeo;
+    private ElevatorSim elevatorSim;
+    private Mechanism2d mechanism;
+    private MechanismRoot2d mechanismRoot;
+    private MechanismLigament2d elevatorMechanism; 
+    private double elevatorTargetHeight;
+
 
     public TestSubsystem() {
-        testSparkMax = new SparkMax(Constants.TestSystem.kTestMotor, MotorType.kBrushless);
-        testDCMotorNeo = DCMotor.getNEO(1);
-        testSparkMaxSim = new SparkSim(testSparkMax, testDCMotorNeo);
-        testElevator = new ElevatorSim(testDCMotorNeo, 64, 1, 0.01, 0.1, 2.0, true, .15, 0.0001,0.0);
+        elevatorSparkMax = new SparkMax(Constants.TestSubsystem.kTestMotor, MotorType.kBrushless);
+        elevatorDCMotorNeo = DCMotor.getNEO(1);
+        elevatorSparkMaxSim = new SparkSim(elevatorSparkMax, elevatorDCMotorNeo);
+        elevatorSim = new ElevatorSim(elevatorDCMotorNeo, 
+                                Constants.TestSubsystem.Elevator.kGearRatio, 
+                                Constants.TestSubsystem.Elevator.kCarriageMassKg, 
+                                Constants.TestSubsystem.Elevator.kSpindleRadiusMeters, 
+                                Constants.TestSubsystem.Elevator.kMinHeightMeters, 
+                                Constants.TestSubsystem.Elevator.kMaxHeightMeters, 
+                                true, 
+                                Constants.TestSubsystem.Elevator.kMinHeightMeters, 
+                                0.001,0.0);
         configureTestSparkMax();
-        testSparkMax.getEncoder().setPosition(testElevator.getPositionMeters());
+        
+
+        mechanism = new Mechanism2d(2, 3, new Color8Bit(Color.kBlack));
+        mechanismRoot = mechanism.getRoot("Sim Elevator Root", 1, 0);
+        elevatorMechanism = mechanismRoot.append(new MechanismLigament2d("Sim Elevator", 1.5, 90));
+
+        elevatorTargetHeight = Constants.TestSubsystem.Elevator.kMinHeightMeters;
+        elevatorSim.setState(Constants.TestSubsystem.Elevator.kMinHeightMeters, 0);
+        elevatorSparkMax.getClosedLoopController().setReference(elevatorTargetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0, Constants.TestSubsystem.Elevator.PIDF.kGravityFF);
+
+
+    }
+
+    public void initializeEncoders() {
+        elevatorSparkMaxSim.setPosition(elevatorSim.getPositionMeters());
+        System.out.println("Encoder set to: " + elevatorSim.getPositionMeters());
     }
 
     public void configureTestSparkMax() {
@@ -43,23 +74,25 @@ public class TestSubsystem extends SubsystemBase {
         config
             .idleMode(IdleMode.kBrake)
             .inverted(false)
-            .openLoopRampRate(0.5)
-            .closedLoopRampRate(0.5)
+            .openLoopRampRate(0.1)
+            .closedLoopRampRate(0.1)
             .smartCurrentLimit(70, 40, 0);
 
         config.encoder
-            .positionConversionFactor(1)
-            .velocityConversionFactor(1);
+            .positionConversionFactor(1.0 / (Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter));
+            //.velocityConversionFactor(1.0 / (Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter * 60.0));
 
         config.closedLoop
-            .pid(.1,0,0);
+            .p(Constants.TestSubsystem.Elevator.PIDF.kP)
+            .i(Constants.TestSubsystem.Elevator.PIDF.kI)
+            .d(Constants.TestSubsystem.Elevator.PIDF.kD);
             
-        config.closedLoop.maxMotion
-            .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal)
-            .maxAcceleration(20)
-            .maxVelocity(1);
+        // config.closedLoop.maxMotion
+        //     .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal)
+        //     .maxAcceleration(50 * Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter * 60)
+        //     .maxVelocity(20 * Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter * 60);
         
-        testSparkMax.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        elevatorSparkMax.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     // public void setMotorVolts(double voltage) {
@@ -68,28 +101,36 @@ public class TestSubsystem extends SubsystemBase {
     // }
 
     public void move(double value) {
-        testSparkMax.getClosedLoopController().setReference(value, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, 0.15);
+        elevatorTargetHeight = MathUtil.clamp(elevatorTargetHeight + value, Constants.TestSubsystem.Elevator.kMinHeightMeters, Constants.TestSubsystem.Elevator.kMaxHeightMeters);
+        elevatorSparkMax.getClosedLoopController().setReference(elevatorTargetHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0, Constants.TestSubsystem.Elevator.PIDF.kGravityFF);
+        elevatorSparkMaxSim.getRelativeEncoderSim().setPosition(value);
     }
 
     // public double getMotorVolts() {
     //     return testSparkMax.getAppliedOutput() * 12;
     // }
 
+    public void updateTelemetry() {
+        elevatorMechanism.setLength(elevatorSim.getPositionMeters());
+    }
+
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("TestElevator/Height", testElevator.getPositionMeters());
+        SmartDashboard.putNumber("TestElevator/Height", elevatorSim.getPositionMeters());
+        this.updateTelemetry();
     }
 
     @Override
     public void simulationPeriodic() {
         //update the WPILIB elevator simulator
-        testElevator.setInput(testSparkMaxSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
-        testElevator.update(Constants.kSimulationLoopTime);
+        elevatorSim.setInput(elevatorSparkMaxSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
+        elevatorSim.update(Constants.kSimulationLoopTime);
 
         //update the SparkMax simulator
-        testSparkMaxSim.iterate(testElevator.getVelocityMetersPerSecond(), RoboRioSim.getVInVoltage(), Constants.kSimulationLoopTime);
+        double motorRPM = elevatorSim.getVelocityMetersPerSecond() * Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter * 60;
+        elevatorSparkMaxSim.iterate(motorRPM, RoboRioSim.getVInVoltage(), Constants.kSimulationLoopTime);
 
         //update battery voltage
-        RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(testSparkMaxSim.getMotorCurrent()));
+        RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSparkMaxSim.getMotorCurrent()));
     }
 }
