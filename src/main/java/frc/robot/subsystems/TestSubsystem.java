@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class TestSubsystem extends SubsystemBase {
     private SparkMax elevatorSparkMax;
@@ -79,18 +80,24 @@ public class TestSubsystem extends SubsystemBase {
             .smartCurrentLimit(70, 40, 0);
 
         config.encoder
-            .positionConversionFactor(1.0 / (Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter));
+            .positionConversionFactor(1.0 / (Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter))
+            .quadratureMeasurementPeriod(2)
+            .quadratureAverageDepth(16);
             //.velocityConversionFactor(1.0 / (Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter * 60.0));
 
         config.closedLoop
-            .p(Constants.TestSubsystem.Elevator.PIDF.kP)
-            .i(Constants.TestSubsystem.Elevator.PIDF.kI)
-            .d(Constants.TestSubsystem.Elevator.PIDF.kD);
+            .p(Robot.isSimulation() ? Constants.TestSubsystem.Elevator.PIDF.kP * 20 : Constants.TestSubsystem.Elevator.PIDF.kP)
+            .i(Robot.isSimulation() ? Constants.TestSubsystem.Elevator.PIDF.kI * 20 : Constants.TestSubsystem.Elevator.PIDF.kI)
+            .d(Robot.isSimulation() ? Constants.TestSubsystem.Elevator.PIDF.kD * 20 : Constants.TestSubsystem.Elevator.PIDF.kD);
             
         // config.closedLoop.maxMotion
         //     .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal)
         //     .maxAcceleration(50 * Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter * 60)
         //     .maxVelocity(20 * Constants.TestSubsystem.Elevator.kMotorRotationsPerMeter * 60);
+        config.closedLoop.maxMotion
+            .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal)
+            .maxAcceleration(50000)
+            .maxVelocity(50000);
         
         elevatorSparkMax.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

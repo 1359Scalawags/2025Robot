@@ -24,7 +24,7 @@ public final class Constants {
   
   public static final String robotName = "Flipper";
   public static final double kSimulationLoopTime = 0.02;
-  public static final double kRobotLoopTime = Robot.isSimulation() ? 0.001 : Constants.kSimulationLoopTime;
+  public static final double kRobotLoopTime = Robot.isSimulation() ? kSimulationLoopTime : 0.02;
   
   public static class TestSubsystem {
     public static final boolean kEnabled = true;
@@ -39,7 +39,7 @@ public final class Constants {
       public static final double kCarriageMassKg = Pound.of(5).in(Kilogram);
       public static final double kSpeedMetersPerSecond = 0.5;
       public static class PIDF {
-        public static final double kP = 10;
+        public static final double kP = 0.7;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
         public static final double kGravityFF = 0.02;
