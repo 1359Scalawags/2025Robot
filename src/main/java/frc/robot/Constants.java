@@ -8,6 +8,7 @@ import java.security.KeyPair;
 import static edu.wpi.first.units.Units.*;
 
 import frc.robot.extensions.ArmPosition;
+import frc.robot.extensions.PidConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -26,32 +27,36 @@ public final class Constants {
   public static final double kSimulationLoopTime = 0.02;
   public static final double kRobotLoopTime = Robot.isSimulation() ? kSimulationLoopTime : 0.02;
   
-  public static class TestSubsystem {
+  public static class TestElevator{
     public static final boolean kEnabled = true;
-    public static final int kTestMotor = 300;
-    public static class Elevator {
-      public static final int kMotorID = 300;
-      public static final double kMinHeightMeters = 0.15;
-      public static final double kMaxHeightMeters = 2.5;
-      public static final double kGearRatio = 64.0/1.0;
-      public static final double kSpindleRadiusMeters = 0.0127;
-      public static final double kMotorRotationsPerMeter = 1 /(2 * Math.PI * kSpindleRadiusMeters) * kGearRatio;
-      public static final double kCarriageMassKg = Pound.of(5).in(Kilogram);
-      public static final double kSpeedMetersPerSecond = 0.5;
-      public static class PIDF {
-        public static final double kP = 0.7;
-        public static final double kI = 0.0;
-        public static final double kD = 0.0;
-        public static final double kGravityFF = 0.02;
-      }
-    }
+    public static final int kMotorID = 300;
+    public static final double kMinHeightMeters = 0.15;
+    public static final double kMaxHeightMeters = 2.5;
+    public static final double kGearRatio = 64.0/1.0;
+    public static final double kSpindleRadiusMeters = 0.0127;
+    public static final double kMotorRotationsPerMeter = 1 /(2 * Math.PI * kSpindleRadiusMeters) * kGearRatio;
+    public static final double kCarriageMassKg = Pound.of(5).in(Kilogram);
+    public static final double kSpeedMetersPerSecond = 0.5;
+    public static final PidConstants pid = new PidConstants(0.075, 0.0, 0.0, 0.0, 0.08);
+  }
+
+  public static class TestArm {
+    public static final boolean kEnabled = true;
+    public static final int kMotorID = 301;
+    public static final double kMinAngleDegrees = -75;
+    public static final double kMaxAngleDegrees = 60;   
+    public static final double kGearRatio = 64.0/1.0;
+    public static final double kArmLengthMeters = 0.5;
+    public static final double kMomentInertiaKgMM = 0.020887;
+    public static final PidConstants pid = new PidConstants(0.5, 0.0, 0.0, 0.0, 0.0);
+    public static final double kSpeedDegressPerSecond = 10;
   }
 
   public static class SwerveSubsystem {
     public static final boolean kEnabled = false;
     public static final double MAX_SPEED = 12;
     public static final double LOOP_TIME = 0;
-    public static final double ROBOT_MASS = 100 ;
+    public static final double ROBOT_MASS = 100;
     public static final Object CHASSIS = null;
     public static final double TURN_CONSTANT = 0;
     public static final double kTeleopDeadzone = 0.1;

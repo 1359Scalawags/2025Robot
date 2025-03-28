@@ -3,29 +3,31 @@ package frc.robot.commands.TestingCommands;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.TestSubsystem;
+import frc.robot.subsystems.TestElevatorSubsystem;
 
 
-public class ControlTestMotorWithJoystick extends Command {
+public class MoveElevatorJoystick extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final TestSubsystem m_subsystem;
-  private DoubleSupplier joystickSupplier;
+  private final TestElevatorSubsystem m_subsystem;
+  private DoubleSupplier elevatorSupplier;
 
   /**
    * Creates a new MovePulleyWithJoystick.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ControlTestMotorWithJoystick(TestSubsystem subsystem, DoubleSupplier joystickSupplier) {
+  public MoveElevatorJoystick(TestElevatorSubsystem subsystem, DoubleSupplier elevatorSupplier) {
     m_subsystem = subsystem;
-    this.joystickSupplier = joystickSupplier;
+    this.elevatorSupplier = elevatorSupplier;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
   @Override
   public void initialize() {
-    m_subsystem.move(joystickSupplier.getAsDouble() * Constants.TestSubsystem.Elevator.kSpeedMetersPerSecond * Constants.kRobotLoopTime);
+    double elevator = elevatorSupplier.getAsDouble() * Constants.TestElevator.kSpeedMetersPerSecond * Constants.kRobotLoopTime;
+    m_subsystem.move(elevator);
+
   }
 
   @Override
