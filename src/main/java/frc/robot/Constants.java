@@ -35,7 +35,7 @@ public final class Constants {
     public static final double kMotorRotationsPerMeter = 1.0 /(2 * Math.PI * kSpindleRadiusMeters) * kGearRatio;
     public static final double kCarriageMassKg = Pound.of(2).in(Kilogram);
     public static final double kSpeedMetersPerSecond = 0.2;
-    public static final PidConstants pid = new PidConstants(1, 0.001, 0.0, 0.0, 0.4);
+    public static final PidConstants pid = new PidConstants(0.5, 0.0, 0.0, 0.0, 0.025);
   }
 
   public static class TestArm {
