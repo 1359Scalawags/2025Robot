@@ -31,7 +31,7 @@ public class TestArmSubsystem extends SubsystemBase {
 
     private SparkMax armSparkMax;
     private SparkSim armSparkMaxSim;
-    //private SparkAbsoluteEncoderSim armAbsoluteEncoderSim;
+    private SparkAbsoluteEncoderSim armAbsoluteEncoderSim;
     private DCMotor armDCMotorNeo;
     private SingleJointedArmSim armSim;
 
@@ -49,7 +49,7 @@ public class TestArmSubsystem extends SubsystemBase {
         armSparkMax = new SparkMax(Constants.TestArm.kMotorID, MotorType.kBrushless);
         armDCMotorNeo = DCMotor.getNEO(1);
         armSparkMaxSim = new SparkSim(armSparkMax, armDCMotorNeo);
-        //armAbsoluteEncoderSim = new SparkAbsoluteEncoderSim(armSparkMax);
+        armAbsoluteEncoderSim = new SparkAbsoluteEncoderSim(armSparkMax);
         configureArmSparkMax();
 
         // create simulated arm
@@ -61,7 +61,7 @@ public class TestArmSubsystem extends SubsystemBase {
                                 Math.toRadians(Constants.TestArm.kMaxAngleDegrees), 
                                 true, 
                                 Math.toRadians(Constants.TestArm.kMinAngleDegrees), 
-                                0.01,0.0);  
+                                0.001,0.005);  
 
         armSim.setState(Math.toRadians(Constants.TestArm.kMinAngleDegrees), 0);   
         armTargetAngleDegrees = Constants.TestArm.kMinAngleDegrees;
@@ -72,7 +72,6 @@ public class TestArmSubsystem extends SubsystemBase {
         mechanism = new Mechanism2d(2, 2, new Color8Bit(Color.kBlack));
         mechanismRoot = mechanism.getRoot("Sim Arm Root", 0.5, 1);
         armMechanism = mechanismRoot.append(new MechanismLigament2d("Sim Arm", Constants.TestArm.kArmLengthMeters, Math.toRadians(Constants.TestArm.kMinAngleDegrees)));  
-        SmartDashboard.putData("Arm", mechanism);
     }
 
     public MechanismLigament2d getMechanismLigament() {
@@ -80,7 +79,7 @@ public class TestArmSubsystem extends SubsystemBase {
     }
 
     public void initializeEncoders() {
-        //armAbsoluteEncoderSim.setPosition(Math.toDegrees(armSim.getAngleRads()));
+        armAbsoluteEncoderSim.setPosition(Math.toDegrees(armSim.getAngleRads()));
         armSparkMaxSim.setPosition(Math.toDegrees(armSim.getAngleRads()));
         System.out.println("Arm: " + Math.toDegrees(armSim.getAngleRads()));
     }
@@ -98,22 +97,16 @@ public class TestArmSubsystem extends SubsystemBase {
         config.encoder
             .positionConversionFactor(360);
 
-        // config.absoluteEncoder
-        //     .positionConversionFactor(1)
-        //     .zeroOffset(0)
-        //     .zeroCentered(true)
-        //     .averageDepth(32);
+        config.absoluteEncoder
+            .positionConversionFactor(360)
+            .zeroOffset(0)
+            .zeroCentered(true);
 
         config.closedLoop
             .p(Constants.TestArm.pid.p())
             .i(Constants.TestArm.pid.i())
             .d(Constants.TestArm.pid.d())
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-            
-        // config.closedLoop.maxMotion
-        //     .positionMode(MAXMotionPositionMode.kMAXMotionTrapezoidal)
-        //     .maxAcceleration(50000)
-        //     .maxVelocity(50000);
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
         
         armSparkMax.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
@@ -128,26 +121,41 @@ public class TestArmSubsystem extends SubsystemBase {
         armMechanism.setAngle(Math.toDegrees(armSim.getAngleRads()));
     }
 
+    public double getArmRPM() {
+        return (armSim.getVelocityRadPerSec() * 60.0) / (2.0 * Math.PI);
+    }
+
     @Override
     public void periodic() {
         this.updateTelemetry();
         SmartDashboard.putNumber("TestArm/Angle", Math.toDegrees(armSim.getAngleRads()));
     }
 
+    double minVelocity = 0;
     @Override
     public void simulationPeriodic() {
 
         //update the WPILIB arm simulator
         armSim.setInput(armSparkMaxSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
-        armSim.update(Constants.kSimulationLoopTime);
+        armSim.update(Constants.kRobotLoopTime);
+        //armAbsoluteEncoderSim.setPosition(Math.toDegrees(armSim.getAngleRads()));
+
+        double armRPM = getArmRPM();        
+        SmartDashboard.putNumber("TestArm/armSparkMaxSim/getAppliedOutput", armSparkMaxSim.getAppliedOutput());
+        SmartDashboard.putNumber("TestArm/armSim/VelocityRPM", getArmRPM());        
+
+        minVelocity = Math.min(minVelocity, armRPM);
+        SmartDashboard.putNumber("TestArm/armSim/MinVelocity", minVelocity);
 
         //update the SparkMax simulator
-        double armRPM = (armSim.getVelocityRadPerSec() * 60.0) / (2.0 * Math.PI);
         double armMotorRPM = armRPM * Constants.TestArm.kGearRatio;
-        armSparkMaxSim.iterate(armRPM, RoboRioSim.getVInVoltage(), Constants.kSimulationLoopTime);
-        //armAbsoluteEncoderSim.iterate(armMotorRPM/64, Constants.kSimulationLoopTime);
+        //armSparkMaxSim.iterate(armRPM, RoboRioSim.getVInVoltage(), Constants.kRobotLoopTime);
+        //armAbsoluteEncoderSim.iterate(armRPM * 64, Constants.kRobotLoopTime);
+        armSparkMaxSim.iterate(armRPM, RoboRioSim.getVInVoltage(), Constants.kRobotLoopTime);
 
         //update battery voltage
         RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(armSparkMaxSim.getMotorCurrent()));
+    
+
     }
 }

@@ -33,17 +33,18 @@ public class RobotContainer {
     DogLogOptions logOptions = new DogLogOptions().withCaptureConsole(true).withCaptureDs(true).withLogExtras(true);
     DogLog.setOptions(logOptions);
 
+    if(Constants.TestArm.kEnabled) {
+      m_TestArm = new TestArmSubsystem();
+    } else {
+      m_TestArm = null;
+    }
+
     if(Constants.TestElevator.kEnabled) {
-      m_TestElevator = new TestElevatorSubsystem();
+      m_TestElevator = new TestElevatorSubsystem(m_TestArm);
     } else {
       m_TestElevator = null;
     }
 
-    if(Constants.TestArm.kEnabled) {
-      m_TestArm = new TestArmSubsystem();
-    } else {
-      m_TestElevator = null;
-    }
 
     // Configure the trigger bindings
     configureBindings();
@@ -95,14 +96,6 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-  }
-
-  public ArrayList<Runnable> getSimulationPeriodicMethods() {
-    ArrayList<Runnable> simPeriodicList = new ArrayList<Runnable>();
-    if(m_TestElevator != null) {
-      simPeriodicList.add(m_TestElevator::simulationPeriodic);
-    }
-    return simPeriodicList;
   }
 
   public Command initializeTestSystemEncoders() {

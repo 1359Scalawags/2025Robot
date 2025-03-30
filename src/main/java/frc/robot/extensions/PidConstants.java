@@ -16,15 +16,15 @@ public class PidConstants {
     }
 
     public double p() {
-        return Robot.isSimulation() ?  p * (Constants.kRobotLoopTime / 0.001) : p;
+        return Robot.isSimulation() ?  p * (Constants.kSimulationPidScalar * Constants.kRobotLoopTime / 0.001) : p;
     }
 
     public double i() {
-        return Robot.isSimulation() ? i * (Constants.kRobotLoopTime / 0.001) : i;
+        return Robot.isSimulation() ? i * (Constants.kSimulationPidScalar * Constants.kRobotLoopTime / 0.001) : i;
     }
 
     public double d() {
-        return Robot.isSimulation() ? d * (Constants.kRobotLoopTime / 0.001) : d;
+        return Robot.isSimulation() ? d * (Constants.kSimulationPidScalar * Constants.kRobotLoopTime / 0.001) : d;
     }
 
     public double arbFF() {

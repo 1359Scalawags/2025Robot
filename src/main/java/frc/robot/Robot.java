@@ -28,9 +28,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    for(Runnable r : m_robotContainer.getSimulationPeriodicMethods()) {
-      //addPeriodic(r, Constants.kSimulationLoopTime);
-    }
+
     enableLiveWindowInTest(true);
     SmartDashboard.putData(CommandScheduler.getInstance());
     DriverStation.silenceJoystickConnectionWarning(true);
