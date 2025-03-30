@@ -16,6 +16,7 @@ import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -132,6 +133,8 @@ public class TestElevatorSubsystem extends SubsystemBase {
 
         //update the SparkMax simulator
         double elevatorMotorRPM = elevatorSim.getVelocityMetersPerSecond() * Constants.TestElevator.kMotorRotationsPerMeter * 60;
+        //double elevatorMotorRPM = Units.radiansPerSecondToRotationsPerMinute(elevatorSim.getVelocityMetersPerSecond());
+
         elevatorSparkMaxSim.iterate(elevatorMotorRPM, RoboRioSim.getVInVoltage(), Constants.kRobotLoopTime);
 
         //update battery voltage

@@ -14,6 +14,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -121,9 +122,6 @@ public class TestArmSubsystem extends SubsystemBase {
         armMechanism.setAngle(Math.toDegrees(armSim.getAngleRads()));
     }
 
-    public double getArmRPM() {
-        return (armSim.getVelocityRadPerSec() * 60.0) / (2.0 * Math.PI);
-    }
 
     @Override
     public void periodic() {
@@ -138,20 +136,16 @@ public class TestArmSubsystem extends SubsystemBase {
         //update the WPILIB arm simulator
         armSim.setInput(armSparkMaxSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
         armSim.update(Constants.kRobotLoopTime);
-        //armAbsoluteEncoderSim.setPosition(Math.toDegrees(armSim.getAngleRads()));
 
-        double armRPM = getArmRPM();        
+        double armMotorRPM = Units.radiansPerSecondToRotationsPerMinute(armSim.getVelocityRadPerSec());      
         SmartDashboard.putNumber("TestArm/armSparkMaxSim/getAppliedOutput", armSparkMaxSim.getAppliedOutput());
-        SmartDashboard.putNumber("TestArm/armSim/VelocityRPM", getArmRPM());        
+        SmartDashboard.putNumber("TestArm/armSim/VelocityRPM", armMotorRPM);        
 
-        minVelocity = Math.min(minVelocity, armRPM);
+        minVelocity = Math.min(minVelocity, armMotorRPM);
         SmartDashboard.putNumber("TestArm/armSim/MinVelocity", minVelocity);
 
         //update the SparkMax simulator
-        double armMotorRPM = armRPM * Constants.TestArm.kGearRatio;
-        //armSparkMaxSim.iterate(armRPM, RoboRioSim.getVInVoltage(), Constants.kRobotLoopTime);
-        //armAbsoluteEncoderSim.iterate(armRPM * 64, Constants.kRobotLoopTime);
-        armSparkMaxSim.iterate(armRPM, RoboRioSim.getVInVoltage(), Constants.kRobotLoopTime);
+        armSparkMaxSim.iterate(armMotorRPM, RoboRioSim.getVInVoltage(), Constants.kRobotLoopTime);
 
         //update battery voltage
         RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(armSparkMaxSim.getMotorCurrent()));
