@@ -60,7 +60,7 @@ public final class Constants {
 
     //Limits 
     //TODO; make sure these are right
-    public static final boolean kEnabled = true; // disables the climber
+    public static final boolean kEnabled = false; // disables the climber
     public static final double kIntializeDelay = 0.5;
 
     public static class LatchServo {
@@ -117,7 +117,7 @@ public final class Constants {
 
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
-    public static final boolean kEnabled = true;
+    public static final boolean kEnabled = false;
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {

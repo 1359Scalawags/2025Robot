@@ -102,8 +102,10 @@ public class RobotContainer {
     configureBindings();
     setDefaultCommands();
 
-    NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
-    NamedCommands.registerCommand("Open Claw", new autonomousOpenCLaw(m_ArmSubsystem));
+    if (m_ArmSubsystem != null) {
+      NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
+      NamedCommands.registerCommand("Open Claw", new autonomousOpenCLaw(m_ArmSubsystem));
+    }
   }
 
   private void setDefaultCommands() {
@@ -319,8 +321,11 @@ public class RobotContainer {
   }
 
   public Command homeClaw() {
+    if(m_ArmSubsystem == null) {
+      return new WaitCommand(0.01);
+    }
     Command homeclaw = new ZeroClaw(m_ArmSubsystem);
-    return homeclaw;
+      return homeclaw;
   }
 
   // public Command intializeJustTheArm() {
