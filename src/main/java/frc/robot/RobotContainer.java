@@ -92,7 +92,7 @@ public class RobotContainer {
   // uncomment calls in Robot.java
   private final ArmSubsystem m_ArmSubsystem;
   private final ClimberSubsystem m_ClimberSubsystem;
-  // private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
   private final CommandJoystick m_DriverJoystick = new CommandJoystick(Constants.Operator.DriverJoystick.kPort);
   private final CommandJoystick m_AssistantJoystick = new CommandJoystick(Constants.Operator.AssistJoystick.kPort);
 
@@ -136,14 +136,30 @@ public class RobotContainer {
   }
 
   private void setDefaultCommands() {
+
+  if (Constants.Vision.usingAimingRanging) {
     m_SwerveSubsystem.setDefaultCommand(
-        new AbsoluteFieldDrive(m_SwerveSubsystem,
-            this::driverGetForward,
-            this::driverGetRight,
-            this::driverGetZ,
-            this::driverGetThrottle,
-            m_SwerveSubsystem::getFeildCentric,
-            false));
+      new AbsoluteFieldDrive(m_SwerveSubsystem,
+          this::getRangeTarget,
+          this::driverGetRight,
+          this::getAimTarget,
+          this::driverGetThrottle,
+          m_SwerveSubsystem::getFeildCentric,
+          false)
+        );
+  } else {
+    m_SwerveSubsystem.setDefaultCommand(
+      new AbsoluteFieldDrive(m_SwerveSubsystem,
+          this::driverGetForward,
+          this::driverGetRight,
+          this::driverGetZ,
+          this::driverGetThrottle,
+          m_SwerveSubsystem::getFeildCentric,
+          false)
+        );
+  }
+
+   
 
     if (m_ClimberSubsystem != null) {
       m_ClimberSubsystem.setDefaultCommand(
@@ -190,6 +206,14 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+  }
+
+  public double getRangeTarget() {
+    return m_visionSubsystem.limelight_range_proportional();
+  }
+
+  public double getAimTarget() {
+    return m_visionSubsystem.limelight_aim_proportional();
   }
 
   /**

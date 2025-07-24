@@ -142,8 +142,7 @@ public class VisionSubsystem extends SubsystemBase {
   // "proportional control" is a control algorithm in which the output is proportional to the error.
   // in this case, we are going to return an angular velocity that is proportional to the 
   // "tx" value from the Limelight.
-  double limelight_aim_proportional()
-  {    
+  public double limelight_aim_proportional() {    
     // kP (constant of proportionality)
     // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
     // if it is too high, the robot will oscillate around.
@@ -164,8 +163,7 @@ public class VisionSubsystem extends SubsystemBase {
     return targetingAngularVelocity;
   }
 
-  double limelight_range_proportional()
-  {    
+ public double limelight_range_proportional() {    
     double kP = .1;
     double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
     targetingForwardSpeed *= Constants.SwerveSubsystem.MAX_SPEED;
