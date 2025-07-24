@@ -9,9 +9,11 @@ import swervelib.SwerveController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An example command that uses an example subsystem. */
+
 public class DriveForwardCommand extends Command {
     private SwerveSubsystem swerve;
+
+    @SuppressWarnings("unused")
     private SwerveController controller;
 
     /**

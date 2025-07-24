@@ -5,19 +5,17 @@
 package frc.robot.commands.ArmCommands;
 
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
 
-/** An example command that uses an example subsystem. */
 public class MovePulleyWithJoystick extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
   private DoubleSupplier joystickSupplier;
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new MovePulleyWithJoystick.
    *
    * @param subsystem The subsystem used by this command.
    */
@@ -28,11 +26,9 @@ public class MovePulleyWithJoystick extends Command {
     addRequirements(subsystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double current = ArmSubsystem.getPulleyHeight();
@@ -40,13 +36,11 @@ public class MovePulleyWithJoystick extends Command {
     m_subsystem.goToPulleyMotorPosition(target);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return true;

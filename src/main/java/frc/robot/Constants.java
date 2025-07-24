@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.apriltag.AprilTagFields;
 import frc.robot.extensions.ArmPosition;
 
 /**
@@ -59,9 +58,9 @@ public final class Constants {
   public static class ClimberSubsystem {
     //Can ID's for climber are from 9 to 15
 
-      //Limits 
-      //TODO; make sure these are right
-    public static final boolean kEnabled = true; // disables the climber
+    //Limits 
+    //TODO; make sure these are right
+    public static final boolean kEnabled = false; // disables the climber
     public static final double kIntializeDelay = 0.5;
 
     public static class LatchServo {
@@ -118,7 +117,7 @@ public final class Constants {
 
   public static class ArmSubsystem {
     //Can ID's for Arm are from 16 to 21
-    public static final boolean kEnabled = true;
+    public static final boolean kEnabled = false;
     public static final double kIntializeDelay = 1.0;
 
 

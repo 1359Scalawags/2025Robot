@@ -24,14 +24,12 @@ public class InitilizeArmEncoders extends Command {
     addRequirements(subsystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     waitTimer.reset();
     waitTimer.start();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(waitTimer.get() > Constants.ArmSubsystem.kIntializeDelay) {
@@ -41,7 +39,6 @@ public class InitilizeArmEncoders extends Command {
 
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return hasfinished;

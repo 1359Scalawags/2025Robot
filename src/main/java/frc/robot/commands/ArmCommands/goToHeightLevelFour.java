@@ -11,7 +11,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
 
-/** An example command that uses an example subsystem. */
+
 public class goToHeightLevelFour extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
@@ -27,22 +27,22 @@ public class goToHeightLevelFour extends Command {
     addRequirements(subsystem);
   }
 
-  // Called when the command is initially scheduled.
+
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
+ 
   @Override
   public void execute() {
     m_subsystem.goToHeightL4();
     m_subsystem.goToArmL4();
   }
 
-  // Called once the command ends or is interrupted.
+
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
+
 
   
   @Override
