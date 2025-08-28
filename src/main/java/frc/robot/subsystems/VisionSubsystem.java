@@ -13,13 +13,13 @@ import swervelib.SwerveDrive;
 
 public class VisionSubsystem extends SubsystemBase {
         // Basic targeting data
-    double tx = LimelightHelpers.getTX(Constants.Vision.klimelightOne);  // Horizontal offset from crosshair to target in degrees
-    double ty = LimelightHelpers.getTY(Constants.Vision.klimelightOne);  // Vertical offset from crosshair to target in degrees
-    double ta = LimelightHelpers.getTA(Constants.Vision.klimelightOne);  // Target area (0% to 100% of image)
-    boolean hasTarget = LimelightHelpers.getTV(Constants.Vision.klimelightOne); // Do you have a valid target?
+    double tx = LimelightHelpers.getTX(Constants.Vision.klimelightClimber);  // Horizontal offset from crosshair to target in degrees
+    double ty = LimelightHelpers.getTY(Constants.Vision.klimelightClimber);  // Vertical offset from crosshair to target in degrees
+    double ta = LimelightHelpers.getTA(Constants.Vision.klimelightClimber);  // Target area (0% to 100% of image)
+    boolean hasTarget = LimelightHelpers.getTV(Constants.Vision.klimelightClimber); // Do you have a valid target?
 
-    String climberCamer = Constants.Vision.klimelightOne; //used for driver vision, on the climber side
-    String armCamera = Constants.Vision.klimelightTwo; //used for apriltags, and some driver vision, on the arm side
+    String climberCamer = Constants.Vision.klimelightClimber; //used for driver vision, on the climber side
+    String armCamera = Constants.Vision.klimelightArm; //used for apriltags, and some driver vision, on the arm side
 
     public VisionSubsystem() {
 

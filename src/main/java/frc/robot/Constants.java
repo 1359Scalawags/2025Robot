@@ -32,6 +32,19 @@ public final class Constants {
     public static final double kTeleopDeadzone = 0.1;
     public static final double kAngleSpeedMultiplier = 3.0/4.0;
 
+        //--------APRILTAG ALIGNMENT PID VALUES;---------      
+    public static final double X_REEF_ALIGNMENT_P = 0;
+    public static final double Y_REEF_ALIGNMENT_P = 0;
+    public static final double ROT_REEF_ALIGNMENT_P = 0;
+    public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;
+    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0;
+    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0;
+    public static final double X_SETPOINT_REEF_ALIGNMENT = 0;
+    public static final double Y_SETPOINT_REEF_ALIGNMENT = 0;
+    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0;
+    public static final double POSE_VALIDATION_TIME = 0;
+    public static final double DONT_SEE_TAG_WAIT_TIME = 0;
+
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
      *-------------------------------------
@@ -236,8 +249,8 @@ public final class Constants {
   }
 
   public static class Vision { 
-    public static final String klimelightOne = "limelight-climber";
-    public static final String klimelightTwo = "limelight-arm";
+    public static final String klimelightClimber = "limelight-climber";
+    public static final String klimelightArm = "limelight-arm";
     public static final boolean usingAimingRanging = true;
   }
 
