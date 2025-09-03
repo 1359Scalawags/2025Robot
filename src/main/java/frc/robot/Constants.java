@@ -34,23 +34,29 @@ public final class Constants {
 
         //-------- APRILTAG ALIGNMENT Constants; ---------     
       //PID values to tune the auto align. 
-    public static final double X_REEF_ALIGNMENT_P = 0;
-    public static final double Y_REEF_ALIGNMENT_P = 0;
-    public static final double ROT_REEF_ALIGNMENT_P = 0;
+    public static final double X_REEF_ALIGNMENT_P = 0.0001;
+    public static final double Y_REEF_ALIGNMENT_P = 0.0001;
+    public static final double ROT_REEF_ALIGNMENT_P = 0.0001;
 
       // desired Setpoints for the x, y, and rotation perspective of the robot.
-    public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;
-    public static final double X_SETPOINT_REEF_ALIGNMENT = 0;
-    public static final double Y_SETPOINT_REEF_ALIGNMENT = 0;
+        //x stepoint = TX
+        // y setpoint = TZ*
+        // rot setpoint = RY
+          // *if your camera isn’t centered with your scoring system you would need to have 2 different values 
+          // for the right and left reef pipes. if it is centered you can just use the same value 
+          // but negative (-Constants.Y_SETPOINT_REEF_ALIGNMENT)
+    public static final double ROT_SETPOINT_REEF_ALIGNMENT = 1;
+    public static final double X_SETPOINT_REEF_ALIGNMENT = 1;
+    public static final double Y_SETPOINT_REEF_ALIGNMENT = 1;
 
       // Tolerances for the x, y, and rot, setpoints.
-    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0;
-    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0;
-    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0;
+    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0.5;
+    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.5;
+    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.5;
 
       //Timing constants to run logic when the camera does and does not see a detected object.
-    public static final double POSE_VALIDATION_TIME = 0;
-    public static final double DONT_SEE_TAG_WAIT_TIME = 0;
+    public static final double POSE_VALIDATION_TIME = 10; //Stops command after 10sec
+    public static final double DONT_SEE_TAG_WAIT_TIME = 5; //Stops command after 5sec of not seeing a tag
 
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
