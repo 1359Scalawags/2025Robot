@@ -31,11 +31,16 @@ public class AlignToReefTagRelative extends Command {
 
   @Override
   public void initialize() {
+      //Starts timers to stop the command for two conditions:
+        // - If a object is not deteted by the camera in a certain amount of time.
+        // - To stop running the command after a set amount of time.
     this.stopTimer = new Timer();
     this.stopTimer.start();
     this.dontSeeTagTimer = new Timer();
     this.dontSeeTagTimer.start();
 
+      //Sets the x, y, and rot PID controllers to move to a setpoint
+      //Sets tolerances for the PID controllers final destination to be constained by
     rotController.setSetpoint(Constants.SwerveSubsystem.ROT_SETPOINT_REEF_ALIGNMENT);
     rotController.setTolerance(Constants.SwerveSubsystem.ROT_TOLERANCE_REEF_ALIGNMENT);
 
@@ -45,22 +50,26 @@ public class AlignToReefTagRelative extends Command {
     yController.setSetpoint(isRightScore ? Constants.SwerveSubsystem.Y_SETPOINT_REEF_ALIGNMENT : -Constants.SwerveSubsystem.Y_SETPOINT_REEF_ALIGNMENT);
     yController.setTolerance(Constants.SwerveSubsystem.Y_TOLERANCE_REEF_ALIGNMENT);
 
+      //Gets the current ID of the apriltag the camera is detecting
     tagID = LimelightHelpers.getFiducialID(Constants.Vision.klimelightArm);
   }
 
   @Override
   public void execute() {
+    // Checks to see if the Camera is detecting a april tag, and that the april tag matches the TagID that was set during the intialization of the command.
     if (LimelightHelpers.getTV(Constants.Vision.klimelightArm) && LimelightHelpers.getFiducialID(Constants.Vision.klimelightArm) == tagID) {
       this.dontSeeTagTimer.reset();
 
       double[] postions = LimelightHelpers.getBotPose_TargetSpace(Constants.Vision.klimelightArm);
-      SmartDashboard.putNumber("x", postions[2]);
+      SmartDashboard.putNumber("x", postions[2]);//Puts onto the dashboard the table entry of the x position.
 
+      //Calculates the speeds using yhe PID controller and the position of the robot away from the tag.
       double xSpeed = xController.calculate(postions[2]);
-      SmartDashboard.putNumber("xspee", xSpeed);
+      SmartDashboard.putNumber("xspeed", xSpeed); //Puts onto the dashboard the x speed
       double ySpeed = -yController.calculate(postions[0]);
       double rotValue = -rotController.calculate(postions[4]);
 
+      //drives the robot using the speeds as they are set.
       drivebase.drive(new Translation2d(xSpeed, ySpeed), rotValue, false);
 
       if (!rotController.atSetpoint() ||
@@ -68,10 +77,10 @@ public class AlignToReefTagRelative extends Command {
           !xController.atSetpoint()) {
         stopTimer.reset();
       }
-    } else {
+    } else { //if not tag is being detected and or the tag does not match the intially set TagID, does not move the robot.
       drivebase.drive(new Translation2d(), 0, false);
     }
-
+    //Puts onto the dashboard the timer for how long the command has been running.
     SmartDashboard.putNumber("poseValidTimer", stopTimer.get());
   }
 

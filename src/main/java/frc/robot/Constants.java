@@ -32,16 +32,23 @@ public final class Constants {
     public static final double kTeleopDeadzone = 0.1;
     public static final double kAngleSpeedMultiplier = 3.0/4.0;
 
-        //--------APRILTAG ALIGNMENT PID VALUES;---------      
+        //-------- APRILTAG ALIGNMENT Constants; ---------     
+      //PID values to tune the auto align. 
     public static final double X_REEF_ALIGNMENT_P = 0;
     public static final double Y_REEF_ALIGNMENT_P = 0;
     public static final double ROT_REEF_ALIGNMENT_P = 0;
+
+      // desired Setpoints for the x, y, and rotation perspective of the robot.
     public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0;
-    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0;
-    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0;
     public static final double X_SETPOINT_REEF_ALIGNMENT = 0;
     public static final double Y_SETPOINT_REEF_ALIGNMENT = 0;
+
+      // Tolerances for the x, y, and rot, setpoints.
+    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 0;
+    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0;
     public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0;
+
+      //Timing constants to run logic when the camera does and does not see a detected object.
     public static final double POSE_VALIDATION_TIME = 0;
     public static final double DONT_SEE_TAG_WAIT_TIME = 0;
 
