@@ -4,41 +4,41 @@
 
 package frc.robot.commands.ArmCommands;
 
-import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class ZeroClaw extends Command {
+public class outakeCorral extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
-  //private Timer waitTimer;
 
-  public ZeroClaw(ArmSubsystem subsystem) {
+  /**
+   * Creates a new ExampleCommand.
+   *
+   * @param subsystem The subsystem used by this command.
+   */
+  public outakeCorral(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
-    // waitTimer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(subsystem);
   }
 
   @Override
   public void initialize() {
-    // waitTimer.reset();
-    // waitTimer.start();
+      m_subsystem.outakeCorral();
   }
 
   @Override
   public void execute() {
-    // if(waitTimer.get() > 1.0) {
-      double currentPosition = m_subsystem.getClawMotorPosition();
-      m_subsystem.goToClawMotorPosition(currentPosition + Constants.ArmSubsystem.Claw.kHomingPositionIncrement, true);      
-    // }
   }
 
   @Override
+  public void end(boolean interrupted) {}
+
+  @Override
+    //TODO: Do we want tolerences?
   public boolean isFinished() {
-    if(m_subsystem.isClawAtHome()) {
-      return true;
-    }
-    return false;
+    return true;
   }
 }
+

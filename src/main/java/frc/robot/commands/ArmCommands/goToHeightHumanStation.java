@@ -34,7 +34,6 @@ public class goToHeightHumanStation extends Command {
   public void execute() {
     m_subsystem.goToArmHumanStation();
     m_subsystem.goToHeightHumanStation();
-    m_subsystem.halfOpenClaw();
   }
 
 

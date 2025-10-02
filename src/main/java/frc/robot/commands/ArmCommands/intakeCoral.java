@@ -8,7 +8,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class closeClawCommand extends Command {
+public class intakeCoral extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArmSubsystem m_subsystem;
 
@@ -17,7 +17,7 @@ public class closeClawCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public closeClawCommand(ArmSubsystem subsystem) {
+  public intakeCoral(ArmSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     // addRequirements(subsystem);
@@ -26,7 +26,7 @@ public class closeClawCommand extends Command {
 
   @Override
   public void initialize() {
-      m_subsystem.closeClaw();
+      m_subsystem.intakeCoral();
   }
 
   @Override

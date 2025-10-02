@@ -133,8 +133,6 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().schedule(m_robotContainer.initializeClimberPosition());    
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
     CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
-    CommandScheduler.getInstance().schedule(m_robotContainer.homeClaw());
-
     // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 
@@ -165,7 +163,6 @@ public class Robot extends TimedRobot {
   CommandScheduler.getInstance().schedule(m_robotContainer.initializeClimberPosition());    
   CommandScheduler.getInstance().schedule(m_robotContainer.intializeArmEncoders());
   CommandScheduler.getInstance().schedule(m_robotContainer.intializeTheArm());
-  CommandScheduler.getInstance().schedule(m_robotContainer.homeClaw());
   // CommandScheduler.getInstance().schedule(m_robotContainer.intializeJustTheArm());
   }
 

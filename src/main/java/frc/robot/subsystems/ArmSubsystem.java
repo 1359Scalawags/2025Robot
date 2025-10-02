@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -45,6 +46,8 @@ public class ArmSubsystem extends SubsystemBase {
   private boolean initialized = false;
   private boolean elbowError = true;
   private boolean wristError = true;
+
+  private double clawTargetVelocity;
 
   private GravityAssistedFeedForward elbowFF;
   private GravityAssistedFeedForward wristFF;
@@ -306,6 +309,31 @@ public class ArmSubsystem extends SubsystemBase {
     getAbsoluteWristAngleMax());
   }
 
+    //TODO: Should these be negated?
+  public void intakeCoral() {
+    clawMotor.set(Constants.ArmSubsystem.Claw.kIntakeClawspeed);
+  }
+
+  public void outakeCorral() {
+    clawMotor.set(Constants.ArmSubsystem.Claw.kOutakeClawspeed);
+  }
+
+  public void stopClawMotor() {
+    clawMotor.set(0);
+  }
+
+  // public void intakeCoral() {
+  //   clawTargetVelocity = Constants.IntakeCoralSpeed
+  // }
+
+  // public void outakeCorral() {
+  //   clawTargetVelocity = Constants.OutakeCoralSpeed
+  // }
+
+  // public void stopClawMotor() {
+  //   clawTargetVelocity = Constants.StopClawMotor
+  // }
+
   public ArmPosition getArmPosition() {
     return new ArmPosition(getPulleyHeight(), getElbowMotorPosition(), getWristMotorPosition());
   }
@@ -468,10 +496,16 @@ public class ArmSubsystem extends SubsystemBase {
           pulleyInitialized = true;
         }
       }
-        // TODO: rewrite for new claw.
-
+        //TODO: does this need to be negated?
+      if (clawMotor.get() > 0) {
+         if (clawLimitSwitch.get() == true) {
+            clawMotor.set(0);
+        }
+      }
 
       double wristSafeTarget = MathUtil.clamp(wristMotorTarget, getAbsoluteWristAngleMin(), getAbsoluteWristAngleMax());
+
+      //clawMotor.getClosedLoopController().setReference(clawTargetVelocity, null);
 
       if (wristError == false) {
         wristStateGoal = new State(wristSafeTarget, 0);

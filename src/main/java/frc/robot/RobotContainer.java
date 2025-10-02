@@ -5,18 +5,17 @@
 package frc.robot;
 
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.commands.ArmCommands.ZeroClaw;
 import frc.robot.commands.ArmCommands.ZeroPulley;
 import frc.robot.commands.ArmCommands.autonomousOpenCLaw;
 import frc.robot.commands.ArmCommands.InitilizeArmEncoders;
-import frc.robot.commands.ArmCommands.closeClawCommand;
+import frc.robot.commands.ArmCommands.intakeCoral;
 import frc.robot.commands.ArmCommands.goToHeightHome;
 import frc.robot.commands.ArmCommands.goToHeightHumanStation;
 import frc.robot.commands.ArmCommands.goToHeightLevelFour;
 import frc.robot.commands.ArmCommands.goToHeightLevelThree;
 import frc.robot.commands.ArmCommands.goToHeightLevelTwo;
 import frc.robot.commands.ArmCommands.goToHightGround;
-import frc.robot.commands.ArmCommands.openClawCommand;
+import frc.robot.commands.ArmCommands.outakeCorral;
 import frc.robot.commands.ClimberCommands.Functionality.InitilizeClimberEncoders;
 import frc.robot.commands.ClimberCommands.Functionality.LockClimberSubsystem;
 import frc.robot.commands.ClimberCommands.Functionality.UnlockClimberSubsystem;
@@ -196,8 +195,8 @@ public class RobotContainer {
 
     // Bindin Arm Commands
     if(m_ArmSubsystem != null) {
-      m_AssistantJoystick.button(1).onFalse(new closeClawCommand(m_ArmSubsystem));
-      m_AssistantJoystick.button(1).onTrue(new openClawCommand(m_ArmSubsystem));
+      m_AssistantJoystick.button(1).onTrue(new intakeCoral(m_ArmSubsystem));
+      m_AssistantJoystick.button(2).onTrue(new outakeCorral(m_ArmSubsystem));
 
       m_AssistantJoystick.button(8).onTrue(new goToHeightHumanStation(m_ArmSubsystem));
       m_AssistantJoystick.button(10).onTrue(new goToHeightLevelFour(m_ArmSubsystem));
@@ -320,13 +319,6 @@ public class RobotContainer {
     // return initializeArm.Commands.sequence(homeClaw.andThen(homePulley));
   }
 
-  public Command homeClaw() {
-    if(m_ArmSubsystem == null) {
-      return new WaitCommand(0.01);
-    }
-    Command homeclaw = new ZeroClaw(m_ArmSubsystem);
-      return homeclaw;
-  }
 
   // public Command intializeJustTheArm() {
   // return new InitilizeArm(m_ArmSubsystem);

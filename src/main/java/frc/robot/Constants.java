@@ -221,7 +221,10 @@ public final class Constants {
       public static final int kLimitSwitchID = 1;
       //public static final double kHomingVelocity = 300;
       public static final double kHomingPositionIncrement = 75.0 * 0.020; // homing loop time is 20ms
-    public static final double kAutoOpenClaw = -5;
+
+      public static final double kAutoOpenClaw = -5;
+      public static final double kOutakeClawspeed = -0.1;
+      public static final double kIntakeClawspeed = 0.35;
     
     public static class PIDF{
           //0.05, 0.0001, 0.03

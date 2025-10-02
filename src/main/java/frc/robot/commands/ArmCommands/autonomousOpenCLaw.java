@@ -24,7 +24,7 @@ public class autonomousOpenCLaw extends Command {
 
   @Override
   public void initialize() {
-      m_subsystem.autonomousOpenClaw();
+      m_subsystem.intakeCoral();
   }
 
   @Override
