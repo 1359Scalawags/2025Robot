@@ -30,7 +30,7 @@ public final class Constants {
     public static final Object CHASSIS = null;
     public static final double TURN_CONSTANT = 0;
     public static final double kTeleopDeadzone = 0.1;
-    public static final double kAngleSpeedMultiplier = 3.0/4.0;
+    public static final double kAngleSpeedMultiplier = 1;
 
     /*
      * Motor ID's for the rev motors on the swerve Drive (in json file), Pheonix motors are set seperatly
@@ -60,7 +60,7 @@ public final class Constants {
 
     //Limits 
     //TODO; make sure these are right
-    public static final boolean kEnabled = false; // disables the climber
+    public static final boolean kEnabled = true; // disables the climber
     public static final double kIntializeDelay = 0.5;
 
     public static class LatchServo {
@@ -121,7 +121,7 @@ public final class Constants {
     public static final double kIntializeDelay = 1.0;
 
     public static class Positions {
-      public static final ArmPosition kHome = new ArmPosition(1,305,293);
+      public static final ArmPosition kHome = new ArmPosition(1,334,248);
       public static final ArmPosition kHumanStation = new ArmPosition(12,300,203);
       public static final ArmPosition kGround = new ArmPosition(2.25,193,148);//correct
       public static final ArmPosition kLevel1 = new ArmPosition(1,295,208);//correct
@@ -192,7 +192,7 @@ public final class Constants {
       public static final double kMaxLimit = 286.0; // measure when elbow is horizontal
       public static final double kMinLimit = 147.0; // measure when elbow is horizontal
       public static final double kSlewRate = 60; //45
-      public static final double kHorizontalAngle =232.0; 
+      public static final double kHorizontalAngle = 164.0; 
       public static final double kTolerance = 2.0;
     public static final double kAccelerationRate = 60;
     public static class PIDF{

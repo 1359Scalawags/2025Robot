@@ -13,20 +13,8 @@
                 "data": {
                   "pathName": "Go To Reef (Center)"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "moveL2"
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Open Claw"
           }
         }
       ]

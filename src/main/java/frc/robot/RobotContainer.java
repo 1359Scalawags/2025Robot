@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.ArmCommands.ZeroPulley;
-import frc.robot.commands.ArmCommands.autonomousOpenCLaw;
+// import frc.robot.commands.ArmCommands.autonomousOpenCLaw;
 import frc.robot.commands.ArmCommands.InitilizeArmEncoders;
 import frc.robot.commands.ArmCommands.intakeCoral;
 import frc.robot.commands.ArmCommands.goToHeightHome;
@@ -133,6 +133,9 @@ public class RobotContainer {
   // TODO: Are deadbands implemented for joysticks?
   // Configure remote movements
   public double assistantGetY() {
+    if(Math.abs(m_AssistantJoystick.getY()) < 0.2) {
+      return 0;
+    }
     return -m_AssistantJoystick.getY();
   }
 
@@ -145,14 +148,23 @@ public class RobotContainer {
   }
 
   public double driverGetRight() {
+    if(Math.abs(m_AssistantJoystick.getY()) < 0.2) {
+      return 0;
+    }
     return -m_DriverJoystick.getX();
   }
 
   public double driverGetForward() {
+    if(Math.abs(m_AssistantJoystick.getY()) < 0.2) {
+      return 0;
+    }
     return -m_DriverJoystick.getY();
   }
 
   public double driverGetZ() {
+    if(Math.abs(m_AssistantJoystick.getY()) < 0.2) {
+      return 0;
+    }
     return m_DriverJoystick.getZ();
   }
 

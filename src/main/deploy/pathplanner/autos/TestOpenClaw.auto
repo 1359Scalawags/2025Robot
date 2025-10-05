@@ -7,13 +7,13 @@
         {
           "type": "named",
           "data": {
-            "name": "moveL2"
+            "name": null
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Open Claw"
+            "name": null
           }
         }
       ]
