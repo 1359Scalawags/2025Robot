@@ -101,10 +101,10 @@ public class RobotContainer {
     configureBindings();
     setDefaultCommands();
 
-    if (m_ArmSubsystem != null) {
-      NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
-      NamedCommands.registerCommand("Open Claw", new autonomousOpenCLaw(m_ArmSubsystem));
-    }
+    // if (m_ArmSubsystem != null) {
+    //   NamedCommands.registerCommand("moveL2", new goToHeightLevelTwo(m_ArmSubsystem));
+    //   NamedCommands.registerCommand("Open Claw", new autonomousOpenCLaw(m_ArmSubsystem));
+    // }
   }
 
   private void setDefaultCommands() {
