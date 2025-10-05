@@ -148,21 +148,21 @@ public class RobotContainer {
   }
 
   public double driverGetRight() {
-    if(Math.abs(m_AssistantJoystick.getY()) < 0.2) {
+    if(Math.abs(m_DriverJoystick.getY()) < 0.2) {
       return 0;
     }
     return -m_DriverJoystick.getX();
   }
 
   public double driverGetForward() {
-    if(Math.abs(m_AssistantJoystick.getY()) < 0.2) {
+    if(Math.abs(m_DriverJoystick.getY()) < 0.2) {
       return 0;
     }
     return -m_DriverJoystick.getY();
   }
 
   public double driverGetZ() {
-    if(Math.abs(m_AssistantJoystick.getY()) < 0.2) {
+    if(Math.abs(m_DriverJoystick.getY()) < 0.2) {
       return 0;
     }
     return m_DriverJoystick.getZ();
