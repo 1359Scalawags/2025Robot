@@ -277,7 +277,7 @@ public class ArmSubsystem extends SubsystemBase {
     SparkMaxConfig clawMotorConfig = new SparkMaxConfig();
 
     clawMotorConfig
-        .idleMode(IdleMode.kBrake)
+        .idleMode(IdleMode.kCoast)
         .inverted(false)
         .openLoopRampRate(1.0)
         .closedLoopRampRate(1.0)
